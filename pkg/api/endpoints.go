@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -39,6 +40,7 @@ func (e retryError) Error() string {
 type Endpoint struct {
 	c           *http.Client
 	BearerToken string
+	Context     context.Context
 	Environment string
 	Host        string
 	MaxAttempts uint
@@ -49,6 +51,7 @@ func NewEndpoint(tkn, env, host, proto string) *Endpoint {
 	return &Endpoint{
 		c:           &http.Client{},
 		BearerToken: tkn,
+		Context:     retry.DefaultContext,
 		Environment: env,
 		Host:        host,
 		MaxAttempts: defaultMaxAttempts,
@@ -56,12 +59,12 @@ func NewEndpoint(tkn, env, host, proto string) *Endpoint {
 	}
 }
 
-func (e *Endpoint) retry(method string, reqPath string, opts ...Options) (map[string]any, error) {
+func (e *Endpoint) retry(method string, reqPath string, body io.Reader, opts ...Options) ([]byte, error) {
 	// determine the URL
 	url := fmt.Sprintf("%s://%s%s", e.Proto, e.Host, reqPath)
 
 	// build the request
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequestWithContext(e.Context, method, url, body)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +78,7 @@ func (e *Endpoint) retry(method string, reqPath string, opts ...Options) (map[st
 	}
 
 	// track what is actually provided back from the API
-	dataMap := map[string]any{}
+	data := []byte{}
 
 	// create retry operation
 	apiRequest := func() error {
@@ -129,22 +132,8 @@ func (e *Endpoint) retry(method string, reqPath string, opts ...Options) (map[st
 			}
 		}
 
-		// unmarshal the body
-		var data interface{}
-		if err := json.Unmarshal(bdy, &data); err != nil {
-			// check if data is a string type
-			if _, ok := data.(string); ok {
-				data = map[string]string{
-					"message": data.(string),
-				}
-			} else {
-				// return unmarshal error
-				return err
-			}
-		}
-
-		// reset the data map to whatever was unmarshaled
-		dataMap = data.(map[string]any)
+		// assign the body
+		data = bdy
 
 		// return no error
 		return nil
@@ -178,11 +167,11 @@ func (e *Endpoint) retry(method string, reqPath string, opts ...Options) (map[st
 		return nil, err
 	}
 
-	return dataMap, nil
+	return data, nil
 }
 
-func (e *Endpoint) Request(method string, path string, opts ...Options) (map[string]any, error) {
-	r, err := e.retry(method, path, opts...)
+func (e *Endpoint) Request(method string, path string, body io.Reader, opts ...Options) ([]byte, error) {
+	r, err := e.retry(method, path, body, opts...)
 	if err != nil {
 		return nil, err
 	}
