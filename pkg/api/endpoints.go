@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/avast/retry-go"
+	"golang.org/x/oauth2"
 )
 
 const (
@@ -24,40 +25,22 @@ const (
 	putMethod               string = "PUT"
 )
 
-type apiError struct {
-	Message string `json:"message"`
-	Status  int    `json:"status"`
-	Title   string `json:"title"`
-}
-
-func (e apiError) Error() string {
-	return fmt.Sprintf("%s (%d): %s", e.Title, e.Status, e.Message)
-}
-
-type retryError struct {
-	Err        error
-	RetryAfter time.Duration
-}
-
-func (e retryError) Error() string {
-	return fmt.Sprintf("retry after %s: %s", e.RetryAfter, e.Err)
-}
-
 type Endpoint[T any] struct {
 	c           *http.Client
-	BearerToken string
+	env         *Environment
 	Context     context.Context
 	Environment string
 	Host        string
 	MaxAttempts uint
+	OAuthToken  *oauth2.Token
 	Path        string
 	Proto       string
 }
 
-func NewEndpoint[T any](env Environment, path string) *Endpoint[T] {
+func NewEndpoint[T any](env *Environment, path string) *Endpoint[T] {
 	return &Endpoint[T]{
 		c:           &http.Client{},
-		BearerToken: env.Token,
+		env:         env,
 		Context:     retry.DefaultContext,
 		Environment: env.Name,
 		Host:        env.Host,
@@ -65,6 +48,26 @@ func NewEndpoint[T any](env Environment, path string) *Endpoint[T] {
 		Path:        path,
 		Proto:       env.Proto,
 	}
+}
+
+func (e *Endpoint[T]) ensureBearerToken() (string, error) {
+	// if the token is blank or expired, get a new one
+	if e.OAuthToken == nil || (!e.OAuthToken.Expiry.IsZero() && e.OAuthToken.Expiry.Before(time.Now())) {
+		// set the auth style to header
+		e.env.oauth2.AuthStyle = oauth2.AuthStyleInHeader
+
+		// retrieve the token
+		tkn, err := e.env.oauth2.Token(e.Context)
+		if err != nil {
+			return "", err
+		}
+
+		// assign the token
+		e.OAuthToken = tkn
+	}
+
+	// return the access token
+	return e.OAuthToken.AccessToken, nil
 }
 
 func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts ...Options) ([]byte, error) {
@@ -77,8 +80,12 @@ func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts 
 		return nil, err
 	}
 
-	// set the bearer token
-	req.Header.Set(authorizationHeader, fmt.Sprintf(bearerFmt, e.BearerToken))
+	// set the bearer token authorization header
+	tkn, err := e.ensureBearerToken()
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set(authorizationHeader, fmt.Sprintf(bearerFmt, tkn))
 
 	// set the query params as appropriate
 	if len(opts) > 0 {
@@ -275,7 +282,7 @@ func (e *Endpoint[T]) Patch(id string, mdl T) (T, error) {
 	return patched, nil
 }
 
-func (e *Endpoint[T]) Update(id string, mdl T) (T, error) {
+func (e *Endpoint[T]) Post(id string, mdl T) (T, error) {
 	var updated T
 
 	jd, err := json.Marshal(mdl)
