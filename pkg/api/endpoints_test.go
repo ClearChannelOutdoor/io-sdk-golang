@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -19,10 +20,11 @@ const (
 )
 
 type TestModel struct {
-	ID string `json:"id"`
+	ID   string `json:"id"`
+	Path string `json:"path"`
 }
 
-func TestEndpoint_Request(t *testing.T) {
+func TestEndpoint_request(t *testing.T) {
 	getTestServer := func(res func(w http.ResponseWriter, r *http.Request)) *httptest.Server {
 		ts := httptest.NewServer(http.HandlerFunc(res))
 		return ts
@@ -201,7 +203,7 @@ func TestEndpoint_Request(t *testing.T) {
 
 			got, err := e.request(tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Endpoint.Request() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Endpoint.request() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
@@ -209,7 +211,111 @@ func TestEndpoint_Request(t *testing.T) {
 			w := strings.TrimSpace(string(tt.want))
 
 			if g != w {
-				t.Errorf("Endpoint.Request() = \n\t%s\n want \n\t%s", got, tt.want)
+				t.Errorf("Endpoint.request() = \n\t%s\n want \n\t%s", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEndpoint_Create(t *testing.T) {
+	getTestServer := func(res func(w http.ResponseWriter, r *http.Request)) *httptest.Server {
+		ts := httptest.NewServer(http.HandlerFunc(res))
+		return ts
+	}
+
+	var ts *httptest.Server
+
+	type fields struct {
+		path string
+	}
+	type args struct {
+		res func(w http.ResponseWriter, r *http.Request)
+		mdl TestModel
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    TestModel
+		wantErr bool
+	}{
+		{
+			"should properly create a model",
+			fields{
+				"/models",
+			},
+			args{
+				func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusOK)
+					w.Header().Set("Content-Type", "application/json")
+
+					var tm TestModel
+					bdy, _ := io.ReadAll(r.Body)
+					json.Unmarshal(bdy, &tm)
+					tm.Path = r.URL.String()
+					json.NewEncoder(w).Encode(tm)
+				},
+				TestModel{
+					ID: "test-model-id",
+				},
+			},
+			TestModel{
+				ID:   "test-model-id",
+				Path: "/models",
+			},
+			false,
+		},
+		{
+			"should properly handle an error response",
+			fields{
+				"/models",
+			},
+			args{
+				func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusBadRequest)
+					w.Header().Set("Content-Type", "application/json")
+
+					err := apiError{
+						Message: "test-error-message",
+						Status:  http.StatusBadRequest,
+						Title:   "test-error-title",
+					}
+
+					json.NewEncoder(w).Encode(err)
+				},
+				TestModel{
+					ID: "test-model-id",
+				},
+			},
+			TestModel{},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		// reset the test server
+		ts = getTestServer(tt.args.res)
+		defer ts.Close()
+
+		u, _ := url.Parse(ts.URL)
+		t.Run(tt.name, func(t *testing.T) {
+			e := NewEndpoint[TestModel](
+				Environment{
+					Host:  u.Host,
+					Name:  defaultTestEnvironment,
+					Proto: u.Scheme,
+					Token: defaultTestBearerToken,
+				},
+				tt.fields.path,
+			)
+
+			got, err := e.Create(tt.args.mdl)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Endpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			if !tt.wantErr && !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Endpoint.Create() = \n\t%s\n want \n\t%s", got, tt.want)
 			}
 		})
 	}
