@@ -18,6 +18,10 @@ const (
 	defaultTestProto       string = "http"
 )
 
+type TestModel struct {
+	ID string `json:"id"`
+}
+
 func TestEndpoint_Request(t *testing.T) {
 	getTestServer := func(res func(w http.ResponseWriter, r *http.Request)) *httptest.Server {
 		ts := httptest.NewServer(http.HandlerFunc(res))
@@ -185,14 +189,17 @@ func TestEndpoint_Request(t *testing.T) {
 
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
-			e := NewEndpoint(
-				defaultTestBearerToken,
-				defaultTestEnvironment,
-				u.Host,
-				u.Scheme,
+			e := NewEndpoint[TestModel](
+				Environment{
+					Host:  u.Host,
+					Name:  defaultTestEnvironment,
+					Proto: u.Scheme,
+					Token: defaultTestBearerToken,
+				},
+				"/test",
 			)
 
-			got, err := e.Request(tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
+			got, err := e.request(tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Request() error = %v, wantErr %v", err, tt.wantErr)
 				return

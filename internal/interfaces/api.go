@@ -3,13 +3,13 @@ package interfaces
 import "cco.dev/io/pkg/api"
 
 type ReadAPI[T any] interface {
-	GetAll(o api.Options) T
-	GetOne(id string) T
+	GetAll(api.Options) (T, error)
+	GetOne(string) (T, error)
 }
 
 type WriteAPI[T any] interface {
-	Create(t T) T
-	Delete(t T) T
-	Overwrite(t T) T
-	Patch(t T) T
+	Create(T) (T, error)
+	Delete(string) error
+	Patch(T) (T, error)
+	Update(T) (T, error)
 }

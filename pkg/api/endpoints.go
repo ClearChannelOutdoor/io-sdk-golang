@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -16,6 +17,11 @@ const (
 	bearerFmt               string = "Bearer %s"
 	defaultMaxAttempts      uint   = 5
 	defaultThrottleRetrySec uint   = 5
+	deleteMethod            string = "DELETE"
+	getMethod               string = "GET"
+	patchMethod             string = "PATCH"
+	postMethod              string = "POST"
+	putMethod               string = "PUT"
 )
 
 type apiError struct {
@@ -37,29 +43,31 @@ func (e retryError) Error() string {
 	return fmt.Sprintf("retry after %s: %s", e.RetryAfter, e.Err)
 }
 
-type Endpoint struct {
+type Endpoint[T any] struct {
 	c           *http.Client
 	BearerToken string
 	Context     context.Context
 	Environment string
 	Host        string
 	MaxAttempts uint
+	Path        string
 	Proto       string
 }
 
-func NewEndpoint(tkn, env, host, proto string) *Endpoint {
-	return &Endpoint{
+func NewEndpoint[T any](env Environment, path string) *Endpoint[T] {
+	return &Endpoint[T]{
 		c:           &http.Client{},
-		BearerToken: tkn,
+		BearerToken: env.Token,
 		Context:     retry.DefaultContext,
-		Environment: env,
-		Host:        host,
+		Environment: env.Name,
+		Host:        env.Host,
 		MaxAttempts: defaultMaxAttempts,
-		Proto:       proto,
+		Path:        path,
+		Proto:       env.Proto,
 	}
 }
 
-func (e *Endpoint) retry(method string, reqPath string, body io.Reader, opts ...Options) ([]byte, error) {
+func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts ...Options) ([]byte, error) {
 	// determine the URL
 	url := fmt.Sprintf("%s://%s%s", e.Proto, e.Host, reqPath)
 
@@ -170,11 +178,121 @@ func (e *Endpoint) retry(method string, reqPath string, body io.Reader, opts ...
 	return data, nil
 }
 
-func (e *Endpoint) Request(method string, path string, body io.Reader, opts ...Options) ([]byte, error) {
+func (e *Endpoint[T]) request(method string, path string, body io.Reader, opts ...Options) ([]byte, error) {
 	r, err := e.retry(method, path, body, opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	return r, nil
+}
+
+func (e *Endpoint[T]) Create(mdl T) (T, error) {
+	var created T
+
+	jd, err := json.Marshal(mdl)
+	if err != nil {
+		return created, err
+	}
+
+	// make the request to the API
+	data, err := e.request(postMethod, e.Path, bytes.NewBuffer(jd))
+	if err != nil {
+		return created, err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &created); err != nil {
+		return created, err
+	}
+
+	return created, nil
+}
+
+func (e *Endpoint[T]) Delete(id string) error {
+	// make the request to the API
+	_, err := e.request(deleteMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e *Endpoint[T]) Get(id string) (T, error) {
+	var mdl T
+
+	// make the request to the API
+	data, err := e.request(getMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
+	if err != nil {
+		return mdl, err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &mdl); err != nil {
+		return mdl, err
+	}
+
+	return mdl, nil
+}
+
+func (e *Endpoint[T]) GetAll(opts ...Options) (SearchResult[T], error) {
+	var sr SearchResult[T]
+
+	// make the request to the API
+	data, err := e.request(getMethod, e.Path, nil, opts...)
+	if err != nil {
+		return sr, err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &sr); err != nil {
+		return sr, err
+	}
+
+	return sr, nil
+}
+
+func (e *Endpoint[T]) Patch(id string, mdl T) (T, error) {
+	var patched T
+
+	jd, err := json.Marshal(mdl)
+	if err != nil {
+		return patched, err
+	}
+
+	// make the request to the API
+	data, err := e.request(patchMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
+	if err != nil {
+		return patched, err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &patched); err != nil {
+		return patched, err
+	}
+
+	return patched, nil
+}
+
+func (e *Endpoint[T]) Update(id string, mdl T) (T, error) {
+	var updated T
+
+	jd, err := json.Marshal(mdl)
+	if err != nil {
+		return updated, err
+	}
+
+	// make the request to the API
+	data, err := e.request(putMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
+	if err != nil {
+		return updated, err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &updated); err != nil {
+		return updated, err
+	}
+
+	return updated, nil
 }
