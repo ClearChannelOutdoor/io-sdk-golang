@@ -1,14 +1,22 @@
-package client
+package displays
 
 import (
 	"errors"
 
+	"cco.dev/io/internal"
 	"cco.dev/io/pkg/api"
-	"cco.dev/io/pkg/api/display"
+	"cco.dev/io/pkg/client"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
-func NewDisplayClient(env Environment, oauth2 *clientcredentials.Config, svr ...string) (*client[display.Display], error) {
+const (
+	DisplayDevelopAPI    string = "https://display-api.dev.cco.dev"
+	DisplayProductionAPI string = "https://display-api.cco.dev"
+	DisplayStageAPI      string = "https://display-api.stg.cco.dev"
+	ScopeDisplayModify   string = "displays-modify"
+)
+
+func NewClient(env api.Environment, oauth2 *clientcredentials.Config, svr ...string) (*client.Client[Display], error) {
 	if oauth2 == nil {
 		return nil, errors.New("oauth2 configuration is required")
 	}
@@ -18,11 +26,11 @@ func NewDisplayClient(env Environment, oauth2 *clientcredentials.Config, svr ...
 	var svc *api.Service
 
 	switch env {
-	case DevelopEnvironment:
+	case api.DevelopEnvironment:
 		svc = api.NewService(env.String(), oauth2).SetServer(DisplayDevelopAPI)
-	case ProductionEnvironment:
+	case api.ProductionEnvironment:
 		svc = api.NewService(env.String(), oauth2).SetServer(DisplayProductionAPI)
-	case StagingEnvironment:
+	case api.StagingEnvironment:
 		svc = api.NewService(env.String(), oauth2).SetServer(DisplayStageAPI)
 	default:
 		if !override {
@@ -42,16 +50,14 @@ func NewDisplayClient(env Environment, oauth2 *clientcredentials.Config, svr ...
 	}
 
 	// create new endpoint
-	ep := api.NewEndpoint[display.Display](svc, "/v1/displays")
-	clnt := &client[display.Display]{
-		dr:  ep,
-		svc: svc,
-	}
+	ep := api.NewEndpoint[Display](svc, "/v1/displays")
 
 	// determine if oauth supports write operations
-	if containsValue(oauth2.Scopes, ScopeDisplayModify) {
-		clnt.dw = ep
+	if internal.ContainsValue(oauth2.Scopes, ScopeDisplayModify) {
+		// return a read-write client
+		return client.NewClient(svc, ep, ep), nil
 	}
 
-	return clnt, nil
+	// return a read-only client
+	return client.NewClient(svc, ep, nil), nil
 }

@@ -1,4 +1,4 @@
-package client
+package api
 
 type Environment string
 
