@@ -27,26 +27,20 @@ const (
 
 type Endpoint[T any] struct {
 	c           *http.Client
-	env         *Environment
-	Context     context.Context
-	Environment string
-	Host        string
+	ctx         context.Context
+	svc         *Service
 	MaxAttempts uint
 	OAuthToken  *oauth2.Token
 	Path        string
-	Proto       string
 }
 
-func NewEndpoint[T any](env *Environment, path string) *Endpoint[T] {
+func NewEndpoint[T any](svc *Service, path string) *Endpoint[T] {
 	return &Endpoint[T]{
 		c:           &http.Client{},
-		env:         env,
-		Context:     retry.DefaultContext,
-		Environment: env.Name,
-		Host:        env.Host,
+		svc:         svc,
+		ctx:         retry.DefaultContext,
 		MaxAttempts: defaultMaxAttempts,
 		Path:        path,
-		Proto:       env.Proto,
 	}
 }
 
@@ -54,10 +48,10 @@ func (e *Endpoint[T]) ensureBearerToken() (string, error) {
 	// if the token is blank or expired, get a new one
 	if e.OAuthToken == nil || (!e.OAuthToken.Expiry.IsZero() && e.OAuthToken.Expiry.Before(time.Now())) {
 		// set the auth style to header
-		e.env.oauth2.AuthStyle = oauth2.AuthStyleInHeader
+		e.svc.oauth2.AuthStyle = oauth2.AuthStyleInHeader
 
 		// retrieve the token
-		tkn, err := e.env.oauth2.Token(e.Context)
+		tkn, err := e.svc.oauth2.Token(e.ctx)
 		if err != nil {
 			return "", err
 		}
@@ -72,10 +66,10 @@ func (e *Endpoint[T]) ensureBearerToken() (string, error) {
 
 func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts ...Options) ([]byte, error) {
 	// determine the URL
-	url := fmt.Sprintf("%s://%s%s", e.Proto, e.Host, reqPath)
+	url := fmt.Sprintf("%s://%s%s", e.svc.Proto, e.svc.Host, reqPath)
 
 	// build the request
-	req, err := http.NewRequestWithContext(e.Context, method, url, body)
+	req, err := http.NewRequestWithContext(e.ctx, method, url, body)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +220,7 @@ func (e *Endpoint[T]) Delete(id string) error {
 	return nil
 }
 
-func (e *Endpoint[T]) Get(id string) (T, error) {
+func (e *Endpoint[T]) GetOne(id string) (T, error) {
 	var mdl T
 
 	// make the request to the API

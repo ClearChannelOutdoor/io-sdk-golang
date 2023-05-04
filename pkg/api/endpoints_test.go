@@ -98,7 +98,7 @@ func TestEndpoint_ensureBearerToken(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					oauth2: tt.fields.oauth2,
 					Host:   u.Host,
 					Name:   defaultTestEnvironment,
@@ -108,7 +108,7 @@ func TestEndpoint_ensureBearerToken(t *testing.T) {
 			)
 
 			// set a token url pointing back to our test server
-			e.env.oauth2.TokenURL = fmt.Sprintf("%s/v2/token", ts.URL)
+			e.svc.oauth2.TokenURL = fmt.Sprintf("%s/v2/token", ts.URL)
 			e.OAuthToken = tt.fields.token
 
 			got, err := e.ensureBearerToken()
@@ -291,7 +291,7 @@ func TestEndpoint_request(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
@@ -402,7 +402,7 @@ func TestEndpoint_Create(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
@@ -493,7 +493,7 @@ func TestEndpoint_Delete(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
@@ -513,7 +513,7 @@ func TestEndpoint_Delete(t *testing.T) {
 	}
 }
 
-func TestEndpoint_Get(t *testing.T) {
+func TestEndpoint_GetOne(t *testing.T) {
 	getTestServer := func(res func(w http.ResponseWriter, r *http.Request)) *httptest.Server {
 		ts := httptest.NewServer(http.HandlerFunc(res))
 		return ts
@@ -590,7 +590,7 @@ func TestEndpoint_Get(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
@@ -603,14 +603,14 @@ func TestEndpoint_Get(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := e.Get(tt.args.id)
+			got, err := e.GetOne(tt.args.id)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Endpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Endpoint.GetOne() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			if !tt.wantErr && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Endpoint.Get() = \n\t%+v\n want \n\t%+v", got, tt.want)
+				t.Errorf("Endpoint.GetOne() = \n\t%+v\n want \n\t%+v", got, tt.want)
 			}
 		})
 	}
@@ -699,7 +699,7 @@ func TestEndpoint_GetAll(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
@@ -811,7 +811,7 @@ func TestEndpoint_Patch(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
@@ -923,7 +923,7 @@ func TestEndpoint_Post(t *testing.T) {
 		u, _ := url.Parse(ts.URL)
 		t.Run(tt.name, func(t *testing.T) {
 			e := NewEndpoint[TestModel](
-				&Environment{
+				&Service{
 					Host:  u.Host,
 					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
