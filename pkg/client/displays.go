@@ -13,6 +13,8 @@ func NewDisplayClient(env Environment, oauth2 *clientcredentials.Config, svr ...
 		return nil, errors.New("oauth2 configuration is required")
 	}
 
+	override := len(svr) > 0 && svr[0] != ""
+
 	var svc *api.Service
 
 	switch env {
@@ -23,14 +25,20 @@ func NewDisplayClient(env Environment, oauth2 *clientcredentials.Config, svr ...
 	case StagingEnvironment:
 		svc = api.NewService(env.String(), oauth2).SetServer(DisplayStageAPI)
 	default:
-		if len(svr) == 0 || len(svr[0]) == 0 {
+		if !override {
 			return nil, errors.New("custom environment requires server URL to be specified")
 		}
+	}
 
+	// apply any server overrides, even if these are intended to override
+	// a preset environment (e.g. DevelopEnvironment)
+	if override {
 		svc = api.NewService(env.String(), oauth2).SetServer(svr[0])
-		if svc.Proto == "" || svc.Host == "" {
-			return nil, errors.New("custom environment server URL is invalid")
-		}
+	}
+
+	// ensure there is a valid server to connect to
+	if svc == nil || svc.Proto == "" || svc.Host == "" {
+		return nil, errors.New("the API server URL is invalid")
 	}
 
 	// create new endpoint

@@ -188,28 +188,33 @@ func (e *Endpoint[T]) request(method string, path string, body io.Reader, opts .
 	return r, nil
 }
 
-func (e *Endpoint[T]) Create(mdl T) (T, error) {
+// Create creates a new model of type T within the API
+func (e *Endpoint[T]) Create(mdl *T) error {
 	var created T
 
 	jd, err := json.Marshal(mdl)
 	if err != nil {
-		return created, err
+		return err
 	}
 
 	// make the request to the API
 	data, err := e.request(postMethod, e.Path, bytes.NewBuffer(jd))
 	if err != nil {
-		return created, err
+		return err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &created); err != nil {
-		return created, err
+		return err
 	}
 
-	return created, nil
+	// assign the created model
+	*mdl = created
+
+	return nil
 }
 
+// Delete deletes a model of type T from the API
 func (e *Endpoint[T]) Delete(id string) error {
 	// make the request to the API
 	_, err := e.request(deleteMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
@@ -220,24 +225,53 @@ func (e *Endpoint[T]) Delete(id string) error {
 	return nil
 }
 
-func (e *Endpoint[T]) GetOne(id string) (T, error) {
+// Get gets a single model of type T from the API
+func (e *Endpoint[T]) Get(id string) (*T, error) {
 	var mdl T
 
 	// make the request to the API
 	data, err := e.request(getMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
 	if err != nil {
-		return mdl, err
+		return nil, err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &mdl); err != nil {
-		return mdl, err
+		return nil, err
 	}
 
-	return mdl, nil
+	return &mdl, nil
 }
 
-func (e *Endpoint[T]) GetAll(opts ...Options) (SearchResult[T], error) {
+// Patch updates a model of type T within the API while preserving
+// any fields that are omitted and any additional externalIDs
+// that already exist
+func (e *Endpoint[T]) Patch(id string, mdl *T) error {
+	var patched T
+
+	jd, err := json.Marshal(mdl)
+	if err != nil {
+		return err
+	}
+
+	// make the request to the API
+	data, err := e.request(patchMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
+	if err != nil {
+		return err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &patched); err != nil {
+		return err
+	}
+
+	// assign the patched model
+	*mdl = patched
+
+	return nil
+}
+
+func (e *Endpoint[T]) Search(opts ...Options) (SearchResult[T], error) {
 	var sr SearchResult[T]
 
 	// make the request to the API
@@ -254,46 +288,27 @@ func (e *Endpoint[T]) GetAll(opts ...Options) (SearchResult[T], error) {
 	return sr, nil
 }
 
-func (e *Endpoint[T]) Patch(id string, mdl T) (T, error) {
-	var patched T
-
-	jd, err := json.Marshal(mdl)
-	if err != nil {
-		return patched, err
-	}
-
-	// make the request to the API
-	data, err := e.request(patchMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
-	if err != nil {
-		return patched, err
-	}
-
-	// unmarshal the data into the struct
-	if err := json.Unmarshal(data, &patched); err != nil {
-		return patched, err
-	}
-
-	return patched, nil
-}
-
-func (e *Endpoint[T]) Post(id string, mdl T) (T, error) {
+func (e *Endpoint[T]) Update(id string, mdl *T) error {
 	var updated T
 
 	jd, err := json.Marshal(mdl)
 	if err != nil {
-		return updated, err
+		return err
 	}
 
 	// make the request to the API
 	data, err := e.request(putMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
 	if err != nil {
-		return updated, err
+		return err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &updated); err != nil {
-		return updated, err
+		return err
 	}
 
-	return updated, nil
+	// assign the updated model
+	*mdl = updated
+
+	return nil
 }

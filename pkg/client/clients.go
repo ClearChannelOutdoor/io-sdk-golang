@@ -1,6 +1,8 @@
 package client
 
 import (
+	"errors"
+
 	"cco.dev/io/pkg/api"
 )
 
@@ -26,26 +28,50 @@ type client[T any] struct {
 	svc *api.Service
 }
 
-func (c *client[T]) GetAll(opts ...api.Options) (api.SearchResult[T], error) {
-	return c.dr.GetAll(opts...)
+func (c *client[T]) checkWrite() error {
+	if c.dw == nil {
+		return errors.New("write operations are not allowed with this client configuration")
+	}
+
+	return nil
 }
 
-func (c *client[T]) GetOne(id string) (T, error) {
-	return c.dr.GetOne(id)
-}
+func (c *client[T]) Create(d *T) error {
+	if err := c.checkWrite(); err != nil {
+		return err
+	}
 
-func (c *client[T]) Create(d T) (T, error) {
 	return c.dw.Create(d)
 }
 
 func (c *client[T]) Delete(id string) error {
+	if err := c.checkWrite(); err != nil {
+		return err
+	}
+
 	return c.dw.Delete(id)
 }
 
-func (c *client[T]) Patch(id string, d T) (T, error) {
+func (c *client[T]) Get(id string) (*T, error) {
+	return c.dr.Get(id)
+}
+
+func (c *client[T]) Patch(id string, d *T) error {
+	if err := c.checkWrite(); err != nil {
+		return err
+	}
+
 	return c.dw.Patch(id, d)
 }
 
-func (c *client[T]) Post(id string, d T) (T, error) {
-	return c.dw.Post(id, d)
+func (c *client[T]) Search(opts ...api.Options) (api.SearchResult[T], error) {
+	return c.dr.Search(opts...)
+}
+
+func (c *client[T]) Update(id string, d *T) error {
+	if err := c.checkWrite(); err != nil {
+		return err
+	}
+
+	return c.dw.Update(id, d)
 }

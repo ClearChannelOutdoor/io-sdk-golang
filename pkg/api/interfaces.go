@@ -1,13 +1,13 @@
 package api
 
 type ReadAPI[T any] interface {
-	GetAll(...Options) (SearchResult[T], error)
-	GetOne(string) (T, error)
+	Search(...Options) (SearchResult[T], error)
+	Get(string) (*T, error)
 }
 
 type WriteAPI[T any] interface {
-	Create(T) (T, error)
+	Create(*T) error
 	Delete(string) error
-	Patch(string, T) (T, error)
-	Post(string, T) (T, error)
+	Patch(string, *T) error
+	Update(string, *T) error
 }
