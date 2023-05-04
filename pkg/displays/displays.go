@@ -5,7 +5,7 @@ import (
 
 	"cco.dev/io/internal"
 	"cco.dev/io/pkg/api"
-	"cco.dev/io/pkg/client"
+	"cco.dev/io/pkg/clients"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -16,7 +16,7 @@ const (
 	ScopeDisplayModify   string = "displays-modify"
 )
 
-func NewClient(env api.Environment, oauth2 *clientcredentials.Config, svr ...string) (*client.Client[Display], error) {
+func NewClient(env api.Environment, oauth2 *clientcredentials.Config, svr ...string) (*clients.Client[Display], error) {
 	if oauth2 == nil {
 		return nil, errors.New("oauth2 configuration is required")
 	}
@@ -55,9 +55,9 @@ func NewClient(env api.Environment, oauth2 *clientcredentials.Config, svr ...str
 	// determine if oauth supports write operations
 	if internal.ContainsValue(oauth2.Scopes, ScopeDisplayModify) {
 		// return a read-write client
-		return client.NewClient(svc, ep, ep), nil
+		return clients.NewClient(svc, ep, ep), nil
 	}
 
 	// return a read-only client
-	return client.NewClient(svc, ep, nil), nil
+	return clients.NewClient(svc, ep, nil), nil
 }

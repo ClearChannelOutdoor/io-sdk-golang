@@ -6,7 +6,11 @@
 // and pagination.
 package api
 
-import "testing"
+import (
+	"testing"
+
+	"cco.dev/io/internal"
+)
 
 func Test_containsValue(t *testing.T) {
 	type args struct {
@@ -24,7 +28,7 @@ func Test_containsValue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := containsValue(tt.args.values, tt.args.value); got != tt.want {
+			if got := internal.ContainsValue(tt.args.values, tt.args.value); got != tt.want {
 				t.Errorf("containsValue() = %v, want %v", got, tt.want)
 			}
 		})

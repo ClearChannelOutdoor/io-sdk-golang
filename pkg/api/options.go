@@ -3,6 +3,8 @@ package api
 import (
 	"fmt"
 	"net/url"
+
+	"cco.dev/io/internal"
 )
 
 const (
@@ -37,7 +39,7 @@ func EmptyOptions() *Options {
 // are returned in the results for an API request.
 func (o *Options) AddField(field ...string) *Options {
 	for _, f := range field {
-		if !containsValue(o.fields, f) {
+		if !internal.ContainsValue(o.fields, f) {
 			o.fields = append(o.fields, f)
 		}
 	}
@@ -61,7 +63,7 @@ func (o *Options) AddFilter(field string, value any) *Options {
 	// check to see if the field already exists within the filters
 	if f, ok := o.filter[field]; ok {
 		// check to see if the value already exists within the filter
-		if containsValue(f, v) {
+		if internal.ContainsValue(f, v) {
 			return o
 		}
 
@@ -90,7 +92,7 @@ func (o *Options) AddPage(field string, value int) *Options {
 // (e.g. "-name" or "-updatedAt").
 func (o *Options) AddSort(field ...string) *Options {
 	for _, f := range field {
-		if !containsValue(o.sort, f) {
+		if !internal.ContainsValue(o.sort, f) {
 			o.sort = append(o.sort, f)
 		}
 	}
