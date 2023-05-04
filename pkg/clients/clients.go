@@ -2,6 +2,7 @@ package clients
 
 import (
 	"errors"
+	"reflect"
 
 	"cco.dev/io/pkg/api"
 )
@@ -13,7 +14,7 @@ type Client[T any] struct {
 }
 
 func (c *Client[T]) checkWrite() error {
-	if c.wep == nil {
+	if reflect.ValueOf(c.wep).IsNil() {
 		return errors.New("write operations are not allowed with this client configuration")
 	}
 
