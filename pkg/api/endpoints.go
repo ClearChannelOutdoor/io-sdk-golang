@@ -271,6 +271,7 @@ func (e *Endpoint[T]) Patch(id string, mdl *T) error {
 	return nil
 }
 
+// Search searches for models of type T within the API
 func (e *Endpoint[T]) Search(opts ...Options) (SearchResult[T], error) {
 	var sr SearchResult[T]
 
@@ -288,6 +289,7 @@ func (e *Endpoint[T]) Search(opts ...Options) (SearchResult[T], error) {
 	return sr, nil
 }
 
+// Update updates a model of type T within the API
 func (e *Endpoint[T]) Update(id string, mdl *T) error {
 	var updated T
 
