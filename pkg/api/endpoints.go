@@ -178,7 +178,7 @@ func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts 
 		}),
 	); err != nil {
 		switch e := err.(type) {
-		// when the error is a wrapped error, clean up and return the last error
+		// when the error is a wrapped error, clean it up and return the last error
 		case retry.Error:
 			el := e.WrappedErrors()
 			err = el[len(el)-1]
