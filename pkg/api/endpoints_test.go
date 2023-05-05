@@ -142,7 +142,7 @@ func TestEndpoint_request(t *testing.T) {
 		method string
 		path   string
 		body   io.Reader
-		opts   []Options
+		opts   []*Options
 	}
 	tests := []struct {
 		name    string
@@ -165,7 +165,7 @@ func TestEndpoint_request(t *testing.T) {
 				"GET",
 				"/test",
 				nil,
-				[]Options{},
+				[]*Options{},
 			},
 			testData,
 			false,
@@ -198,7 +198,7 @@ func TestEndpoint_request(t *testing.T) {
 				"GET",
 				"/test",
 				nil,
-				[]Options{},
+				[]*Options{},
 			},
 			testData,
 			false,
@@ -225,7 +225,7 @@ func TestEndpoint_request(t *testing.T) {
 				"GET",
 				"/test",
 				nil,
-				[]Options{},
+				[]*Options{},
 			},
 			testData,
 			false,
@@ -240,7 +240,7 @@ func TestEndpoint_request(t *testing.T) {
 				"GET",
 				"/test",
 				nil,
-				[]Options{},
+				[]*Options{},
 			},
 			nil,
 			true,
@@ -256,7 +256,7 @@ func TestEndpoint_request(t *testing.T) {
 				"GET",
 				"/test",
 				bytes.NewReader([]byte("a random string")),
-				[]Options{},
+				[]*Options{},
 			},
 			[]byte("a random string"),
 			false,
@@ -274,7 +274,7 @@ func TestEndpoint_request(t *testing.T) {
 				"POST",
 				"/test",
 				bytes.NewBuffer(testData),
-				[]Options{},
+				[]*Options{},
 			},
 			testData,
 			false,

@@ -1,7 +1,7 @@
 package api
 
 type ReadAPI[T any] interface {
-	Search(...Options) (SearchResult[T], error)
+	Search(...*Options) (SearchResult[T], error)
 	Get(string) (*T, error)
 }
 

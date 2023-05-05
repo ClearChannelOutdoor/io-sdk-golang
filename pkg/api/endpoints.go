@@ -68,7 +68,7 @@ func (e *Endpoint[T]) ensureBearerToken() (string, error) {
 	return e.OAuthToken.AccessToken, nil
 }
 
-func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts ...Options) ([]byte, error) {
+func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, error) {
 	// determine the URL
 	url := fmt.Sprintf("%s://%s%s", e.svc.Proto, e.svc.Host, reqPath)
 
@@ -194,7 +194,7 @@ func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts 
 	return data, nil
 }
 
-func (e *Endpoint[T]) request(method string, path string, body io.Reader, opts ...Options) ([]byte, error) {
+func (e *Endpoint[T]) request(method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
 	r, err := e.retry(method, path, body, opts...)
 	if err != nil {
 		return nil, err
@@ -287,7 +287,7 @@ func (e *Endpoint[T]) Patch(id string, mdl *T) error {
 }
 
 // Search searches for models of type T within the API
-func (e *Endpoint[T]) Search(opts ...Options) (SearchResult[T], error) {
+func (e *Endpoint[T]) Search(opts ...*Options) (SearchResult[T], error) {
 	var sr SearchResult[T]
 
 	// make the request to the API

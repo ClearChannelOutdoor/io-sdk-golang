@@ -51,7 +51,7 @@ func (c *Client[T]) Patch(id string, d *T) error {
 	return c.wep.Patch(id, d)
 }
 
-func (c *Client[T]) Search(opts ...api.Options) (api.SearchResult[T], error) {
+func (c *Client[T]) Search(opts ...*api.Options) (api.SearchResult[T], error) {
 	return c.rep.Search(opts...)
 }
 

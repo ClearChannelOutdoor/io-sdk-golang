@@ -14,7 +14,11 @@ const (
 )
 
 func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Network], error) {
-	svr := fmt.Sprintf(serverFmt, fmt.Sprintf(".%s", env.String()))
+	svr := fmt.Sprintf(serverFmt, "")
+	if env != api.ProductionEnvironment {
+		svr = fmt.Sprintf(serverFmt, fmt.Sprintf(".%s", env.String()))
+	}
+
 	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
 		svr = overrideSvr[0]
 	}
