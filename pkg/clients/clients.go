@@ -2,7 +2,6 @@ package clients
 
 import (
 	"errors"
-	"reflect"
 
 	"cco.dev/io/internal"
 	"cco.dev/io/pkg/api"
@@ -10,13 +9,14 @@ import (
 )
 
 type Client[T any] struct {
-	rep api.ReadAPI[T]
-	wep api.WriteAPI[T]
-	svc *api.Service
+	rep      api.ReadAPI[T]
+	wep      api.WriteAPI[T]
+	svc      *api.Service
+	writable bool
 }
 
 func (c *Client[T]) checkWrite() error {
-	if reflect.ValueOf(c.wep).IsNil() {
+	if !c.writable {
 		return errors.New("write operations are not allowed with this client configuration")
 	}
 
@@ -83,9 +83,10 @@ func NewClient[T any](env api.Environment, svr string, resource string, oauth2 *
 	for _, scope := range writeScopes {
 		if internal.ContainsValue(oauth2.Scopes, scope) {
 			return &Client[T]{
-				rep: ep,
-				svc: svc,
-				wep: ep,
+				rep:      ep,
+				svc:      svc,
+				wep:      ep,
+				writable: true,
 			}, nil
 		}
 	}

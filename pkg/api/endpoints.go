@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"time"
 
 	"github.com/avast/retry-go"
@@ -24,6 +26,8 @@ const (
 	postMethod              string = "POST"
 	putMethod               string = "PUT"
 )
+
+var retryAfterRE *regexp.Regexp = regexp.MustCompile(`retry after (\d+)s\: `)
 
 type Endpoint[T any] struct {
 	c           *http.Client
@@ -173,6 +177,17 @@ func (e *Endpoint[T]) retry(method string, reqPath string, body io.Reader, opts 
 			return retry.BackOffDelay(n, err, config)
 		}),
 	); err != nil {
+		switch e := err.(type) {
+		// when the error is a wrapped error, clean up and return the last error
+		case retry.Error:
+			el := e.WrappedErrors()
+			err = el[len(el)-1]
+			if retryAfterRE.MatchString(err.Error()) {
+				i := retryAfterRE.FindStringIndex(err.Error())
+				err = errors.New(err.Error()[i[1]:])
+			}
+		}
+
 		return nil, err
 	}
 
