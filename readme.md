@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-  // create a new client for retrieving displays
+	// create a new client for retrieving displays
 	client, err := displays.NewClient(api.ProductionEnvironment, &clientcredentials.Config{
 		ClientID:     "replace-with-your-client-id",
 		ClientSecret: "replace-with-your-client-secret",
