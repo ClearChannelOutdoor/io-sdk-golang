@@ -10,7 +10,7 @@ import (
 
 const (
 	scopeMarketsModify string = "markets-modify"
-	serverFmt          string = "https://market-api%s.cco.dev"
+	serverFmt          string = "https://direct%s.cco.io"
 )
 
 func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Market], error) {

@@ -10,7 +10,7 @@ import (
 
 const (
 	scopeNetworksModify string = "networks-modify"
-	serverFmt           string = "https://network-api%s.cco.dev"
+	serverFmt           string = "https://direct%s.cco.io"
 )
 
 func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Network], error) {

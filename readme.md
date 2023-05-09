@@ -1,6 +1,6 @@
 # IO SDK
 
-The IO SDK enables easy consumption of the CCO.IO Automated Direct and Programmatic endpoints in Go based applications and from the command line. 
+The IO SDK enables easy consumption of the CCO.IO Automated Direct and Programmatic endpoints in Go based applications and from the command line. By default, the SDK is configured to communicate via the `https://direct.cco.io` gateway. The SDK enables custom server configuration to support additional sandbox development and testing scenarios.
 
 ## Usage
 

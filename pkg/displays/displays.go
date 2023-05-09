@@ -10,7 +10,7 @@ import (
 
 const (
 	scopeDisplaysModify string = "displays-modify"
-	serverFmt           string = "https://display-api%s.cco.dev"
+	serverFmt           string = "https://direct%s.cco.io"
 )
 
 func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Display], error) {
