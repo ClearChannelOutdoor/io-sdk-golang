@@ -9,9 +9,8 @@ import (
 )
 
 type Client[T any] struct {
-	rep      api.ReadAPI[T]
-	wep      api.WriteAPI[T]
-	svc      *api.Service
+	rep      api.ReadResource[T]
+	wep      api.WriteResource[T]
 	writable bool
 }
 
@@ -84,7 +83,6 @@ func NewClient[T any](env api.Environment, svr string, resource string, oauth2 *
 		if internal.ContainsValue(oauth2.Scopes, scope) {
 			return &Client[T]{
 				rep:      ep,
-				svc:      svc,
 				wep:      ep,
 				writable: true,
 			}, nil
@@ -93,6 +91,5 @@ func NewClient[T any](env api.Environment, svr string, resource string, oauth2 *
 
 	return &Client[T]{
 		rep: ep,
-		svc: svc,
 	}, nil
 }

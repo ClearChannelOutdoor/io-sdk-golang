@@ -12,10 +12,12 @@ type Display struct {
 	Digital          *DisplayDigital      `json:"digital,omitempty"`
 	ExternalIDs      []string             `json:"externalIDs,omitempty"`
 	Facing           string               `json:"facing,omitempty"`
+	FinishDate       *time.Time           `json:"finishDate,omitempty"`
 	GeoLocation      *GeoLocation         `json:"geolocation,omitempty"`
 	Height           *DisplayHeight       `json:"height,omitempty"`
 	ID               string               `json:"displayID"`
 	Illumination     *DisplayIllumination `json:"illumination,omitempty"`
+	LiveDate         *time.Time           `json:"liveDate,omitempty"`
 	Market           *DisplayMarket       `json:"market,omitempty"`
 	MediaProducts    []MediaProduct       `json:"mediaProducts,omitempty"`
 	ReadDirection    *string              `json:"readDirection,omitempty"`
