@@ -91,3 +91,70 @@ func (ce *ChildEndpoint[T]) Get(parentID string, id string) (*T, error) {
 
 	return &mdl, nil
 }
+
+func (ce *ChildEndpoint[T]) Patch(parentID string, id string, mdl *T) error {
+	var patched T
+
+	jd, err := json.Marshal(mdl)
+	if err != nil {
+		return err
+	}
+
+	// make the request to the API
+	data, err := ce.request(patchMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
+	if err != nil {
+		return err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &patched); err != nil {
+		return err
+	}
+
+	// assign the created model
+	*mdl = patched
+
+	return nil
+}
+
+func (ce *ChildEndpoint[T]) Search(parentID string, opts ...*Options) (SearchResult[T], error) {
+	var sr SearchResult[T]
+
+	// make the request to the API
+	data, err := ce.request(getMethod, fmt.Sprintf(ce.Path, parentID), nil, opts...)
+	if err != nil {
+		return sr, err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &sr); err != nil {
+		return sr, err
+	}
+
+	return sr, nil
+}
+
+func (ce *ChildEndpoint[T]) Update(parentID string, id string, mdl *T) error {
+	var updated T
+
+	jd, err := json.Marshal(mdl)
+	if err != nil {
+		return err
+	}
+
+	// make the request to the API
+	data, err := ce.request(putMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
+	if err != nil {
+		return err
+	}
+
+	// unmarshal the data into the struct
+	if err := json.Unmarshal(data, &updated); err != nil {
+		return err
+	}
+
+	// assign the updated model
+	*mdl = updated
+
+	return nil
+}
