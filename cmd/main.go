@@ -17,10 +17,11 @@ import (
 )
 
 type command struct {
-	api    string
-	id     string
-	opts   *api.Options
-	method string
+	api     string
+	childID string
+	id      string
+	opts    *api.Options
+	method  string
 }
 
 func determineEnvironment() api.Environment {
@@ -84,14 +85,25 @@ func parseArgs() command {
 			cmd.method = os.Args[i]
 
 			// check for ID
-			hasID := cmd.method == "delete" ||
+			requiresID := cmd.method == "delete" ||
 				cmd.method == "get" ||
 				cmd.method == "patch" ||
 				cmd.method == "update"
 
-			if hasID && i < l-1 {
+			if requiresID && i < l-1 {
 				i++
 				cmd.id = os.Args[i]
+
+				// check for a child ID
+				if i < l-1 && os.Args[i+1][0] != '-' {
+					i++
+					cmd.childID = os.Args[i]
+				}
+			}
+
+			if cmd.method == "search" && i < l-1 && os.Args[i+1][0] != '-' {
+				i++
+				cmd.childID = os.Args[i]
 			}
 		}
 

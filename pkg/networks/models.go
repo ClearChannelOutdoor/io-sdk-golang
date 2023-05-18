@@ -38,6 +38,14 @@ type Network struct {
 	VisibleCreative *VisibleCreative `json:"visibleCreative,omitempty"`
 }
 
+type NetworkDisplay struct {
+	CreatedAt   time.Time `json:"createdAt,omitempty"`
+	DisplayID   string    `json:"displayID,omitempty"`
+	ExternalIDs []string  `json:"externalIDs,omitempty"`
+	NetworkID   string    `json:"networkID,omitempty"`
+	UpdatedAt   time.Time `json:"updatedAt,omitempty"`
+}
+
 type Venue struct {
 	ExternalIDs []string `json:"externalIDs,omitempty"`
 	ID          string   `json:"venueID,omitempty"`

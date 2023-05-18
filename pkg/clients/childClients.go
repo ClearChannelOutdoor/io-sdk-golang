@@ -3,6 +3,7 @@ package clients
 import (
 	"errors"
 
+	"cco.dev/io/internal"
 	"cco.dev/io/pkg/api"
 	"golang.org/x/oauth2/clientcredentials"
 )
@@ -74,5 +75,20 @@ func NewChildClient[T any](env api.Environment, svr string, parentResource, chil
 		return nil, errors.New("the API server URL is invalid")
 	}
 
-	return nil, nil
+	ep := api.NewChildEndpoint[T](svc, parentResource, childResouce)
+
+	// determine if oauth supports write operations
+	for _, scope := range writeScopes {
+		if internal.ContainsValue(oauth2.Scopes, scope) {
+			return &ChildClient[T]{
+				rep:      ep,
+				wep:      ep,
+				writable: true,
+			}, nil
+		}
+	}
+
+	return &ChildClient[T]{
+		rep: ep,
+	}, nil
 }
