@@ -47,32 +47,3 @@ func main() {
 	}
 }
 ```
-
-## CLI
-
-This SDK can also be installed as a command line tool, which may be useful for troubleshooting and validation:
-
-```bash
-$ io --help
-Usage: io -a <api> -m <method> [-f <filter>]
-
-  -a, --api	        The API to use
-  -f, --filter	    A filter to apply to the request
-  -h, --help	      Print this help
-  -m, --method	    The method to call
-
-Example: Get a display with the ID "abc123":
-
-	io -a displays -m get -f "abc123"
-
-Example: Get any displays with the external ID "quattro:123":
-
-	io -a displays -m search -f "externalIDs:quattro:*"
-
-Example: Get all digital displays that are 1080p:
-
-	io -a displays -m search -f "mediaProducts.type:Digital" -f "digital.width:1080"
-```
-
-### CLI Installation
-
