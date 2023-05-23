@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"cco.dev/io/pkg/api"
-	"cco.dev/io/pkg/displays"
-	"cco.dev/io/pkg/networks"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
 	"golang.org/x/oauth2/clientcredentials"
 )
 

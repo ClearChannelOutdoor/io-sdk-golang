@@ -3,8 +3,8 @@ package clients
 import (
 	"errors"
 
-	"cco.dev/io/internal"
-	"cco.dev/io/pkg/api"
+	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
 	"golang.org/x/oauth2/clientcredentials"
 )
 

@@ -7,12 +7,12 @@ import (
 	"os"
 	"strings"
 
-	"cco.dev/io/internal"
-	"cco.dev/io/pkg/api"
-	"cco.dev/io/pkg/clients"
-	"cco.dev/io/pkg/displays"
-	"cco.dev/io/pkg/markets"
-	"cco.dev/io/pkg/networks"
+	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -141,7 +141,7 @@ func printUsageAndExit(exitCode ...int) {
 	os.Exit(ec)
 }
 
-func runCommand[T any](client func() (*clients.Client[T], error), cmd command) {
+func runClientCommand[T any](client func() (*clients.Client[T], error), cmd command) {
 	cl, err := client()
 	if err != nil {
 		panic(err)
@@ -159,6 +159,46 @@ func runCommand[T any](client func() (*clients.Client[T], error), cmd command) {
 		panic(errors.New("not implemented"))
 	case "search":
 		sr, err = cl.Search(cmd.opts)
+	case "update":
+		panic(errors.New("not implemented"))
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	// write out the response if there is one
+	if res != nil {
+		jsn, _ := json.MarshalIndent(res, "", "\t")
+		os.Stdout.Write(jsn)
+	}
+
+	// write out the search result if there is one
+	if sr.Total != 0 {
+		jsn, _ := json.MarshalIndent(sr, "", "\t")
+		os.Stdout.Write(jsn)
+	}
+
+	fmt.Println()
+}
+
+func runChildClientCommand[T any](client func() (*clients.ChildClient[T], error), cmd command) {
+	cl, err := client()
+	if err != nil {
+		panic(err)
+	}
+
+	var res *T
+	var sr api.SearchResult[T]
+
+	switch cmd.method {
+	case "delete":
+		err = cl.Delete(cmd.id, cmd.childID)
+	case "get":
+		res, err = cl.Get(cmd.id, cmd.childID)
+	case "patch":
+		panic(errors.New("not implemented"))
+	case "search":
+		sr, err = cl.Search(cmd.id, cmd.opts)
 	case "update":
 		panic(errors.New("not implemented"))
 	}
@@ -218,16 +258,20 @@ func main() {
 
 	switch cmd.api {
 	case "displays":
-		runCommand(func() (*clients.Client[displays.Display], error) {
+		runClientCommand(func() (*clients.Client[displays.Display], error) {
 			return displays.NewClient(env, cc)
 		}, cmd)
 	case "markets":
-		runCommand(func() (*clients.Client[markets.Market], error) {
+		runClientCommand(func() (*clients.Client[markets.Market], error) {
 			return markets.NewClient(env, cc)
 		}, cmd)
 	case "networks":
-		runCommand(func() (*clients.Client[networks.Network], error) {
+		runClientCommand(func() (*clients.Client[networks.Network], error) {
 			return networks.NewClient(env, cc)
+		}, cmd)
+	case "network-displays":
+		runChildClientCommand(func() (*clients.ChildClient[networks.NetworkDisplay], error) {
+			return networks.NewDisplayClient(env, cc)
 		}, cmd)
 	}
 }

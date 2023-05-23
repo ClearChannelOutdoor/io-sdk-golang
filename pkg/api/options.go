@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"cco.dev/io/internal"
+	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
 )
 
 const (

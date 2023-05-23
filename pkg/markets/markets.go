@@ -3,8 +3,8 @@ package markets
 import (
 	"fmt"
 
-	"cco.dev/io/pkg/api"
-	"cco.dev/io/pkg/clients"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
 	"golang.org/x/oauth2/clientcredentials"
 )
 

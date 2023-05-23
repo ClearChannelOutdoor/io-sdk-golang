@@ -1,4 +1,4 @@
-module cco.dev/io
+module github.com/clearchanneloutdoor/io-sdk-golang
 
 go 1.20
 

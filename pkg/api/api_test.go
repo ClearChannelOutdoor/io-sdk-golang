@@ -9,7 +9,7 @@ package api
 import (
 	"testing"
 
-	"cco.dev/io/internal"
+	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
 )
 
 func Test_containsValue(t *testing.T) {
