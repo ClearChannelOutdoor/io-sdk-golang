@@ -103,7 +103,7 @@ func parseArgs() command {
 
 			if cmd.method == "search" && i < l-1 && os.Args[i+1][0] != '-' {
 				i++
-				cmd.childID = os.Args[i]
+				cmd.id = os.Args[i]
 			}
 		}
 
