@@ -1,6 +1,7 @@
 package clients
 
 import (
+	"context"
 	"errors"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
@@ -22,44 +23,44 @@ func (c *Client[T]) checkWrite() error {
 	return nil
 }
 
-func (c *Client[T]) Create(d *T) error {
+func (c *Client[T]) Create(ctx context.Context, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Create(d)
+	return c.wep.Create(ctx, d)
 }
 
-func (c *Client[T]) Delete(id string) error {
+func (c *Client[T]) Delete(ctx context.Context, id string) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Delete(id)
+	return c.wep.Delete(ctx, id)
 }
 
-func (c *Client[T]) Get(id string) (*T, error) {
-	return c.rep.Get(id)
+func (c *Client[T]) Get(ctx context.Context, id string) (*T, error) {
+	return c.rep.Get(ctx, id)
 }
 
-func (c *Client[T]) Patch(id string, d *T) error {
+func (c *Client[T]) Patch(ctx context.Context, id string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Patch(id, d)
+	return c.wep.Patch(ctx, id, d)
 }
 
-func (c *Client[T]) Search(opts ...*api.Options) (api.SearchResult[T], error) {
-	return c.rep.Search(opts...)
+func (c *Client[T]) Search(ctx context.Context, opts ...*api.Options) (api.SearchResult[T], error) {
+	return c.rep.Search(ctx, opts...)
 }
 
-func (c *Client[T]) Update(id string, d *T) error {
+func (c *Client[T]) Update(ctx context.Context, id string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Update(id, d)
+	return c.wep.Update(ctx, id, d)
 }
 
 func NewClient[T any](env api.Environment, svr string, resource string, oauth2 *clientcredentials.Config, writeScopes ...string) (*Client[T], error) {

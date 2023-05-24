@@ -1,6 +1,7 @@
 package clients
 
 import (
+	"context"
 	"errors"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
@@ -22,44 +23,44 @@ func (c *ChildClient[T]) checkWrite() error {
 	return nil
 }
 
-func (c *ChildClient[T]) Create(parentID string, d *T) error {
+func (c *ChildClient[T]) Create(ctx context.Context, parentID string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Create(parentID, d)
+	return c.wep.Create(ctx, parentID, d)
 }
 
-func (c *ChildClient[T]) Delete(parentID string, id string) error {
+func (c *ChildClient[T]) Delete(ctx context.Context, parentID string, id string) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Delete(parentID, id)
+	return c.wep.Delete(ctx, parentID, id)
 }
 
-func (c *ChildClient[T]) Get(parentID string, id string) (*T, error) {
-	return c.rep.Get(parentID, id)
+func (c *ChildClient[T]) Get(ctx context.Context, parentID string, id string) (*T, error) {
+	return c.rep.Get(ctx, parentID, id)
 }
 
-func (c *ChildClient[T]) Patch(parentID string, id string, d *T) error {
+func (c *ChildClient[T]) Patch(ctx context.Context, parentID string, id string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Patch(parentID, id, d)
+	return c.wep.Patch(ctx, parentID, id, d)
 }
 
-func (c *ChildClient[T]) Search(parentID string, opts ...*api.Options) (api.SearchResult[T], error) {
-	return c.rep.Search(parentID, opts...)
+func (c *ChildClient[T]) Search(ctx context.Context, parentID string, opts ...*api.Options) (api.SearchResult[T], error) {
+	return c.rep.Search(ctx, parentID, opts...)
 }
 
-func (c *ChildClient[T]) Update(parentID string, id string, d *T) error {
+func (c *ChildClient[T]) Update(ctx context.Context, parentID string, id string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Update(parentID, id, d)
+	return c.wep.Update(ctx, parentID, id, d)
 }
 
 func NewChildClient[T any](env api.Environment, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {

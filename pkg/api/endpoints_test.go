@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -125,7 +126,7 @@ func TestEndpoint_Create(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Create(tt.args.mdl); (err != nil) != tt.wantErr {
+			if err := e.Create(context.Background(), tt.args.mdl); (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
@@ -215,7 +216,7 @@ func TestEndpoint_Delete(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Delete(tt.args.id); (err != nil) != tt.wantErr {
+			if err := e.Delete(context.Background(), tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -312,7 +313,7 @@ func TestEndpoint_Get(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := e.Get(tt.args.id)
+			got, err := e.Get(context.Background(), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -423,7 +424,7 @@ func TestEndpoint_Patch(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Patch(tt.args.id, tt.args.m); (err != nil) != tt.wantErr {
+			if err := e.Patch(context.Background(), tt.args.id, tt.args.m); (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Patch() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
@@ -531,7 +532,7 @@ func TestEndpoint_Search(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := e.Search()
+			got, err := e.Search(context.Background())
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Search() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -642,7 +643,7 @@ func TestEndpoint_Update(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Update(tt.args.id, tt.args.m); (err != nil) != tt.wantErr {
+			if err := e.Update(context.Background(), tt.args.id, tt.args.m); (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}

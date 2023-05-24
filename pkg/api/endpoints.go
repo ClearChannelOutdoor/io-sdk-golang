@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -39,8 +40,9 @@ func NewEndpoint[T any](svc *Service, path string) *Endpoint[T] {
 	}
 }
 
-func (e *Endpoint[T]) request(method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
+func (e *Endpoint[T]) request(ctx context.Context, method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
 	r, err := retryRequest(
+		ctx,
 		e.a,
 		method,
 		path,
@@ -54,7 +56,7 @@ func (e *Endpoint[T]) request(method string, path string, body io.Reader, opts .
 }
 
 // Create creates a new model of type T within the API
-func (e *Endpoint[T]) Create(mdl *T) error {
+func (e *Endpoint[T]) Create(ctx context.Context, mdl *T) error {
 	var created T
 
 	jd, err := json.Marshal(mdl)
@@ -63,7 +65,7 @@ func (e *Endpoint[T]) Create(mdl *T) error {
 	}
 
 	// make the request to the API
-	data, err := e.request(postMethod, e.Path, bytes.NewBuffer(jd))
+	data, err := e.request(ctx, postMethod, e.Path, bytes.NewBuffer(jd))
 	if err != nil {
 		return err
 	}
@@ -80,9 +82,9 @@ func (e *Endpoint[T]) Create(mdl *T) error {
 }
 
 // Delete deletes a model of type T from the API
-func (e *Endpoint[T]) Delete(id string) error {
+func (e *Endpoint[T]) Delete(ctx context.Context, id string) error {
 	// make the request to the API
-	_, err := e.request(deleteMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
+	_, err := e.request(ctx, deleteMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
 	if err != nil {
 		return err
 	}
@@ -91,11 +93,11 @@ func (e *Endpoint[T]) Delete(id string) error {
 }
 
 // Get gets a single model of type T from the API
-func (e *Endpoint[T]) Get(id string) (*T, error) {
+func (e *Endpoint[T]) Get(ctx context.Context, id string) (*T, error) {
 	var mdl T
 
 	// make the request to the API
-	data, err := e.request(getMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
+	data, err := e.request(ctx, getMethod, fmt.Sprintf("%s/%s", e.Path, id), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +113,7 @@ func (e *Endpoint[T]) Get(id string) (*T, error) {
 // Patch updates a model of type T within the API while preserving
 // any fields that are omitted and any additional externalIDs
 // that already exist
-func (e *Endpoint[T]) Patch(id string, mdl *T) error {
+func (e *Endpoint[T]) Patch(ctx context.Context, id string, mdl *T) error {
 	var patched T
 
 	jd, err := json.Marshal(mdl)
@@ -120,7 +122,7 @@ func (e *Endpoint[T]) Patch(id string, mdl *T) error {
 	}
 
 	// make the request to the API
-	data, err := e.request(patchMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
+	data, err := e.request(ctx, patchMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
 	if err != nil {
 		return err
 	}
@@ -137,11 +139,11 @@ func (e *Endpoint[T]) Patch(id string, mdl *T) error {
 }
 
 // Search searches for models of type T within the API
-func (e *Endpoint[T]) Search(opts ...*Options) (SearchResult[T], error) {
+func (e *Endpoint[T]) Search(ctx context.Context, opts ...*Options) (SearchResult[T], error) {
 	var sr SearchResult[T]
 
 	// make the request to the API
-	data, err := e.request(getMethod, e.Path, nil, opts...)
+	data, err := e.request(ctx, getMethod, e.Path, nil, opts...)
 	if err != nil {
 		return sr, err
 	}
@@ -155,7 +157,7 @@ func (e *Endpoint[T]) Search(opts ...*Options) (SearchResult[T], error) {
 }
 
 // Update updates a model of type T within the API
-func (e *Endpoint[T]) Update(id string, mdl *T) error {
+func (e *Endpoint[T]) Update(ctx context.Context, id string, mdl *T) error {
 	var updated T
 
 	jd, err := json.Marshal(mdl)
@@ -164,7 +166,7 @@ func (e *Endpoint[T]) Update(id string, mdl *T) error {
 	}
 
 	// make the request to the API
-	data, err := e.request(putMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
+	data, err := e.request(ctx, putMethod, fmt.Sprintf("%s/%s", e.Path, id), bytes.NewBuffer(jd))
 	if err != nil {
 		return err
 	}

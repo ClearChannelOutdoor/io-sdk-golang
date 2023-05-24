@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -107,6 +108,12 @@ func parseArgs() command {
 			}
 		}
 
+		// check for version
+		if a == "-v" || a == "--version" {
+			printVersionAndExit()
+			break
+		}
+
 		i++
 	}
 
@@ -120,6 +127,7 @@ func printUsageAndExit(exitCode ...int) {
 	}
 
 	fmt.Println("Usage: io -a <api> -m <method> [-f <filter>]")
+	fmt.Println("Version:", api.Version)
 	fmt.Println()
 	fmt.Println("\t-a, --api\t\tThe API to use")
 	fmt.Println("\t-f, --filter\t\tA filter to apply to the request")
@@ -141,24 +149,30 @@ func printUsageAndExit(exitCode ...int) {
 	os.Exit(ec)
 }
 
+func printVersionAndExit() {
+	fmt.Println("Version:", api.Version)
+	os.Exit(0)
+}
+
 func runClientCommand[T any](client func() (*clients.Client[T], error), cmd command) {
 	cl, err := client()
 	if err != nil {
 		panic(err)
 	}
 
+	ctx := context.Background()
 	var res *T
 	var sr api.SearchResult[T]
 
 	switch cmd.method {
 	case "delete":
-		err = cl.Delete(cmd.id)
+		err = cl.Delete(ctx, cmd.id)
 	case "get":
-		res, err = cl.Get(cmd.id)
+		res, err = cl.Get(ctx, cmd.id)
 	case "patch":
 		panic(errors.New("not implemented"))
 	case "search":
-		sr, err = cl.Search(cmd.opts)
+		sr, err = cl.Search(ctx, cmd.opts)
 	case "update":
 		panic(errors.New("not implemented"))
 	}
@@ -187,18 +201,19 @@ func runChildClientCommand[T any](client func() (*clients.ChildClient[T], error)
 		panic(err)
 	}
 
+	ctx := context.Background()
 	var res *T
 	var sr api.SearchResult[T]
 
 	switch cmd.method {
 	case "delete":
-		err = cl.Delete(cmd.id, cmd.childID)
+		err = cl.Delete(ctx, cmd.id, cmd.childID)
 	case "get":
-		res, err = cl.Get(cmd.id, cmd.childID)
+		res, err = cl.Get(ctx, cmd.id, cmd.childID)
 	case "patch":
 		panic(errors.New("not implemented"))
 	case "search":
-		sr, err = cl.Search(cmd.id, cmd.opts)
+		sr, err = cl.Search(ctx, cmd.id, cmd.opts)
 	case "update":
 		panic(errors.New("not implemented"))
 	}

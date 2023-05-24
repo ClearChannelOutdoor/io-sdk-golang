@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -27,8 +28,9 @@ func NewChildEndpoint[T any](svc *Service, parentPath, childPath string) *ChildE
 	}
 }
 
-func (ce *ChildEndpoint[T]) request(method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
+func (ce *ChildEndpoint[T]) request(ctx context.Context, method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
 	r, err := retryRequest(
+		ctx,
 		ce.a,
 		method,
 		path,
@@ -41,7 +43,7 @@ func (ce *ChildEndpoint[T]) request(method string, path string, body io.Reader, 
 	return r, nil
 }
 
-func (ce *ChildEndpoint[T]) Create(parentID string, mdl *T) error {
+func (ce *ChildEndpoint[T]) Create(ctx context.Context, parentID string, mdl *T) error {
 	var created T
 
 	jd, err := json.Marshal(mdl)
@@ -49,7 +51,7 @@ func (ce *ChildEndpoint[T]) Create(parentID string, mdl *T) error {
 		return err
 	}
 
-	data, err := ce.request(postMethod, fmt.Sprintf(ce.Path, parentID), bytes.NewBuffer(jd))
+	data, err := ce.request(ctx, postMethod, fmt.Sprintf(ce.Path, parentID), bytes.NewBuffer(jd))
 	if err != nil {
 		return err
 	}
@@ -65,9 +67,9 @@ func (ce *ChildEndpoint[T]) Create(parentID string, mdl *T) error {
 	return nil
 }
 
-func (ce *ChildEndpoint[T]) Delete(parentID string, id string) error {
+func (ce *ChildEndpoint[T]) Delete(ctx context.Context, parentID string, id string) error {
 	// make the request to the API
-	_, err := ce.request(deleteMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
+	_, err := ce.request(ctx, deleteMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
 	if err != nil {
 		return err
 	}
@@ -75,11 +77,11 @@ func (ce *ChildEndpoint[T]) Delete(parentID string, id string) error {
 	return nil
 }
 
-func (ce *ChildEndpoint[T]) Get(parentID string, id string) (*T, error) {
+func (ce *ChildEndpoint[T]) Get(ctx context.Context, parentID string, id string) (*T, error) {
 	var mdl T
 
 	// make the request to the API
-	data, err := ce.request(getMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
+	data, err := ce.request(ctx, getMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +94,7 @@ func (ce *ChildEndpoint[T]) Get(parentID string, id string) (*T, error) {
 	return &mdl, nil
 }
 
-func (ce *ChildEndpoint[T]) Patch(parentID string, id string, mdl *T) error {
+func (ce *ChildEndpoint[T]) Patch(ctx context.Context, parentID string, id string, mdl *T) error {
 	var patched T
 
 	jd, err := json.Marshal(mdl)
@@ -101,7 +103,7 @@ func (ce *ChildEndpoint[T]) Patch(parentID string, id string, mdl *T) error {
 	}
 
 	// make the request to the API
-	data, err := ce.request(patchMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
+	data, err := ce.request(ctx, patchMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
 	if err != nil {
 		return err
 	}
@@ -117,11 +119,11 @@ func (ce *ChildEndpoint[T]) Patch(parentID string, id string, mdl *T) error {
 	return nil
 }
 
-func (ce *ChildEndpoint[T]) Search(parentID string, opts ...*Options) (SearchResult[T], error) {
+func (ce *ChildEndpoint[T]) Search(ctx context.Context, parentID string, opts ...*Options) (SearchResult[T], error) {
 	var sr SearchResult[T]
 
 	// make the request to the API
-	data, err := ce.request(getMethod, fmt.Sprintf(ce.Path, parentID), nil, opts...)
+	data, err := ce.request(ctx, getMethod, fmt.Sprintf(ce.Path, parentID), nil, opts...)
 	if err != nil {
 		return sr, err
 	}
@@ -134,7 +136,7 @@ func (ce *ChildEndpoint[T]) Search(parentID string, opts ...*Options) (SearchRes
 	return sr, nil
 }
 
-func (ce *ChildEndpoint[T]) Update(parentID string, id string, mdl *T) error {
+func (ce *ChildEndpoint[T]) Update(ctx context.Context, parentID string, id string, mdl *T) error {
 	var updated T
 
 	jd, err := json.Marshal(mdl)
@@ -143,7 +145,7 @@ func (ce *ChildEndpoint[T]) Update(parentID string, id string, mdl *T) error {
 	}
 
 	// make the request to the API
-	data, err := ce.request(putMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
+	data, err := ce.request(ctx, putMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
 	if err != nil {
 		return err
 	}

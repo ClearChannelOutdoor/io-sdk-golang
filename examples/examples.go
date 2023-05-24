@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
@@ -29,6 +30,7 @@ func GetDisplays() {
 
 	// get all digital displays that are 1080p
 	res, err := client.Search(
+		context.Background(),
 		api.EmptyOptions().
 			AddFilter("mediaProducts.type", "Digital").
 			AddFilter("digital.width", 1080))
@@ -54,6 +56,7 @@ func GetNetworkdisplays() {
 
 	// get all digital displays that are 1080p
 	res, err := client.Search(
+		context.Background(),
 		"",
 		api.EmptyOptions())
 	if err != nil {
