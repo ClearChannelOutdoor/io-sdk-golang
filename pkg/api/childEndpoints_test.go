@@ -109,7 +109,6 @@ func TestChildEndpoint_Create(t *testing.T) {
 			e := NewChildEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.parentPath,
@@ -206,7 +205,6 @@ func TestChildEndpoint_Delete(t *testing.T) {
 			e := NewChildEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.parentPath,
@@ -310,7 +308,6 @@ func TestChildEndpoint_Get(t *testing.T) {
 			e := NewChildEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.parentPath,
@@ -428,7 +425,6 @@ func TestChildEndpoint_Patch(t *testing.T) {
 			e := NewChildEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.parentPath,
@@ -543,7 +539,6 @@ func TestChildEndpoint_Search(t *testing.T) {
 			e := NewChildEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.parentPath,
@@ -661,7 +656,6 @@ func TestChildEndpoint_Update(t *testing.T) {
 			e := NewChildEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.parentPath,

@@ -115,7 +115,6 @@ func TestEndpoint_Create(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
@@ -205,7 +204,6 @@ func TestEndpoint_Delete(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
@@ -302,7 +300,6 @@ func TestEndpoint_Get(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
@@ -413,7 +410,6 @@ func TestEndpoint_Patch(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
@@ -521,7 +517,6 @@ func TestEndpoint_Search(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
@@ -632,7 +627,6 @@ func TestEndpoint_Update(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				tt.fields.path,

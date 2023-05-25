@@ -64,16 +64,16 @@ func (c *Client[T]) Update(id string, d *T) error {
 	return c.wep.Update(c.ctx, id, d)
 }
 
-func NewClient[T any](ctx context.Context, env api.Environment, svr string, resource string, oauth2 *clientcredentials.Config, writeScopes ...string) (*Client[T], error) {
+func NewClient[T any](ctx context.Context, svr string, resource string, oauth2 *clientcredentials.Config, writeScopes ...string) (*Client[T], error) {
 	if oauth2 == nil {
 		return nil, errors.New("oauth2 configuration is required")
 	}
 
 	// define the host and protocol details for the API
-	svc := api.NewService(env.String(), oauth2).SetServer(svr)
+	svc := api.NewService(svr, oauth2)
 
 	// ensure there is a valid server to connect to
-	if svc == nil || svc.Proto == "" || svc.Host == "" {
+	if !svc.IsValid() {
 		return nil, errors.New("the API server URL is invalid")
 	}
 

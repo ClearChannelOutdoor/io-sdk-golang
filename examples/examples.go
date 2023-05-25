@@ -20,7 +20,6 @@ func main() {
 
 func GetDisplays() {
 	client, err := displays.NewClient(context.Background(),
-		api.ProductionEnvironment,
 		&clientcredentials.Config{
 			ClientID:     "my-client-id",
 			ClientSecret: "my-client-secret",
@@ -48,7 +47,6 @@ func GetDisplays() {
 func GetNetworkdisplays() {
 	client, err := networks.NewDisplayClient(
 		context.Background(),
-		api.ProductionEnvironment,
 		&clientcredentials.Config{
 			ClientID:     "my-client-id",
 			ClientSecret: "my-client-secret",

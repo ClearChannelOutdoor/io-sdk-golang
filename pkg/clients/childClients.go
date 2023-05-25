@@ -64,16 +64,16 @@ func (c *ChildClient[T]) Update(parentID string, id string, d *T) error {
 	return c.wep.Update(c.ctx, parentID, id, d)
 }
 
-func NewChildClient[T any](ctx context.Context, env api.Environment, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {
+func NewChildClient[T any](ctx context.Context, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {
 	if oauth2 == nil {
 		return nil, errors.New("oauth2 configuration is required")
 	}
 
 	// define the host and protocol details for the API
-	svc := api.NewService(env.String(), oauth2).SetServer(svr)
+	svc := api.NewService(svr, oauth2)
 
 	// ensure there is a valid server to connect to
-	if svc == nil || svc.Proto == "" || svc.Host == "" {
+	if !svc.IsValid() {
 		return nil, errors.New("the API server URL is invalid")
 	}
 

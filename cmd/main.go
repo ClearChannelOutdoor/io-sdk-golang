@@ -23,22 +23,7 @@ type command struct {
 	id      string
 	opts    *api.Options
 	method  string
-}
-
-func determineEnvironment() api.Environment {
-	env := api.CustomEnvironment
-	switch os.Getenv("CCO_ENV") {
-	case "production":
-		env = api.ProductionEnvironment
-	case "develop":
-		env = api.DevelopEnvironment
-	case "staging":
-		env = api.StagingEnvironment
-	case "":
-		env = api.ProductionEnvironment
-	}
-
-	return env
+	server  string
 }
 
 func parseArgs() command {
@@ -106,6 +91,12 @@ func parseArgs() command {
 				i++
 				cmd.id = os.Args[i]
 			}
+		}
+
+		// check for server override
+		if (a == "-s" || a == "--server") && i < l-1 {
+			i++
+			cmd.server = os.Args[i]
 		}
 
 		// check for version
@@ -235,14 +226,8 @@ func runChildClientCommand[T any](client func() (*clients.ChildClient[T], error)
 }
 
 func main() {
-	// determine the environment
-	env := determineEnvironment()
-	envName := env.String()
-
 	// override the envName if it is a known environment
-	if env == api.CustomEnvironment {
-		envName = os.Getenv("CCO_ENV")
-	}
+	envName := os.Getenv("CCO_ENV")
 
 	// load the access settings for the environment
 	as, err := internal.LoadAccessSettings(envName)
@@ -274,19 +259,19 @@ func main() {
 	switch cmd.api {
 	case "displays":
 		runClientCommand(func() (*clients.Client[displays.Display], error) {
-			return displays.NewClient(ctx, env, cc)
+			return displays.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {
-			return markets.NewClient(ctx, env, cc)
+			return markets.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "networks":
 		runClientCommand(func() (*clients.Client[networks.Network], error) {
-			return networks.NewClient(ctx, env, cc)
+			return networks.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "network-displays":
 		runChildClientCommand(func() (*clients.ChildClient[networks.NetworkDisplay], error) {
-			return networks.NewDisplayClient(ctx, env, cc)
+			return networks.NewDisplayClient(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }

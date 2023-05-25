@@ -25,12 +25,11 @@ func main() {
 	// create a new client for retrieving displays
 	client, err := displays.NewClient(
 		context.Background(),
-		api.ProductionEnvironment, 
 		&clientcredentials.Config{
-		ClientID:     "replace-with-your-client-id",
-		ClientSecret: "replace-with-your-client-secret",
-		TokenURL:     "https://direct.cco.io/v2/token",
-	})
+			ClientID:     "replace-with-your-client-id",
+			ClientSecret: "replace-with-your-client-secret",
+			TokenURL:     "https://direct.cco.io/v2/token",
+		})
 	if err != nil {
 		panic(err)
 	}

@@ -89,7 +89,6 @@ func Test_ensureBearerToken(t *testing.T) {
 				&Service{
 					oauth2: tt.fields.oauth2,
 					Host:   u.Host,
-					Name:   defaultTestEnvironment,
 					Proto:  u.Scheme,
 				},
 				"/test",
@@ -281,7 +280,6 @@ func Test_retryRequest(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				"/test",
