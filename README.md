@@ -23,7 +23,10 @@ import (
 
 func main() {
 	// create a new client for retrieving displays
-	client, err := displays.NewClient(api.ProductionEnvironment, &clientcredentials.Config{
+	client, err := displays.NewClient(
+		context.Background(),
+		api.ProductionEnvironment, 
+		&clientcredentials.Config{
 		ClientID:     "replace-with-your-client-id",
 		ClientSecret: "replace-with-your-client-secret",
 		TokenURL:     "https://direct.cco.io/v2/token",
@@ -34,7 +37,6 @@ func main() {
 
 	// get all digital displays that are 1080p
 	res, err := client.Search(
-		context.Background(), 
 		api.EmptyOptions().
 			AddFilter("mediaProducts.type", "Digital").
 			AddFilter("digital.width", 1080))

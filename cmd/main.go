@@ -160,19 +160,18 @@ func runClientCommand[T any](client func() (*clients.Client[T], error), cmd comm
 		panic(err)
 	}
 
-	ctx := context.Background()
 	var res *T
 	var sr api.SearchResult[T]
 
 	switch cmd.method {
 	case "delete":
-		err = cl.Delete(ctx, cmd.id)
+		err = cl.Delete(cmd.id)
 	case "get":
-		res, err = cl.Get(ctx, cmd.id)
+		res, err = cl.Get(cmd.id)
 	case "patch":
 		panic(errors.New("not implemented"))
 	case "search":
-		sr, err = cl.Search(ctx, cmd.opts)
+		sr, err = cl.Search(cmd.opts)
 	case "update":
 		panic(errors.New("not implemented"))
 	}
@@ -201,19 +200,18 @@ func runChildClientCommand[T any](client func() (*clients.ChildClient[T], error)
 		panic(err)
 	}
 
-	ctx := context.Background()
 	var res *T
 	var sr api.SearchResult[T]
 
 	switch cmd.method {
 	case "delete":
-		err = cl.Delete(ctx, cmd.id, cmd.childID)
+		err = cl.Delete(cmd.id, cmd.childID)
 	case "get":
-		res, err = cl.Get(ctx, cmd.id, cmd.childID)
+		res, err = cl.Get(cmd.id, cmd.childID)
 	case "patch":
 		panic(errors.New("not implemented"))
 	case "search":
-		sr, err = cl.Search(ctx, cmd.id, cmd.opts)
+		sr, err = cl.Search(cmd.id, cmd.opts)
 	case "update":
 		panic(errors.New("not implemented"))
 	}
@@ -271,22 +269,24 @@ func main() {
 		printUsageAndExit(1)
 	}
 
+	ctx := context.Background()
+
 	switch cmd.api {
 	case "displays":
 		runClientCommand(func() (*clients.Client[displays.Display], error) {
-			return displays.NewClient(env, cc)
+			return displays.NewClient(ctx, env, cc)
 		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {
-			return markets.NewClient(env, cc)
+			return markets.NewClient(ctx, env, cc)
 		}, cmd)
 	case "networks":
 		runClientCommand(func() (*clients.Client[networks.Network], error) {
-			return networks.NewClient(env, cc)
+			return networks.NewClient(ctx, env, cc)
 		}, cmd)
 	case "network-displays":
 		runChildClientCommand(func() (*clients.ChildClient[networks.NetworkDisplay], error) {
-			return networks.NewDisplayClient(env, cc)
+			return networks.NewDisplayClient(ctx, env, cc)
 		}, cmd)
 	}
 }

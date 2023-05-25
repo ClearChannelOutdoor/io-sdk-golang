@@ -10,6 +10,7 @@ import (
 )
 
 type ChildClient[T any] struct {
+	ctx      context.Context
 	rep      api.ReadChildResource[T]
 	wep      api.WriteChildResouce[T]
 	writable bool
@@ -23,47 +24,47 @@ func (c *ChildClient[T]) checkWrite() error {
 	return nil
 }
 
-func (c *ChildClient[T]) Create(ctx context.Context, parentID string, d *T) error {
+func (c *ChildClient[T]) Create(parentID string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Create(ctx, parentID, d)
+	return c.wep.Create(c.ctx, parentID, d)
 }
 
-func (c *ChildClient[T]) Delete(ctx context.Context, parentID string, id string) error {
+func (c *ChildClient[T]) Delete(parentID string, id string) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Delete(ctx, parentID, id)
+	return c.wep.Delete(c.ctx, parentID, id)
 }
 
-func (c *ChildClient[T]) Get(ctx context.Context, parentID string, id string) (*T, error) {
-	return c.rep.Get(ctx, parentID, id)
+func (c *ChildClient[T]) Get(parentID string, id string) (*T, error) {
+	return c.rep.Get(c.ctx, parentID, id)
 }
 
-func (c *ChildClient[T]) Patch(ctx context.Context, parentID string, id string, d *T) error {
+func (c *ChildClient[T]) Patch(parentID string, id string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Patch(ctx, parentID, id, d)
+	return c.wep.Patch(c.ctx, parentID, id, d)
 }
 
-func (c *ChildClient[T]) Search(ctx context.Context, parentID string, opts ...*api.Options) (api.SearchResult[T], error) {
-	return c.rep.Search(ctx, parentID, opts...)
+func (c *ChildClient[T]) Search(parentID string, opts ...*api.Options) (api.SearchResult[T], error) {
+	return c.rep.Search(c.ctx, parentID, opts...)
 }
 
-func (c *ChildClient[T]) Update(ctx context.Context, parentID string, id string, d *T) error {
+func (c *ChildClient[T]) Update(parentID string, id string, d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Update(ctx, parentID, id, d)
+	return c.wep.Update(c.ctx, parentID, id, d)
 }
 
-func NewChildClient[T any](env api.Environment, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {
+func NewChildClient[T any](ctx context.Context, env api.Environment, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {
 	if oauth2 == nil {
 		return nil, errors.New("oauth2 configuration is required")
 	}
@@ -82,6 +83,7 @@ func NewChildClient[T any](env api.Environment, svr string, parentResource, chil
 	for _, scope := range writeScopes {
 		if internal.ContainsValue(oauth2.Scopes, scope) {
 			return &ChildClient[T]{
+				ctx:      ctx,
 				rep:      ep,
 				wep:      ep,
 				writable: true,
@@ -90,6 +92,7 @@ func NewChildClient[T any](env api.Environment, svr string, parentResource, chil
 	}
 
 	return &ChildClient[T]{
+		ctx: ctx,
 		rep: ep,
 	}, nil
 }

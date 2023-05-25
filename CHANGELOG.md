@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.0] - 2023-05-23
 
-- Added support for `context.Context` to all API calls
+- Added support for `context.Context`
 
 ## [0.0.2] - 2023-04-07
 

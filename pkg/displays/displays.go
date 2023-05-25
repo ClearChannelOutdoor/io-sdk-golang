@@ -1,6 +1,7 @@
 package displays
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
@@ -13,7 +14,7 @@ const (
 	serverFmt           string = "https://direct%s.cco.io"
 )
 
-func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Display], error) {
+func NewClient(ctx context.Context, env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Display], error) {
 	svr := fmt.Sprintf(serverFmt, "")
 	if env != api.ProductionEnvironment {
 		svr = fmt.Sprintf(serverFmt, fmt.Sprintf(".%s", env.String()))
@@ -23,5 +24,5 @@ func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSv
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[Display](env, svr, "/v1/displays", oauth2, scopeDisplaysModify)
+	return clients.NewClient[Display](ctx, env, svr, "/v1/displays", oauth2, scopeDisplaysModify)
 }

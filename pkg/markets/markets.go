@@ -1,6 +1,7 @@
 package markets
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
@@ -13,7 +14,7 @@ const (
 	serverFmt          string = "https://direct%s.cco.io"
 )
 
-func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Market], error) {
+func NewClient(ctx context.Context, env api.Environment, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Market], error) {
 	svr := fmt.Sprintf(serverFmt, "")
 	if env != api.ProductionEnvironment {
 		svr = fmt.Sprintf(serverFmt, fmt.Sprintf(".%s", env.String()))
@@ -23,5 +24,5 @@ func NewClient(env api.Environment, oauth2 *clientcredentials.Config, overrideSv
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[Market](env, svr, "/v1/markets", oauth2, scopeMarketsModify)
+	return clients.NewClient[Market](ctx, env, svr, "/v1/markets", oauth2, scopeMarketsModify)
 }
