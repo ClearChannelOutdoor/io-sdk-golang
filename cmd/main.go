@@ -17,6 +17,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -287,6 +288,18 @@ func main() {
 	case "products":
 		runClientCommand(func() (*clients.Client[products.Product], error) {
 			return products.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-cco":
+		runClientCommand(func() (*clients.Client[taxa.CCOCode], error) {
+			return taxa.NewCCOCodeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-iab-v1":
+		runClientCommand(func() (*clients.Client[taxa.IABV1Taxonomy], error) {
+			return taxa.NewIABV1Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-iab-v2":
+		runClientCommand(func() (*clients.Client[taxa.IABV2Taxonomy], error) {
+			return taxa.NewIABV2Client(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }
