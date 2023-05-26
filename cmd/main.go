@@ -9,8 +9,10 @@ import (
 	"strings"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/accounts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/customers"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
@@ -257,6 +259,14 @@ func main() {
 	ctx := context.Background()
 
 	switch cmd.api {
+	case "accounts":
+		runClientCommand(func() (*clients.Client[accounts.Account], error) {
+			return accounts.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "customers":
+		runClientCommand(func() (*clients.Client[customers.Customer], error) {
+			return customers.NewClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "displays":
 		runClientCommand(func() (*clients.Client[displays.Display], error) {
 			return displays.NewClient(ctx, cc, cmd.server)

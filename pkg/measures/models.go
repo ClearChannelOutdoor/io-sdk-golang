@@ -2,6 +2,16 @@ package measures
 
 import "time"
 
+type CBSA struct {
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type DMA struct {
+	ID   string `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
 type Construction struct {
 	Classification string `json:"classification,omitempty"`
 	Placement      string `json:"placement,omitempty"`
@@ -29,6 +39,33 @@ type Frame struct {
 
 type FramesStatus struct {
 	UpdatedAt *time.Time `json:"updated_at"`
+}
+
+type HourlyImpression struct {
+	Hour0  float32 `json:"0"`
+	Hour1  float32 `json:"1"`
+	Hour2  float32 `json:"2"`
+	Hour3  float32 `json:"3"`
+	Hour4  float32 `json:"4"`
+	Hour5  float32 `json:"5"`
+	Hour6  float32 `json:"6"`
+	Hour7  float32 `json:"7"`
+	Hour8  float32 `json:"8"`
+	Hour9  float32 `json:"9"`
+	Hour10 float32 `json:"10"`
+	Hour11 float32 `json:"11"`
+	Hour12 float32 `json:"12"`
+	Hour13 float32 `json:"13"`
+	Hour14 float32 `json:"14"`
+	Hour15 float32 `json:"15"`
+	Hour16 float32 `json:"16"`
+	Hour17 float32 `json:"17"`
+	Hour18 float32 `json:"18"`
+	Hour19 float32 `json:"19"`
+	Hour20 float32 `json:"20"`
+	Hour21 float32 `json:"21"`
+	Hour22 float32 `json:"22"`
+	Hour23 float32 `json:"23"`
 }
 
 type Illumination struct {
@@ -71,13 +108,13 @@ type Measure struct {
 		EffectiveMin int     `json:"effectiveMin"` // min frequency to be considered in reach; defaults to 1
 	} `json:"frequency"`
 	Hourly *struct {
-		Monday    schema.HourlyImpression `json:"mon,omitempty"`
-		Tuesday   schema.HourlyImpression `json:"tue,omitempty"`
-		Wednesday schema.HourlyImpression `json:"wed,omitempty"`
-		Thursday  schema.HourlyImpression `json:"thu,omitempty"`
-		Friday    schema.HourlyImpression `json:"fri,omitempty"`
-		Saturday  schema.HourlyImpression `json:"sat,omitempty"`
-		Sunday    schema.HourlyImpression `json:"sun,omitempty"`
+		Monday    HourlyImpression `json:"mon,omitempty"`
+		Tuesday   HourlyImpression `json:"tue,omitempty"`
+		Wednesday HourlyImpression `json:"wed,omitempty"`
+		Thursday  HourlyImpression `json:"thu,omitempty"`
+		Friday    HourlyImpression `json:"fri,omitempty"`
+		Saturday  HourlyImpression `json:"sat,omitempty"`
+		Sunday    HourlyImpression `json:"sun,omitempty"`
 	} `json:"hourly,omitempty"`
 	Impressions struct {
 		Market  float32 `json:"market"`  // impressions reaching the geographic market (i.e. Global, DMA or CBSA)
@@ -96,4 +133,28 @@ type Measure struct {
 		ID   int    `json:"id"`
 		Name string `json:"name"`
 	} `json:"segment"`
+}
+
+type Media struct {
+	MaxHeight int    "json:\"maxHeight,omitempty\""
+	MaxWidth  int    "json:\"maxWidth,omitempty\""
+	Name      string "json:\"name,omitempty\""
+	Status    string "json:\"status,omitempty\""
+	Type      string "json:\"type,omitempty\""
+}
+
+type Operator struct {
+	Name           string `json:"name,omitempty"`
+	Code           string `json:"code,omitempty"`
+	ParentName     string `json:"parentName,omitempty"`
+	Representation string `json:"representation,omitempty"`
+}
+
+type Place struct {
+	City          string `json:"city,omitempty"`
+	Name          string `json:"name,omitempty"`
+	ShortName     string `json:"shortName,omitempty"`
+	StreetAddress string `json:"streetAddress,omitempty"`
+	Type          string `json:"type,omitempty"`
+	UpdatedDesc   string `json:"updatedDesc,omitempty"`
 }

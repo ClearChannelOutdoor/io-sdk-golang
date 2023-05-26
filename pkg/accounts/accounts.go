@@ -1,4 +1,4 @@
-package customers
+package accounts
 
 import (
 	"context"
@@ -12,11 +12,11 @@ const (
 	serverUrl            string = "https://direct.cco.io"
 )
 
-func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Customer], error) {
+func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Account], error) {
 	svr := serverUrl
 	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[Customer](ctx, svr, "/v1/customers", oauth2, scopeCustomersModify)
+	return clients.NewClient[Account](ctx, svr, "/v1/accounts", oauth2, scopeCustomersModify)
 }
