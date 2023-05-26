@@ -1,4 +1,4 @@
-package measures
+package geopath
 
 import "time"
 
@@ -16,6 +16,21 @@ type Construction struct {
 	Classification string `json:"classification,omitempty"`
 	Placement      string `json:"placement,omitempty"`
 	Type           string `json:"type,omitempty"`
+}
+
+type ConstructionClassification struct {
+	Classification string `json:"construction.classification"`
+	FrameCount     int    `json:"count"`
+}
+
+type ConstructionPlacement struct {
+	Placement  string `json:"construction.placement"`
+	FrameCount int    `json:"count"`
+}
+
+type ConstructionType struct {
+	Type       string `json:"construction.type"`
+	FrameCount int    `json:"count"`
 }
 
 type Frame struct {

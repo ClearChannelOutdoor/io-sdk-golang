@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Added support for `context.Context`
 - Simplified client create for consumers
+- Added API clients for the following:
+  - accounts
+  - customers
+  - geopath frames 
+  - geopath measures
+  - advertised products
+  - CCO product codes (taxonomy)
+  - IAB v1 taxa
+  - IAB v2 taxa
 
 ## [0.0.2] - 2023-04-07
 

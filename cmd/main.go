@@ -14,6 +14,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/customers"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/geopath"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
@@ -272,6 +273,30 @@ func main() {
 	case "displays":
 		runClientCommand(func() (*clients.Client[displays.Display], error) {
 			return displays.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-construction-classifications":
+		runClientCommand(func() (*clients.Client[geopath.ConstructionClassification], error) {
+			return geopath.NewFrameConstructionClassificationClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-construction-placements":
+		runClientCommand(func() (*clients.Client[geopath.ConstructionPlacement], error) {
+			return geopath.NewFrameConstructionPlacementClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-construction-types":
+		runClientCommand(func() (*clients.Client[geopath.ConstructionType], error) {
+			return geopath.NewFrameConstructionTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-frames":
+		runClientCommand(func() (*clients.Client[geopath.Frame], error) {
+			return geopath.NewFrameClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-frames-measures":
+		runChildClientCommand(func() (*clients.ChildClient[geopath.Measure], error) {
+			return geopath.NewFrameMeasuresClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-measures":
+		runClientCommand(func() (*clients.Client[geopath.Measure], error) {
+			return geopath.NewMeasuresClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {
