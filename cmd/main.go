@@ -276,27 +276,51 @@ func main() {
 		}, cmd)
 	case "geopath-construction-classifications":
 		runClientCommand(func() (*clients.Client[geopath.ConstructionClassification], error) {
-			return geopath.NewFrameConstructionClassificationClient(ctx, cc, cmd.server)
+			return geopath.NewConstructionClassificationClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "geopath-construction-placements":
 		runClientCommand(func() (*clients.Client[geopath.ConstructionPlacement], error) {
-			return geopath.NewFrameConstructionPlacementClient(ctx, cc, cmd.server)
+			return geopath.NewConstructionPlacementClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "geopath-construction-types":
 		runClientCommand(func() (*clients.Client[geopath.ConstructionType], error) {
-			return geopath.NewFrameConstructionTypeClient(ctx, cc, cmd.server)
+			return geopath.NewConstructionTypeClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "geopath-frames":
 		runClientCommand(func() (*clients.Client[geopath.Frame], error) {
 			return geopath.NewFrameClient(ctx, cc, cmd.server)
 		}, cmd)
+	case "geopath-frames-history":
+		runChildClientCommand(func() (*clients.ChildClient[geopath.Measure], error) {
+			return geopath.NewFrameHistoryClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "geopath-frames-measures":
 		runChildClientCommand(func() (*clients.ChildClient[geopath.Measure], error) {
 			return geopath.NewFrameMeasuresClient(ctx, cc, cmd.server)
 		}, cmd)
+	case "geopath-illumination-types":
+		runClientCommand(func() (*clients.Client[geopath.IlluminationType], error) {
+			return geopath.NewIlluminationTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-location-types":
+		runClientCommand(func() (*clients.Client[geopath.LocationType], error) {
+			return geopath.NewLocationTypeClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "geopath-measures":
 		runClientCommand(func() (*clients.Client[geopath.Measure], error) {
 			return geopath.NewMeasuresClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-media-types":
+		runClientCommand(func() (*clients.Client[geopath.MediaType], error) {
+			return geopath.NewMediaTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-segment-ids":
+		runClientCommand(func() (*clients.Client[geopath.SegmentID], error) {
+			return geopath.NewSegmentIDClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-segment-names":
+		runClientCommand(func() (*clients.Client[geopath.SegmentName], error) {
+			return geopath.NewSegmentNameClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {

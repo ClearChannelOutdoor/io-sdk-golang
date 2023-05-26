@@ -89,6 +89,11 @@ type Illumination struct {
 	Type      string `json:"type,omitempty"`
 }
 
+type IlluminationType struct {
+	Type       string `json:"illumination.type"`
+	FrameCount int    `json:"count"`
+}
+
 type Location struct {
 	CBSA          *CBSA      `json:"cbsa,omitempty"`
 	Coords        *[]float32 `json:"coords,omitempty"`
@@ -104,6 +109,11 @@ type Location struct {
 	Timezone      string     `json:"timezone,omitempty"`
 	Type          string     `json:"type,omitempty"`
 	ZipCode       string     `json:"zipCode,omitempty"`
+}
+
+type LocationType struct {
+	Type       string `json:"location.type"`
+	FrameCount int    `json:"count"`
 }
 
 type Measure struct {
@@ -150,12 +160,21 @@ type Measure struct {
 	} `json:"segment"`
 }
 
+type MeasuresStatus struct {
+	UpdatedAt *time.Time `json:"updated_at"`
+}
+
 type Media struct {
 	MaxHeight int    "json:\"maxHeight,omitempty\""
 	MaxWidth  int    "json:\"maxWidth,omitempty\""
 	Name      string "json:\"name,omitempty\""
 	Status    string "json:\"status,omitempty\""
 	Type      string "json:\"type,omitempty\""
+}
+
+type MediaType struct {
+	Type       string `json:"media.type"`
+	FrameCount int    `json:"count"`
 }
 
 type Operator struct {
@@ -172,4 +191,14 @@ type Place struct {
 	StreetAddress string `json:"streetAddress,omitempty"`
 	Type          string `json:"type,omitempty"`
 	UpdatedDesc   string `json:"updatedDesc,omitempty"`
+}
+
+type SegmentID struct {
+	ID    int `json:"segment.id"`
+	Count int `json:"count"`
+}
+
+type SegmentName struct {
+	Name  string `json:"segment.name"`
+	Count int    `json:"count"`
 }

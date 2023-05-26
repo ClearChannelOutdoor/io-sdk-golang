@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - customers
   - geopath frames 
   - geopath measures
+  - geopath categorical items (construction types, illumination, media, etc.)
   - advertised products
   - CCO product codes (taxonomy)
   - IAB v1 taxa
