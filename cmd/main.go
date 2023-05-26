@@ -16,6 +16,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -282,6 +283,10 @@ func main() {
 	case "network-displays":
 		runChildClientCommand(func() (*clients.ChildClient[networks.NetworkDisplay], error) {
 			return networks.NewDisplayClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "products":
+		runClientCommand(func() (*clients.Client[products.Product], error) {
+			return products.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }
