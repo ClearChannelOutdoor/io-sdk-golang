@@ -19,7 +19,8 @@ func main() {
 }
 
 func GetDisplays() {
-	client, err := displays.NewClient(context.Background(),
+	client, err := displays.NewClient(
+		context.Background(),
 		&clientcredentials.Config{
 			ClientID:     "my-client-id",
 			ClientSecret: "my-client-secret",
