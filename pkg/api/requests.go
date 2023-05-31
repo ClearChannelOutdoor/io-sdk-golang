@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -16,14 +17,14 @@ const (
 	defaultMaxAttempts uint = 5
 )
 
-func ensureBearerToken(a *api) (string, error) {
+func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 	// if the token is blank or expired, get a new one
 	if a.OAuthToken == nil || (!a.OAuthToken.Expiry.IsZero() && a.OAuthToken.Expiry.Before(time.Now())) {
 		// set the auth style to header
 		a.Svc.oauth2.AuthStyle = oauth2.AuthStyleInHeader
 
 		// retrieve the token
-		tkn, err := a.Svc.oauth2.Token(a.GetContext())
+		tkn, err := a.Svc.oauth2.Token(ctx)
 		if err != nil {
 			return "", err
 		}
@@ -36,18 +37,18 @@ func ensureBearerToken(a *api) (string, error) {
 	return a.OAuthToken.AccessToken, nil
 }
 
-func retryRequest(a *api, method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, error) {
+func retryRequest(ctx context.Context, a *api, method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, error) {
 	// determine the URL
 	url := fmt.Sprintf("%s://%s%s", a.Svc.Proto, a.Svc.Host, reqPath)
 
 	// build the request
-	req, err := http.NewRequestWithContext(a.GetContext(), method, url, body)
+	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
 		return nil, err
 	}
 
 	// set the bearer token authorization header
-	tkn, err := ensureBearerToken(a)
+	tkn, err := ensureBearerToken(ctx, a)
 	if err != nil {
 		return nil, err
 	}

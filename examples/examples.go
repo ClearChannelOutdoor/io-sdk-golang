@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
@@ -18,11 +19,13 @@ func main() {
 }
 
 func GetDisplays() {
-	client, err := displays.NewClient(api.ProductionEnvironment, &clientcredentials.Config{
-		ClientID:     "my-client-id",
-		ClientSecret: "my-client-secret",
-		TokenURL:     "https://direct.cco.io/v2/token",
-	})
+	client, err := displays.NewClient(
+		context.Background(),
+		&clientcredentials.Config{
+			ClientID:     "my-client-id",
+			ClientSecret: "my-client-secret",
+			TokenURL:     "https://direct.cco.io/v2/token",
+		})
 	if err != nil {
 		panic(err)
 	}
@@ -43,18 +46,20 @@ func GetDisplays() {
 }
 
 func GetNetworkdisplays() {
-	client, err := networks.NewDisplayClient(api.ProductionEnvironment, &clientcredentials.Config{
-		ClientID:     "my-client-id",
-		ClientSecret: "my-client-secret",
-		TokenURL:     "https://direct.cco.io/v2/token",
-	})
+	client, err := networks.NewDisplayClient(
+		context.Background(),
+		&clientcredentials.Config{
+			ClientID:     "my-client-id",
+			ClientSecret: "my-client-secret",
+			TokenURL:     "https://direct.cco.io/v2/token",
+		})
 	if err != nil {
 		panic(err)
 	}
 
 	// get all digital displays that are 1080p
 	res, err := client.Search(
-		"",
+		"networkID123",
 		api.EmptyOptions())
 	if err != nil {
 		panic(err)

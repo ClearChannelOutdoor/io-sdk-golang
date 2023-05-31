@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -88,7 +89,6 @@ func Test_ensureBearerToken(t *testing.T) {
 				&Service{
 					oauth2: tt.fields.oauth2,
 					Host:   u.Host,
-					Name:   defaultTestEnvironment,
 					Proto:  u.Scheme,
 				},
 				"/test",
@@ -98,7 +98,7 @@ func Test_ensureBearerToken(t *testing.T) {
 			e.a.Svc.oauth2.TokenURL = fmt.Sprintf("%s/v2/token", ts.URL)
 			e.a.OAuthToken = tt.fields.token
 
-			got, err := ensureBearerToken(e.a)
+			got, err := ensureBearerToken(context.Background(), e.a)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.ensureBearerToken() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -280,7 +280,6 @@ func Test_retryRequest(t *testing.T) {
 			e := NewEndpoint[TestModel](
 				&Service{
 					Host:  u.Host,
-					Name:  defaultTestEnvironment,
 					Proto: u.Scheme,
 				},
 				"/test",
@@ -291,7 +290,7 @@ func Test_retryRequest(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := retryRequest(e.a, tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
+			got, err := retryRequest(context.Background(), e.a, tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.request() error = %v, wantErr %v", err, tt.wantErr)
 				return

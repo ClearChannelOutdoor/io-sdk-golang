@@ -1,25 +1,27 @@
 package api
 
+import "context"
+
 type ReadChildResource[T any] interface {
-	Search(string, ...*Options) (SearchResult[T], error)
-	Get(string, string) (*T, error)
+	Search(context.Context, string, ...*Options) (SearchResult[T], error)
+	Get(context.Context, string, string) (*T, error)
 }
 
 type ReadResource[T any] interface {
-	Search(...*Options) (SearchResult[T], error)
-	Get(string) (*T, error)
+	Search(context.Context, ...*Options) (SearchResult[T], error)
+	Get(context.Context, string) (*T, error)
 }
 
 type WriteChildResouce[T any] interface {
-	Create(string, *T) error
-	Delete(string, string) error
-	Patch(string, string, *T) error
-	Update(string, string, *T) error
+	Create(context.Context, string, *T) error
+	Delete(context.Context, string, string) error
+	Patch(context.Context, string, string, *T) error
+	Update(context.Context, string, string, *T) error
 }
 
 type WriteResource[T any] interface {
-	Create(*T) error
-	Delete(string) error
-	Patch(string, *T) error
-	Update(string, *T) error
+	Create(context.Context, *T) error
+	Delete(context.Context, string) error
+	Patch(context.Context, string, *T) error
+	Update(context.Context, string, *T) error
 }

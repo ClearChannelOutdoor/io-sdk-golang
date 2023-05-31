@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,11 +9,16 @@ import (
 	"strings"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/accounts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/customers"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/geopath"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -22,22 +28,7 @@ type command struct {
 	id      string
 	opts    *api.Options
 	method  string
-}
-
-func determineEnvironment() api.Environment {
-	env := api.CustomEnvironment
-	switch os.Getenv("CCO_ENV") {
-	case "production":
-		env = api.ProductionEnvironment
-	case "develop":
-		env = api.DevelopEnvironment
-	case "staging":
-		env = api.StagingEnvironment
-	case "":
-		env = api.ProductionEnvironment
-	}
-
-	return env
+	server  string
 }
 
 func parseArgs() command {
@@ -103,8 +94,20 @@ func parseArgs() command {
 
 			if cmd.method == "search" && i < l-1 && os.Args[i+1][0] != '-' {
 				i++
-				cmd.childID = os.Args[i]
+				cmd.id = os.Args[i]
 			}
+		}
+
+		// check for server override
+		if (a == "-s" || a == "--server") && i < l-1 {
+			i++
+			cmd.server = os.Args[i]
+		}
+
+		// check for version
+		if a == "-v" || a == "--version" {
+			printVersionAndExit()
+			break
 		}
 
 		i++
@@ -120,6 +123,7 @@ func printUsageAndExit(exitCode ...int) {
 	}
 
 	fmt.Println("Usage: io -a <api> -m <method> [-f <filter>]")
+	fmt.Println("Version:", api.Version)
 	fmt.Println()
 	fmt.Println("\t-a, --api\t\tThe API to use")
 	fmt.Println("\t-f, --filter\t\tA filter to apply to the request")
@@ -139,6 +143,11 @@ func printUsageAndExit(exitCode ...int) {
 	fmt.Println("\tio -a displays -m search -f \"mediaProducts.type:Digital\" -f \"digital.width:1080\"")
 	fmt.Println()
 	os.Exit(ec)
+}
+
+func printVersionAndExit() {
+	fmt.Println("Version:", api.Version)
+	os.Exit(0)
 }
 
 func runClientCommand[T any](client func() (*clients.Client[T], error), cmd command) {
@@ -222,14 +231,8 @@ func runChildClientCommand[T any](client func() (*clients.ChildClient[T], error)
 }
 
 func main() {
-	// determine the environment
-	env := determineEnvironment()
-	envName := env.String()
-
 	// override the envName if it is a known environment
-	if env == api.CustomEnvironment {
-		envName = os.Getenv("CCO_ENV")
-	}
+	envName := os.Getenv("CCO_ENV")
 
 	// load the access settings for the environment
 	as, err := internal.LoadAccessSettings(envName)
@@ -256,22 +259,96 @@ func main() {
 		printUsageAndExit(1)
 	}
 
+	ctx := context.Background()
+
 	switch cmd.api {
+	case "accounts":
+		runClientCommand(func() (*clients.Client[accounts.Account], error) {
+			return accounts.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "customers":
+		runClientCommand(func() (*clients.Client[customers.Customer], error) {
+			return customers.NewClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "displays":
 		runClientCommand(func() (*clients.Client[displays.Display], error) {
-			return displays.NewClient(env, cc)
+			return displays.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-construction-classifications":
+		runClientCommand(func() (*clients.Client[geopath.ConstructionClassification], error) {
+			return geopath.NewConstructionClassificationClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-construction-placements":
+		runClientCommand(func() (*clients.Client[geopath.ConstructionPlacement], error) {
+			return geopath.NewConstructionPlacementClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-construction-types":
+		runClientCommand(func() (*clients.Client[geopath.ConstructionType], error) {
+			return geopath.NewConstructionTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-frames":
+		runClientCommand(func() (*clients.Client[geopath.Frame], error) {
+			return geopath.NewFrameClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-frames-history":
+		runChildClientCommand(func() (*clients.ChildClient[geopath.Measure], error) {
+			return geopath.NewFrameHistoryClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-frames-measures":
+		runChildClientCommand(func() (*clients.ChildClient[geopath.Measure], error) {
+			return geopath.NewFrameMeasuresClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-illumination-types":
+		runClientCommand(func() (*clients.Client[geopath.IlluminationType], error) {
+			return geopath.NewIlluminationTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-location-types":
+		runClientCommand(func() (*clients.Client[geopath.LocationType], error) {
+			return geopath.NewLocationTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-measures":
+		runClientCommand(func() (*clients.Client[geopath.Measure], error) {
+			return geopath.NewMeasuresClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-media-types":
+		runClientCommand(func() (*clients.Client[geopath.MediaType], error) {
+			return geopath.NewMediaTypeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-segment-ids":
+		runClientCommand(func() (*clients.Client[geopath.SegmentID], error) {
+			return geopath.NewSegmentIDClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "geopath-segment-names":
+		runClientCommand(func() (*clients.Client[geopath.SegmentName], error) {
+			return geopath.NewSegmentNameClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {
-			return markets.NewClient(env, cc)
+			return markets.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "networks":
 		runClientCommand(func() (*clients.Client[networks.Network], error) {
-			return networks.NewClient(env, cc)
+			return networks.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "network-displays":
 		runChildClientCommand(func() (*clients.ChildClient[networks.NetworkDisplay], error) {
-			return networks.NewDisplayClient(env, cc)
+			return networks.NewDisplayClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "products":
+		runClientCommand(func() (*clients.Client[products.Product], error) {
+			return products.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-cco":
+		runClientCommand(func() (*clients.Client[taxa.CCOCode], error) {
+			return taxa.NewCCOCodeClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-iab-v1":
+		runClientCommand(func() (*clients.Client[taxa.IABV1Taxonomy], error) {
+			return taxa.NewIABV1Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-iab-v2":
+		runClientCommand(func() (*clients.Client[taxa.IABV2Taxonomy], error) {
+			return taxa.NewIABV2Client(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }

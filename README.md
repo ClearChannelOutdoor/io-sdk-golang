@@ -8,7 +8,7 @@ The IO SDK enables easy consumption of the CCO.IO Automated Direct and Programma
 go get -u github.com/clearchanneloutdoor/io-sdk-golang
 ```
 
-The SDK can be leveraged in applications directly, as shown in the example below that queries all digital billboards that are 1080p:
+The SDK can be leveraged in applications directly, as shown in the example below. The following code example queries all digital billboards that are 1080p:
 
 ```go
 package main
@@ -23,11 +23,13 @@ import (
 
 func main() {
 	// create a new client for retrieving displays
-	client, err := displays.NewClient(api.ProductionEnvironment, &clientcredentials.Config{
-		ClientID:     "replace-with-your-client-id",
-		ClientSecret: "replace-with-your-client-secret",
-		TokenURL:     "https://direct.cco.io/v2/token",
-	})
+	client, err := displays.NewClient(
+		context.Background(),
+		&clientcredentials.Config{
+			ClientID:     "replace-with-your-client-id",
+			ClientSecret: "replace-with-your-client-secret",
+			TokenURL:     "https://direct.cco.io/v2/token",
+		})
 	if err != nil {
 		panic(err)
 	}
@@ -47,3 +49,4 @@ func main() {
 	}
 }
 ```
+

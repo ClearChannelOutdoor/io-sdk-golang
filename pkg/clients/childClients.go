@@ -1,6 +1,7 @@
 package clients
 
 import (
+	"context"
 	"errors"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
@@ -9,6 +10,7 @@ import (
 )
 
 type ChildClient[T any] struct {
+	ctx      context.Context
 	rep      api.ReadChildResource[T]
 	wep      api.WriteChildResouce[T]
 	writable bool
@@ -27,7 +29,7 @@ func (c *ChildClient[T]) Create(parentID string, d *T) error {
 		return err
 	}
 
-	return c.wep.Create(parentID, d)
+	return c.wep.Create(c.ctx, parentID, d)
 }
 
 func (c *ChildClient[T]) Delete(parentID string, id string) error {
@@ -35,11 +37,11 @@ func (c *ChildClient[T]) Delete(parentID string, id string) error {
 		return err
 	}
 
-	return c.wep.Delete(parentID, id)
+	return c.wep.Delete(c.ctx, parentID, id)
 }
 
 func (c *ChildClient[T]) Get(parentID string, id string) (*T, error) {
-	return c.rep.Get(parentID, id)
+	return c.rep.Get(c.ctx, parentID, id)
 }
 
 func (c *ChildClient[T]) Patch(parentID string, id string, d *T) error {
@@ -47,11 +49,11 @@ func (c *ChildClient[T]) Patch(parentID string, id string, d *T) error {
 		return err
 	}
 
-	return c.wep.Patch(parentID, id, d)
+	return c.wep.Patch(c.ctx, parentID, id, d)
 }
 
 func (c *ChildClient[T]) Search(parentID string, opts ...*api.Options) (api.SearchResult[T], error) {
-	return c.rep.Search(parentID, opts...)
+	return c.rep.Search(c.ctx, parentID, opts...)
 }
 
 func (c *ChildClient[T]) Update(parentID string, id string, d *T) error {
@@ -59,19 +61,19 @@ func (c *ChildClient[T]) Update(parentID string, id string, d *T) error {
 		return err
 	}
 
-	return c.wep.Update(parentID, id, d)
+	return c.wep.Update(c.ctx, parentID, id, d)
 }
 
-func NewChildClient[T any](env api.Environment, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {
+func NewChildClient[T any](ctx context.Context, svr string, parentResource, childResouce string, oauth2 *clientcredentials.Config, writeScopes ...string) (*ChildClient[T], error) {
 	if oauth2 == nil {
 		return nil, errors.New("oauth2 configuration is required")
 	}
 
 	// define the host and protocol details for the API
-	svc := api.NewService(env.String(), oauth2).SetServer(svr)
+	svc := api.NewService(svr, oauth2)
 
 	// ensure there is a valid server to connect to
-	if svc == nil || svc.Proto == "" || svc.Host == "" {
+	if !svc.IsValid() {
 		return nil, errors.New("the API server URL is invalid")
 	}
 
@@ -81,6 +83,7 @@ func NewChildClient[T any](env api.Environment, svr string, parentResource, chil
 	for _, scope := range writeScopes {
 		if internal.ContainsValue(oauth2.Scopes, scope) {
 			return &ChildClient[T]{
+				ctx:      ctx,
 				rep:      ep,
 				wep:      ep,
 				writable: true,
@@ -89,6 +92,7 @@ func NewChildClient[T any](env api.Environment, svr string, parentResource, chil
 	}
 
 	return &ChildClient[T]{
+		ctx: ctx,
 		rep: ep,
 	}, nil
 }

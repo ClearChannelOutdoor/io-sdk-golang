@@ -29,7 +29,7 @@ func LoadAccessSettings(envName string) (*AccessSettings, error) {
 	// determine file name
 	fn := fmt.Sprintf(fileFmt, "")
 	if envName != "" && envName != "production" {
-		fn = fmt.Sprintf(fileFmt, fmt.Sprintf(".%s", envName))
+		fn = fmt.Sprintf(fileFmt, fmt.Sprintf(".%s", ""))
 	}
 
 	fp := path.Join(basePath, fn)
