@@ -19,7 +19,7 @@ const (
 
 func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 	// if the token is blank or expired, get a new one
-	if a.OAuthToken == nil || (!a.OAuthToken.Expiry.IsZero() && a.OAuthToken.Expiry.Before(time.Now())) {
+	if a.OAuthToken == nil || a.OAuthToken.Expiry.IsZero() || a.OAuthToken.Expiry.Before(time.Now()) {
 		// set the auth style to header
 		a.Svc.oauth2.AuthStyle = oauth2.AuthStyleInHeader
 
