@@ -37,6 +37,7 @@ type Frame struct {
 	Geopath struct {
 		FrameID int        `json:"frameID,omitempty"`
 		Created *time.Time `json:"createdAt,omitempty"`
+		SpotIDs *[]int     `json:"spotIDs,omitempty"`
 		Updated *time.Time `json:"updatedAt,omitempty"`
 	} `json:"geopath,omitempty"`
 	Construction    *Construction `json:"construction,omitempty"`

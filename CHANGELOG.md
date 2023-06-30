@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.1.2] - 2023-06-30
+
+- Added `SpotIDs` to the `Frame` model in the `geopath` package
+
 ## [0.1.1] - 2023-06-06
 
 - Simplified check for expired or no PASETO
