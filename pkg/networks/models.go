@@ -18,9 +18,21 @@ type HoursOfOperation struct {
 }
 
 type Market struct {
-	ExternalIDs []string `json:"externalIDs,omitempty"`
-	ID          string   `json:"marketID,omitempty"`
-	Name        string   `json:"name,omitempty"`
+	ExternalIDs               []string                         `json:"externalIDs,omitempty"`
+	CoreBasedStatisticalAreas []MarketCoreBasedStatisticalArea `json:"coreBasedStatisticalAreas,omitempty" bson:"coreBasedStatisticalAreas,omitempty"`
+	ID                        string                           `json:"marketID,omitempty"`
+	DesignatedMarketAreas     []MarketDesignatedMarketArea     `json:"designatedMarketAreas,omitempty" bson:"designatedMarketAreas,omitempty"`
+	Name                      string                           `json:"name,omitempty"`
+}
+
+type MarketCoreBasedStatisticalArea struct {
+	Code string `json:"code,omitempty" bson:"code,omitempty"`
+	Name string `json:"name,omitempty" bson:"name,omitempty"`
+}
+
+type MarketDesignatedMarketArea struct {
+	Code string `json:"code,omitempty" bson:"code,omitempty"`
+	Name string `json:"name,omitempty" bson:"name,omitempty"`
 }
 
 type Network struct {

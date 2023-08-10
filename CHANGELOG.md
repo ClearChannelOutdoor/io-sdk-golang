@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.0] - 2023-08-10
+
+- Added support for schema updates to `display` and `network` package models to include DMA and CBSA details
+- Modified `campaign` package models to reflect latest changes
+
 ## [0.1.2] - 2023-06-30
 
 - Added `SpotIDs` to the `Frame` model in the `geopath` package

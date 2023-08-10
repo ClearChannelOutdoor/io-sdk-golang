@@ -21,8 +21,8 @@ type Display struct {
 	Market           *DisplayMarket       `json:"market,omitempty"`
 	MediaProducts    []MediaProduct       `json:"mediaProducts,omitempty"`
 	ReadDirection    *string              `json:"readDirection,omitempty"`
-	Route            *DisplayRoute        `json:"route,omitempty"`
 	Saleable         *bool                `json:"saleable,omitempty"`
+	Status           *DisplayStatus       `json:"status,omitempty"`
 	StreetSide       string               `json:"streetSide,omitempty"`
 	Structure        *DisplayStructure    `json:"structure,omitempty"`
 	Title            string               `json:"title,omitempty"`
@@ -55,14 +55,18 @@ type DisplayIllumination struct {
 
 type DisplayMarket struct {
 	ExternalIDs []string `json:"externalIDs,omitempty"`
+	BSACode     string   `json:"cbsaCode,omitempty" bson:"cbsaCode,omitempty"`
+	CBSAName    string   `json:"cbsaName,omitempty" bson:"cbsaName,omitempty"`
+	DMACode     string   `json:"dmaCode,omitempty" bson:"dmaCode,omitempty"`
+	DMAName     string   `json:"dmaName,omitempty" bson:"dmaName,omitempty"`
 	ID          string   `json:"marketID,omitempty"`
 	Name        string   `json:"name,omitempty"`
 	Number      string   `json:"number,omitempty"`
 }
 
-type DisplayRoute struct {
-	Name     string  `json:"name,omitempty"`
-	Sequence float32 `json:"sequence,omitempty"`
+type DisplayStatus struct {
+	Active   bool `json:"active,omitempty"`
+	Saleable bool `json:"saleable,omitempty"`
 }
 
 type DisplayStructure struct {
