@@ -49,31 +49,38 @@ func (o *Options) AddField(field ...string) *Options {
 
 // AddFilter adds a field and value to the options used to control
 // which results are returned for an API request.
-func (o *Options) AddFilter(field string, value any) *Options {
-	var v string
-	switch tv := value.(type) {
-	case fmt.Stringer:
-		v = tv.String()
-	case string:
-		v = tv
-	default:
-		v = fmt.Sprintf("%v", tv)
-	}
-
-	// check to see if the field already exists within the filters
-	if f, ok := o.filter[field]; ok {
-		// check to see if the value already exists within the filter
-		if internal.ContainsValue(f, v) {
-			return o
-		}
-
-		// append the filter and return
-		o.filter[field] = append(f, v)
+func (o *Options) AddFilter(field string, value ...any) *Options {
+	if len(value) == 0 {
 		return o
 	}
 
-	// add the filter and return
-	o.filter[field] = []string{v}
+	for _, val := range value {
+		var v string
+		switch tv := val.(type) {
+		case fmt.Stringer:
+			v = tv.String()
+		case string:
+			v = tv
+		default:
+			v = fmt.Sprintf("%v", tv)
+		}
+
+		// check to see if the field already exists within the filters
+		if f, ok := o.filter[field]; ok {
+			// check to see if the value already exists within the filter
+			if internal.ContainsValue(f, v) {
+				return o
+			}
+
+			// append the filter and return
+			o.filter[field] = append(f, v)
+			return o
+		}
+
+		// add the filter and return
+		o.filter[field] = []string{v}
+	}
+
 	return o
 }
 

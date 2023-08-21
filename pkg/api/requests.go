@@ -18,6 +18,10 @@ const (
 )
 
 func ensureBearerToken(ctx context.Context, a *api) (string, error) {
+	if a.Svc == nil || a.Svc.oauth2 == nil {
+		return "", nil
+	}
+
 	// if the token is blank or expired, get a new one
 	// removing check for OAuthToken.Expiry.Zero - this would indicate token does not expire
 	if a.OAuthToken == nil || a.OAuthToken.Expiry.Before(time.Now()) {

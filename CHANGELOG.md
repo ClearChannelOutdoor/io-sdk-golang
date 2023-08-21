@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.1] - 2023-08-10
+
+- Added support for schema updates to `market` package models to include DMA and CBSA details
+- Adjusted the `options.AddFilter` method to be variadic to support passing multiple values easily
+
 ## [0.2.0] - 2023-08-10
 
 - Added support for schema updates to `display` and `network` package models to include DMA and CBSA details
