@@ -61,7 +61,8 @@ func retryRequest(ctx context.Context, a *api, method string, reqPath string, bo
 
 	// set the query params as appropriate
 	if len(opts) > 0 {
-		req.URL.RawQuery = opts[0].Query().Encode()
+		req.URL.RawQuery = opts[0].FormatQuery()
+		fmt.Println(req.URL.RawQuery)
 	}
 
 	// track what is actually provided back from the API

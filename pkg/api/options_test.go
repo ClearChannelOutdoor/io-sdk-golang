@@ -3,6 +3,7 @@ package api
 import (
 	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -830,6 +831,17 @@ func Test_options_Query(t *testing.T) {
 			},
 		},
 		{
+			"should return a query with filters comma separated when there are multiple values",
+			fields{
+				filter: map[string][]string{
+					"field": {"value 1", "value 2"},
+				},
+			},
+			url.Values{
+				"filter[field]": []string{"value 1", "value 2"},
+			},
+		},
+		{
 			"should return a query with page provided",
 			fields{
 				page: map[string]int{
@@ -860,8 +872,106 @@ func Test_options_Query(t *testing.T) {
 				page:   tt.fields.page,
 				sort:   tt.fields.sort,
 			}
+
 			if got := o.Query(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("options.Query() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_options_FormatQuery(t *testing.T) {
+	var similar = func(a, b string) bool {
+		if len(a) != len(b) {
+			return false
+		}
+
+		aPrms := strings.Split(a, "&")
+		bPrms := strings.Split(b, "&")
+
+		if len(aPrms) != len(bPrms) {
+			return false
+		}
+
+		for _, prm := range aPrms {
+			if !strings.Contains(b, prm) {
+				return false
+			}
+		}
+
+		return true
+	}
+	type fields struct {
+		fields []string
+		filter map[string][]string
+		page   map[string]int
+		sort   []string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			"should return an empty query when no options are set",
+			fields{},
+			"",
+		},
+		{
+			"should return a query with fields provided",
+			fields{
+				fields: []string{"field"},
+			},
+			"fields=field",
+		},
+		{
+			"should return a query with filters provided",
+			fields{
+				filter: map[string][]string{
+					"field": {"value"},
+					"other": {"value"},
+				},
+			},
+			"filter[field]=value&filter[other]=value",
+		},
+		{
+			"should return a query with filters comma separated when there are multiple values",
+			fields{
+				filter: map[string][]string{
+					"field": {"value 1", "value 2"},
+				},
+			},
+			"filter[field]=value+1,value+2",
+		},
+		{
+			"should return a query with page provided",
+			fields{
+				page: map[string]int{
+					"limit":  100,
+					"offset": 100,
+				},
+			},
+			"page[limit]=100&page[offset]=100",
+		},
+		{
+			"should return a query with sort provided",
+			fields{
+				sort: []string{"field", "-other"},
+			},
+			"sort=field,-other",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			o := &Options{
+				fields: tt.fields.fields,
+				filter: tt.fields.filter,
+				page:   tt.fields.page,
+				sort:   tt.fields.sort,
+			}
+
+			if got := o.FormatQuery(); !similar(got, tt.want) {
+				t.Errorf("options.EncodeQuery() = %v, want %v", got, tt.want)
 			}
 		})
 	}

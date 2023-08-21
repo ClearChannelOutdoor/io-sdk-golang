@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
 )
@@ -105,6 +106,30 @@ func (o *Options) AddSort(field ...string) *Options {
 	}
 
 	return o
+}
+
+func (o *Options) FormatQuery() string {
+	q := o.Query()
+	sb := strings.Builder{}
+
+	for k, v := range q {
+		if len(v) > 0 {
+			if sb.Len() > 0 {
+				sb.WriteString("&")
+			}
+
+			sb.WriteString(fmt.Sprintf("%s=", k))
+			for i, val := range v {
+				if i > 0 {
+					sb.WriteString(",")
+				}
+
+				sb.WriteString(url.QueryEscape(val))
+			}
+		}
+	}
+
+	return sb.String()
 }
 
 // NextPage increments the offset value by the limit value for
