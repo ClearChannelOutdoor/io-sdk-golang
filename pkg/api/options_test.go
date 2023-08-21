@@ -971,7 +971,7 @@ func Test_options_FormatQuery(t *testing.T) {
 			}
 
 			if got := o.FormatQuery(); !similar(got, tt.want) {
-				t.Errorf("options.EncodeQuery() = %v, want %v", got, tt.want)
+				t.Errorf("options.FormatQuery() = %v, want %v", got, tt.want)
 			}
 		})
 	}
