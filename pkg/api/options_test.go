@@ -133,7 +133,7 @@ func Test_options_AddFilter(t *testing.T) {
 	}
 	type args struct {
 		field string
-		value any
+		value []any
 	}
 	tests := []struct {
 		name   string
@@ -148,7 +148,7 @@ func Test_options_AddFilter(t *testing.T) {
 			},
 			args{
 				"field",
-				"value",
+				[]any{"value"},
 			},
 			&Options{
 				filter: map[string][]string{
@@ -163,7 +163,7 @@ func Test_options_AddFilter(t *testing.T) {
 			},
 			args{
 				"field",
-				10,
+				[]any{10},
 			},
 			&Options{
 				filter: map[string][]string{
@@ -178,7 +178,7 @@ func Test_options_AddFilter(t *testing.T) {
 			},
 			args{
 				"field",
-				time.Date(1, 1, 1, 12, 0, 0, 0, time.UTC),
+				[]any{time.Date(1, 1, 1, 12, 0, 0, 0, time.UTC)},
 			},
 			&Options{
 				filter: map[string][]string{
@@ -195,7 +195,22 @@ func Test_options_AddFilter(t *testing.T) {
 			},
 			args{
 				"field",
-				"value 2",
+				[]any{"value 2"},
+			},
+			&Options{
+				filter: map[string][]string{
+					"field": {"value 1", "value 2"},
+				},
+			},
+		},
+		{
+			"should add multiple values to filter when passed as array",
+			fields{
+				filter: map[string][]string{},
+			},
+			args{
+				"field",
+				[]any{"value 1", "value 2"},
 			},
 			&Options{
 				filter: map[string][]string{
@@ -212,7 +227,7 @@ func Test_options_AddFilter(t *testing.T) {
 			},
 			args{
 				"field",
-				"value 1",
+				[]any{"value 1"},
 			},
 			&Options{
 				filter: map[string][]string{
@@ -227,7 +242,7 @@ func Test_options_AddFilter(t *testing.T) {
 				filter: tt.fields.filter,
 			}
 
-			if got := o.AddFilter(tt.args.field, tt.args.value); !reflect.DeepEqual(got, tt.want) {
+			if got := o.AddFilter(tt.args.field, tt.args.value...); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("options.AddFilter() = \n\t%+v\nwant \n\t%+v", got, tt.want)
 			}
 		})
