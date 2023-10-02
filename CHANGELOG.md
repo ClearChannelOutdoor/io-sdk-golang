@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.3.1] - 2023-10-02
 
-- Updated `customer` model  to include customer number and taxonmay details
+- Updated `customer` model  to include customer number and taxonomy details
 
 ## [0.3.0] - 2023-08-21
 
