@@ -5,14 +5,13 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.1] - 2023-10-02
+
+- Updated `customer` model  to include customer number and taxonomy details
 
 ## [0.3.0] - 2023-08-21
 
 - Modified query options encoding for optimal use with CCO microservices
-
-## [0.2.2] - 2023-10-02
-
-- Updated `customer` model  to include customer number and taxonomy details
 
 ## [0.2.1] - 2023-08-10
 
