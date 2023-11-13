@@ -5,9 +5,13 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.2] - 2023-11-13
+
+- Updated `customer` market sub model to include code field
+
 ## [0.3.1] - 2023-10-02
 
-- Updated `customer` model  to include customer number and taxonomy details
+- Updated `customer` model to include customer number and taxonomy details
 
 ## [0.3.0] - 2023-08-21
 
