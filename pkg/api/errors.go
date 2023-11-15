@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-type apiError struct {
+type APIError struct {
 	Message string `json:"message"`
 	Status  int    `json:"status"`
 	Title   string `json:"title"`
 }
 
-func (e apiError) Error() string {
+func (e APIError) Error() string {
 	return fmt.Sprintf("%s (%d): %s", e.Title, e.Status, e.Message)
 }
 
