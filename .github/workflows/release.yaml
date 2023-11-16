@@ -31,3 +31,5 @@ jobs:
         build_command: "make build"
         extra_files: LICENSE
         release_name: ${{ github.ref_name }}
+
+permissions: write-all
