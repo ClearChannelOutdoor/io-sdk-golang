@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Added support for `creatives`
 
+## [0.3.3] - 2023-11-15
+
+- Exposing API errors in order to support consumers performing status checks
+- Updated build automation manifest for CLI tool
+
 ## [0.3.2] - 2023-11-13
 
 - Updated `customer` market sub model to include code field

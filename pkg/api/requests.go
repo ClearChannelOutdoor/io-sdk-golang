@@ -89,10 +89,10 @@ func retryRequest(ctx context.Context, a *api, method string, reqPath string, bo
 		// check to see if the response contains an error status
 		if res.StatusCode > 399 {
 			// attempt to unmarshal the body into an apiError
-			var apiErr apiError
+			var apiErr APIError
 			if err := json.Unmarshal(bdy, &apiErr); err != nil {
 				// the error is not an apiError, it is a string value
-				apiErr = apiError{
+				apiErr = APIError{
 					Message: string(bdy),
 					Status:  res.StatusCode,
 					Title:   res.Status,
