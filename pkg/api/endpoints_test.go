@@ -89,7 +89,7 @@ func TestEndpoint_Create(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 
-					err := apiError{
+					err := APIError{
 						Message: "test-error-message",
 						Status:  http.StatusBadRequest,
 						Title:   "test-error-title",
@@ -181,7 +181,7 @@ func TestEndpoint_Delete(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 
-					err := apiError{
+					err := APIError{
 						Message: "test-error-message",
 						Status:  http.StatusBadRequest,
 						Title:   "test-error-title",
@@ -276,7 +276,7 @@ func TestEndpoint_Get(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 
-					err := apiError{
+					err := APIError{
 						Message: "test-error-message",
 						Status:  http.StatusBadRequest,
 						Title:   "test-error-title",
@@ -382,7 +382,7 @@ func TestEndpoint_Patch(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 
-					err := apiError{
+					err := APIError{
 						Message: "test-error-message",
 						Status:  http.StatusBadRequest,
 						Title:   "test-error-title",
@@ -494,7 +494,7 @@ func TestEndpoint_Search(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 
-					err := apiError{
+					err := APIError{
 						Message: "test-error-message",
 						Status:  http.StatusBadRequest,
 						Title:   "test-error-title",
@@ -599,7 +599,7 @@ func TestEndpoint_Update(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 
-					err := apiError{
+					err := APIError{
 						Message: "test-error-message",
 						Status:  http.StatusBadRequest,
 						Title:   "test-error-title",
