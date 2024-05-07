@@ -11,6 +11,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/accounts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/bookings"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/creatives"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/customers"
@@ -18,7 +19,9 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/geopath"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/markets"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/orders"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/renewals"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
 	"golang.org/x/oauth2/clientcredentials"
 )
@@ -267,6 +270,10 @@ func main() {
 		runClientCommand(func() (*clients.Client[accounts.Account], error) {
 			return accounts.NewClient(ctx, cc, cmd.server)
 		}, cmd)
+	case "bookings":
+		runClientCommand(func() (*clients.Client[bookings.Booking], error) {
+			return bookings.NewClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "creatives":
 		runClientCommand(func() (*clients.Client[creatives.Creative], error) {
 			return creatives.NewClient(ctx, cc, cmd.server)
@@ -339,9 +346,21 @@ func main() {
 		runChildClientCommand(func() (*clients.ChildClient[networks.NetworkDisplay], error) {
 			return networks.NewDisplayClient(ctx, cc, cmd.server)
 		}, cmd)
+	case "orders":
+		runClientCommand(func() (*clients.Client[orders.Order], error) {
+			return orders.NewOrdersClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "orderlines":
+		runClientCommand(func() (*clients.Client[orders.OrderLine], error) {
+			return orders.NewOrderLinesClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "products":
 		runClientCommand(func() (*clients.Client[products.Product], error) {
 			return products.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "renewals":
+		runClientCommand(func() (*clients.Client[renewals.Relationship], error) {
+			return renewals.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "taxa-cco":
 		runClientCommand(func() (*clients.Client[taxa.CCOCode], error) {

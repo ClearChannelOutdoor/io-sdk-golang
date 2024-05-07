@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.5] - 2024-05-07
+
+- Added support for `renewals`, `orders` and `orderlines`, and `bookings`
+
 ## [0.3.4] - 2023-11-16
 
 - Added support for `creatives`
