@@ -16,5 +16,6 @@ type Account struct {
 type AccountCustomer struct {
 	ID          string   `json:"customerID"`
 	ExternalIDs []string `json:"externalIDs,omitempty"`
-	Name        string   `json:"name"`
+	Name        string   `json:"name,omitempty"`
+	Number      string   `json:"number,omitempty"`
 }
