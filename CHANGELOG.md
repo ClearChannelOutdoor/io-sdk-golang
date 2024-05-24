@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.6] - 2024-05-24
+
+- Updated `account` sub model to include customer number field
+
 ## [0.3.5] - 2024-05-07
 
 - Added support for `renewals`, `orders` and `orderlines`, and `bookings`
@@ -55,7 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added API clients for the following:
   - accounts
   - customers
-  - geopath frames 
+  - geopath frames
   - geopath measures
   - geopath categorical items (construction types, illumination, media, etc.)
   - advertised products
@@ -66,7 +70,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.0.2] - 2023-04-07
 
 - Implemented sub-resource routines for making API calls to child resources
-- Added networks and network displays to available API clients 
+- Added networks and network displays to available API clients
 
 ## [0.0.1] - 2023-04-06
 
