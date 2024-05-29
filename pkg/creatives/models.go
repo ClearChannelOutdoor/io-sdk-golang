@@ -3,7 +3,6 @@ package creatives
 import "time"
 
 type AdCreative struct {
-	ID          string          `json:"creativeID" bson:"_id"`
 	Asset       AdCreativeAsset `json:"asset" bson:"asset"`
 	CreatedAt   time.Time       `json:"createdAt" bson:"createdAt"`
 	Description string          `json:"description,omitempty" bson:"description,omitempty"`
@@ -11,6 +10,7 @@ type AdCreative struct {
 	FileType    string          `json:"fileType,omitempty" bson:"fileType,omitempty"`
 	Format      string          `json:"format,omitempty" bson:"format,omitempty"`
 	Hidden      *bool           `json:"hidden,omitempty" bson:"hidden,omitempty"`
+	ID          string          `json:"creativeID" bson:"_id"`
 	SubmittedBy string          `json:"submittedBy,omitempty" bson:"submittedBy,omitempty"`
 	UpdatedAt   time.Time       `json:"updatedAt" bson:"updatedAt"`
 }
