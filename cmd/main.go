@@ -274,9 +274,13 @@ func main() {
 		runClientCommand(func() (*clients.Client[bookings.Booking], error) {
 			return bookings.NewClient(ctx, cc, cmd.server)
 		}, cmd)
-	case "creatives":
+	case "creatives-v1":
 		runClientCommand(func() (*clients.Client[creatives.Creative], error) {
-			return creatives.NewClient(ctx, cc, cmd.server)
+			return creatives.NewCreativeV1Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "creatives-v2":
+		runClientCommand(func() (*clients.Client[creatives.AdCreative], error) {
+			return creatives.NewCreativeV2Client(ctx, cc, cmd.server)
 		}, cmd)
 	case "customers":
 		runClientCommand(func() (*clients.Client[customers.Customer], error) {
