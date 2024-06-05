@@ -375,8 +375,12 @@ func main() {
 			return taxa.NewIABV1Client(ctx, cc, cmd.server)
 		}, cmd)
 	case "taxa-iab-v2":
-		runClientCommand(func() (*clients.Client[taxa.IABV2Taxonomy], error) {
+		runClientCommand(func() (*clients.Client[taxa.IABTaxonomy], error) {
 			return taxa.NewIABV2Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-iab-v3":
+		runClientCommand(func() (*clients.Client[taxa.IABTaxonomy], error) {
+			return taxa.NewIABV3Client(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }

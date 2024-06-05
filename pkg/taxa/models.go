@@ -9,13 +9,14 @@ type CCOCode struct {
 }
 
 type IABV1Taxonomy struct {
-	RTBID      string         `json:"rtbID"`
-	Subject    string         `json:"subject"`
-	Deprecated bool           `json:"deprecated"`
-	V2         *IABV2Taxonomy `json:"v2,omitempty"`
+	RTBID      string       `json:"rtbID"`
+	Subject    string       `json:"subject"`
+	Deprecated bool         `json:"deprecated"`
+	V2         *IABTaxonomy `json:"v2,omitempty"`
+	V3         *IABTaxonomy `json:"v3,omitempty"`
 }
 
-type IABV2Taxonomy struct {
+type IABTaxonomy struct {
 	UniqueID  string `json:"uniqueID"`
 	Parent    string `json:"parent,omitempty"`
 	Name      string `json:"name"`
