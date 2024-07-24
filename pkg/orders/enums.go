@@ -3,27 +3,27 @@ package orders
 type OrderSource string
 
 const (
-	Quattro     OrderSource = "Quattro"
 	Hold        OrderSource = "Salesforce Hold"
 	Opportunity OrderSource = "Salesforce Opportunity"
+	Quattro     OrderSource = "Quattro"
 )
 
 type SubmissionCategory string
 
 const (
+	BillingErrorCorrection       SubmissionCategory = "Billing Error Correction"
+	BillingInquiry               SubmissionCategory = "Billing Inquiry"
+	Cancellation                 SubmissionCategory = "Cancellation"
+	ComissionChange              SubmissionCategory = "Commission Change"
+	ContractRevision             SubmissionCategory = "Contract Revision"
+	HoldRequest                  SubmissionCategory = "Hold Request"
+	InvoiceChange                SubmissionCategory = "Invoice Change"
 	OperationsIssue              SubmissionCategory = "Operations Issue"
 	PrepayInvoiceRequest         SubmissionCategory = "Prepay Invoice Request"
 	ProductionContract           SubmissionCategory = "Production Contract"
-	InvoiceChange                SubmissionCategory = "Invoice Change"
-	Cancellation                 SubmissionCategory = "Cancellation"
-	BillingErrorCorrection       SubmissionCategory = "Billing Error Correction"
-	HoldRequest                  SubmissionCategory = "Hold Request"
 	PrepayInvoiceContractRequest SubmissionCategory = "Prepayment Invoice Contract Request"
-	OrderBooking                 SubmissionCategory = "Order Booking"
-	TradeOrderBooking            SubmissionCategory = "Trade Order Booking"
 	PSAOrderBooking              SubmissionCategory = "PSA Order Booking"
-	ComissionChange              SubmissionCategory = "Commission Change"
+	OrderBooking                 SubmissionCategory = "Order Booking"
 	RateChange                   SubmissionCategory = "Rate Change"
-	ContractRevision             SubmissionCategory = "Contract Revision"
-	BillingInquiry               SubmissionCategory = "Billing Inquiry"
+	TradeOrderBooking            SubmissionCategory = "Trade Order Booking"
 )
