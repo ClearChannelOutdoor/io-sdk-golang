@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.10] - 2024-07-29
+
+- Updated models for markets
+
 ## [0.3.9] - 2024-07-24
 
 - Updated models for orders, orderLines, and bookings
