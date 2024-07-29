@@ -2,23 +2,21 @@ package markets
 
 import "time"
 
-type Location struct {
-	City    string `json:"city,omitempty"`
-	Country string `json:"country,omitempty"`
-	State   string `json:"state,omitempty"`
-}
-
 type Market struct {
-	ID                        string                           `json:"marketID"`
+	ID                        string                           `json:"marketID" bson:"marketID"`
+	Code                      string                           `json:"code" bson:"code"`
 	CoreBasedStatisticalAreas []MarketCoreBasedStatisticalArea `json:"coreBasedStatisticalAreas,omitempty" bson:"coreBasedStatisticalAreas,omitempty"`
-	Code                      string                           `json:"code"`
-	CreatedAt                 time.Time                        `json:"createdAt"`
+	CreatedAt                 time.Time                        `json:"createdAt" bson:"createdAt"`
 	DesignatedMarketAreas     []MarketDesignatedMarketArea     `json:"designatedMarketAreas,omitempty" bson:"designatedMarketAreas,omitempty"`
-	ExternalIDs               []string                         `json:"externalIDs,omitempty"`
-	Location                  Location                         `json:"location,omitempty"`
-	Name                      string                           `json:"name"`
-	Timezone                  string                           `json:"timezone,omitempty"`
-	UpdatedAt                 time.Time                        `json:"updatedAt"`
+	ExternalIDs               []string                         `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	Location                  struct {
+		City    string `json:"city,omitempty" bson:"city,omitempty"`
+		Country string `json:"country,omitempty" bson:"country,omitempty"`
+		State   string `json:"state,omitempty" bson:"state,omitempty"`
+	} `json:"location,omitempty" bson:"location,omitempty"`
+	Name      string    `json:"name" bson:"name"`
+	Timezone  string    `json:"timezone,omitempty" bson:"timezone,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt" bson:"updatedAt"`
 }
 
 type MarketCoreBasedStatisticalArea struct {
