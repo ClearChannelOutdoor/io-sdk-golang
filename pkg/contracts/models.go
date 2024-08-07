@@ -1,10 +1,7 @@
 package contracts
 
 import (
-	"strings"
 	"time"
-
-	query "go.jtlabs.io/query"
 )
 
 type ContractSigned struct {
@@ -77,14 +74,6 @@ type ContractSignedEvent struct {
 	} `json:"webhookUrlInfo,omitempty"`
 }
 
-func (cse ContractSignedEvent) GetDocumentID() string {
-	splitStr := strings.Split(cse.Agreement.ExternalID.ID, "|")
-	if len(splitStr) == 2 {
-		return splitStr[1]
-	}
-	return ""
-}
-
 type Contract struct {
 	AcceptedOnDate    time.Time `json:"acceptedOnDate,omitempty" bson:"acceptedOnDate,omitempty"`
 	CancellationTerms string    `json:"cancellationTerms,omitempty" bson:"cancellationTerms,omitempty"`
@@ -95,11 +84,4 @@ type Contract struct {
 	OrderID           string    `json:"orderID,omitempty" bson:"orderID,omitempty"`
 	OrderLineIDs      []string  `json:"orderLineIDs,omitempty" bson:"orderLineIDs,omitempty"`
 	UpdatedAt         time.Time `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
-}
-
-type ContractsSearchResult struct {
-	Data    []*Contract   `json:"data,omitempty"`
-	Errors  []*APIError   `json:"errors,omitempty"`
-	Options query.Options `json:"options,omitempty"`
-	Total   uint          `json:"total,omitempty"`
 }
