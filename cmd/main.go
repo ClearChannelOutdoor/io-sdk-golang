@@ -13,6 +13,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/bookings"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/contracts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/creatives"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/customers"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/displays"
@@ -274,6 +275,10 @@ func main() {
 	case "bookings":
 		runClientCommand(func() (*clients.Client[bookings.Booking], error) {
 			return bookings.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "contracts":
+		runClientCommand(func() (*clients.Client[contracts.Contract], error) {
+			return contracts.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "creatives-v1":
 		runClientCommand(func() (*clients.Client[creatives.Creative], error) {
