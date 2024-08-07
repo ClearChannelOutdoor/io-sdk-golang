@@ -24,6 +24,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/photos"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/renewals"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/structures"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
 	"golang.org/x/oauth2/clientcredentials"
 )
@@ -375,6 +376,10 @@ func main() {
 	case "renewals":
 		runClientCommand(func() (*clients.Client[renewals.Relationship], error) {
 			return renewals.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "structures":
+		runClientCommand(func() (*clients.Client[structures.Structure], error) {
+			return structures.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "taxa-cco":
 		runClientCommand(func() (*clients.Client[taxa.CCOCode], error) {
