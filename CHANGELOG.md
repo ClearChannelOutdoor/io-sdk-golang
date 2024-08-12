@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.12] - 2024-08-12
+
+- update booking DigitalDetails model
+
 ## [0.3.11] - 2024-08-08
 
 - Remove structure-api since it is being deprecated
