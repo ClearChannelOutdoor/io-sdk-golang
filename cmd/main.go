@@ -26,6 +26,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/renewals"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/segmentDetails"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/urls"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -344,6 +345,10 @@ func main() {
 	case "geopath-segment-names":
 		runClientCommand(func() (*clients.Client[geopath.SegmentName], error) {
 			return geopath.NewSegmentNameClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "locations":
+		runClientCommand(func() (*clients.Client[urls.Location], error) {
+			return urls.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {
