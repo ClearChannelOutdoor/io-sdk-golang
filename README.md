@@ -4,6 +4,7 @@ The IO SDK enables easy consumption of the CCO.IO Automated Direct and Programma
 
 ## Usage
 
+IMPORTANT: please make sure to name the branch the same version of the intended release (i.e. v0.3.13) and use the same for the git commit comment.
 ```bash
 go get -u github.com/clearchanneloutdoor/io-sdk-golang
 ```
