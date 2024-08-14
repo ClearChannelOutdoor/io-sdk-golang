@@ -37,8 +37,8 @@ func main() {
 	// get all digital displays that are 1080p
 	res, err := client.Search(
 		api.EmptyOptions().
-			AddFilter("mediaProducts.type", "Digital").
-			AddFilter("digital.width", 1080))
+			AddFilter("mediaProducts.digital", true).
+			AddFilter("mediaProducts.digitalInfo.width", 1080))
 	if err != nil {
 		panic(err)
 	}
@@ -49,4 +49,3 @@ func main() {
 	}
 }
 ```
-

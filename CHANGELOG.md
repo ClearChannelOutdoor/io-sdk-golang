@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.14] - 2024-08-14
+
+- Updated display-api models and added mediaProducts to display model
+- Fixed filters in example in readme
+
 ## [0.3.13] - 2024-08-14
 
 - Added support for url-api
@@ -28,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.3.8] - 2024-07-09
 
 - Added support for `photos`
- 
+
 ## [0.3.7] - 2024-05-29
 
 - Added support for v2 `creatives`
