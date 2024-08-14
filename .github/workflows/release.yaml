@@ -21,7 +21,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Go 1.22
-      if: ${{ (env.LANGUAGE == 'go') && (env.SERVICE_NAME == 'orders-bff-api') }}
       uses: actions/setup-go@v3
       with:
         go-version: '1.22'
