@@ -20,6 +20,13 @@ jobs:
             goos: windows
     steps:
     - uses: actions/checkout@v3
+    - name: Go 1.22
+      if: ${{ (env.LANGUAGE == 'go') && (env.SERVICE_NAME == 'orders-bff-api') }}
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.22'
+      id: go-122
+      continue-on-error: true
     - uses: wangyoucao577/go-release-action@v1.40
       with:
         asset_name: io-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
