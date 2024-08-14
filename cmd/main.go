@@ -26,6 +26,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/renewals"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/segmentDetails"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/urls"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -392,6 +393,10 @@ func main() {
 	case "taxa-iab-v2":
 		runClientCommand(func() (*clients.Client[taxa.IABV2Taxonomy], error) {
 			return taxa.NewIABV2Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "url-locations":
+		runClientCommand(func() (*clients.Client[urls.Location], error) {
+			return urls.NewLocationClient(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }
