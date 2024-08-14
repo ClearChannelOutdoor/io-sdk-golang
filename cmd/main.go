@@ -346,10 +346,6 @@ func main() {
 		runClientCommand(func() (*clients.Client[geopath.SegmentName], error) {
 			return geopath.NewSegmentNameClient(ctx, cc, cmd.server)
 		}, cmd)
-	case "locations":
-		runClientCommand(func() (*clients.Client[urls.Location], error) {
-			return urls.NewClient(ctx, cc, cmd.server)
-		}, cmd)
 	case "markets":
 		runClientCommand(func() (*clients.Client[markets.Market], error) {
 			return markets.NewClient(ctx, cc, cmd.server)
@@ -397,6 +393,10 @@ func main() {
 	case "taxa-iab-v2":
 		runClientCommand(func() (*clients.Client[taxa.IABV2Taxonomy], error) {
 			return taxa.NewIABV2Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "url-locations":
+		runClientCommand(func() (*clients.Client[urls.Location], error) {
+			return urls.NewLocationClient(ctx, cc, cmd.server)
 		}, cmd)
 	}
 }
