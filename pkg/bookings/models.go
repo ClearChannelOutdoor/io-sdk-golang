@@ -9,7 +9,7 @@ type Booking struct {
 	EndDate     *time.Time      `json:"endDate,omitempty" bson:"endDate,omitempty"`
 	ExternalIDs []string        `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 	Filler      bool            `json:"filler,omitempty" bson:"filler,omitempty"`
-	ID          string          `json:"id,omitempty" bson:"id,omitempty"`
+	ID          string          `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
 	OrderLineID string          `json:"orderLineID,omitempty" bson:"orderLineID,omitempty"`
 	Print       *PrintDetails   `json:"print,omitempty" bson:"print,omitempty"`
 	StartDate   *time.Time      `json:"startDate,omitempty" bson:"startDate,omitempty"`
