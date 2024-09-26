@@ -362,10 +362,6 @@ func main() {
 		runClientCommand(func() (*clients.Client[orders.Order], error) {
 			return orders.NewOrdersClient(ctx, cc, cmd.server)
 		}, cmd)
-	case "orderlines":
-		runClientCommand(func() (*clients.Client[orders.OrderLine], error) {
-			return orders.NewOrderLinesClient(ctx, cc, cmd.server)
-		}, cmd)
 	case "photos":
 		runClientCommand(func() (*clients.Client[photos.Photo], error) {
 			return photos.NewClient(ctx, cc, cmd.server)
