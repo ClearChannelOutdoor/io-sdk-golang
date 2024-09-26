@@ -27,7 +27,6 @@ type Booking struct {
 	Lifecycle   map[string]LifecycleTimestamp `json:"lifecycle,omitempty" bson:"lifecycle,omitempty"`
 	MarketID    string                        `json:"marketID,omitempty" bson:"marketID,omitempty"`
 	OrderID     string                        `json:"orderID,omitempty" bson:"orderID,omitempty"`
-	OrderLineID string                        `json:"orderLineID,omitempty" bson:"orderLineID,omitempty"`
 	Print       *PrintDetails                 `json:"print,omitempty" bson:"print,omitempty"`
 	Product     ProductDetails                `json:"product,omitempty" bson:"product,omitempty"`
 	Segment     SegmentDetails                `json:"segment,omitempty" bson:"segment,omitempty"`
