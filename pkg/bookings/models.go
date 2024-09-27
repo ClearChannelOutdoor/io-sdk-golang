@@ -1,6 +1,11 @@
 package bookings
 
-import "time"
+import (
+	"slices"
+	"time"
+
+	"github.com/rs/zerolog/log"
+)
 
 type BookingStatus string
 type LifecycleEvent string
@@ -16,29 +21,37 @@ const (
 )
 
 type Booking struct {
-	ID          string                        `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
-	Canceled    *bool                         `json:"canceled,omitempty" bson:"canceled,omitempty"`
-	CreatedAt   time.Time                     `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	DeletedAt   *time.Time                    `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
-	Digital     *DigitalDetails               `json:"digital,omitempty" bson:"digital,omitempty"`
-	EndDate     *time.Time                    `json:"endDate,omitempty" bson:"endDate,omitempty"`
-	ExternalIDs []string                      `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
-	Filler      bool                          `json:"filler,omitempty" bson:"filler,omitempty"`
-	Lifecycle   map[string]LifecycleTimestamp `json:"lifecycle,omitempty" bson:"lifecycle,omitempty"`
-	MarketID    string                        `json:"marketID,omitempty" bson:"marketID,omitempty"`
-	OrderID     string                        `json:"orderID,omitempty" bson:"orderID,omitempty"`
-	Print       *PrintDetails                 `json:"print,omitempty" bson:"print,omitempty"`
-	Product     ProductDetails                `json:"product,omitempty" bson:"product,omitempty"`
-	Segment     SegmentDetails                `json:"segment,omitempty" bson:"segment,omitempty"`
-	StartDate   *time.Time                    `json:"startDate,omitempty" bson:"startDate,omitempty"`
-	Status      BookingStatus                 `json:"status,omitempty" bson:"status,omitempty"`
-	UpdatedAt   time.Time                     `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
-	Waitlisted  *bool                         `json:"waitlisted,omitempty" bson:"waitlisted,omitempty"`
+	ID          string           `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
+	Canceled    *bool            `json:"canceled,omitempty" bson:"canceled,omitempty"`
+	CreatedAt   time.Time        `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	DeletedAt   *time.Time       `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
+	Digital     *DigitalDetails  `json:"digital,omitempty" bson:"digital,omitempty"`
+	EndDate     *time.Time       `json:"endDate,omitempty" bson:"endDate,omitempty"`
+	ExternalIDs []string         `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	Filler      bool             `json:"filler,omitempty" bson:"filler,omitempty"`
+	Lifecycle   BookingLifecycle `json:"lifecycle,omitempty" bson:"lifecycle,omitempty"`
+	MarketID    string           `json:"marketID,omitempty" bson:"marketID,omitempty"`
+	OrderID     string           `json:"orderID,omitempty" bson:"orderID,omitempty"`
+	Print       *PrintDetails    `json:"print,omitempty" bson:"print,omitempty"`
+	Product     ProductDetails   `json:"product,omitempty" bson:"product,omitempty"`
+	Segment     SegmentDetails   `json:"segment,omitempty" bson:"segment,omitempty"`
+	StartDate   *time.Time       `json:"startDate,omitempty" bson:"startDate,omitempty"`
+	Status      BookingStatus    `json:"status,omitempty" bson:"status,omitempty"`
+	UpdatedAt   time.Time        `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	Waitlisted  *bool            `json:"waitlisted,omitempty" bson:"waitlisted,omitempty"`
+}
+
+type BookingLifecycle struct {
+	QuattroCreate       LifecycleTimestamp `json:"quattroCreate,omitempty" bson:"quattroCreate,omitempty"`
+	QuattroReserve      LifecycleTimestamp `json:"quattroReserve,omitempty" bson:"quattroReserve,omitempty"`
+	QuattroBook         LifecycleTimestamp `json:"quattroBook,omitempty" bson:"quattroBook,omitempty"`
+	QuattroDelete       LifecycleTimestamp `json:"quattroDelete,omitempty" bson:"quattroDelete,omitempty"`
+	QuattroResetToDraft LifecycleTimestamp `json:"quattroResetToDraft,omitempty" bson:"quattroResetToDraft,omitempty"`
 }
 
 type LifecycleTimestamp struct {
-	Sent     *time.Time `json:"sent,omitempty" bson:"sent,omitempty"`
-	Received *time.Time `json:"received,omitempty" bson:"received,omitempty"`
+	Sent     time.Time `json:"sent,omitempty" bson:"sent,omitempty"`
+	Received time.Time `json:"received,omitempty" bson:"received,omitempty"`
 }
 
 type ProductDetails struct {
@@ -80,4 +93,46 @@ type DigitalDaysToPlay struct {
 	Thursday  bool `json:"thursday" bson:"thursday"`
 	Friday    bool `json:"friday" bson:"friday"`
 	Saturday  bool `json:"saturday" bson:"saturday"`
+}
+
+func (b *Booking) MergeExternalIds(existing []string) {
+	for _, i := range existing {
+		if !slices.Contains(b.ExternalIDs, i) {
+			b.ExternalIDs = append(b.ExternalIDs, i)
+		}
+	}
+}
+
+func (lt *LifecycleTimestamp) Merge(existing LifecycleTimestamp) {
+	// use new Sent & Received values
+	if !lt.Sent.IsZero() {
+		return
+	} else {
+		// use existing Sent value
+		(*lt).Sent = existing.Sent
+	}
+
+	// use existing Received value,
+	if lt.Received.IsZero() {
+		(*lt).Received = existing.Received
+		return
+	}
+
+	// use existing Sent, new Received value
+	if existing.Received.IsZero() {
+		(*lt).Sent = existing.Sent
+		return
+	}
+
+	log.Error().Msg("Unable to override Recieved value on an existing LifecycleTimestamp")
+	(*lt) = existing
+	return
+}
+
+func (b *Booking) MergeLifecycles(existing BookingLifecycle) {
+	b.Lifecycle.QuattroCreate.Merge(existing.QuattroCreate)
+	b.Lifecycle.QuattroReserve.Merge(existing.QuattroReserve)
+	b.Lifecycle.QuattroBook.Merge(existing.QuattroBook)
+	b.Lifecycle.QuattroDelete.Merge(existing.QuattroDelete)
+	b.Lifecycle.QuattroResetToDraft.Merge(existing.QuattroResetToDraft)
 }
