@@ -1,10 +1,7 @@
 package bookings
 
 import (
-	"slices"
 	"time"
-
-	"github.com/rs/zerolog/log"
 )
 
 type BookingStatus string
@@ -93,46 +90,4 @@ type DigitalDaysToPlay struct {
 	Thursday  bool `json:"thursday" bson:"thursday"`
 	Friday    bool `json:"friday" bson:"friday"`
 	Saturday  bool `json:"saturday" bson:"saturday"`
-}
-
-func (b *Booking) MergeExternalIds(existing []string) {
-	for _, i := range existing {
-		if !slices.Contains(b.ExternalIDs, i) {
-			b.ExternalIDs = append(b.ExternalIDs, i)
-		}
-	}
-}
-
-func (lt *LifecycleTimestamp) Merge(existing LifecycleTimestamp) {
-	// use new Sent & Received values
-	if !lt.Sent.IsZero() {
-		return
-	} else {
-		// use existing Sent value
-		(*lt).Sent = existing.Sent
-	}
-
-	// use existing Received value,
-	if lt.Received.IsZero() {
-		(*lt).Received = existing.Received
-		return
-	}
-
-	// use existing Sent, new Received value
-	if existing.Received.IsZero() {
-		(*lt).Sent = existing.Sent
-		return
-	}
-
-	log.Error().Msg("Unable to override Recieved value on an existing LifecycleTimestamp")
-	(*lt) = existing
-	return
-}
-
-func (b *Booking) MergeLifecycles(existing BookingLifecycle) {
-	b.Lifecycle.QuattroCreate.Merge(existing.QuattroCreate)
-	b.Lifecycle.QuattroReserve.Merge(existing.QuattroReserve)
-	b.Lifecycle.QuattroBook.Merge(existing.QuattroBook)
-	b.Lifecycle.QuattroDelete.Merge(existing.QuattroDelete)
-	b.Lifecycle.QuattroResetToDraft.Merge(existing.QuattroResetToDraft)
 }
