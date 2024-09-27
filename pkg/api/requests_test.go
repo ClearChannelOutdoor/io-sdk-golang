@@ -24,8 +24,9 @@ func Test_ensureBearerToken(t *testing.T) {
 	}
 
 	type fields struct {
-		oauth2 *clientcredentials.Config
-		token  *oauth2.Token
+		headers *http.Header
+		oauth2  *clientcredentials.Config
+		token   *oauth2.Token
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -92,6 +93,7 @@ func Test_ensureBearerToken(t *testing.T) {
 					Proto:  u.Scheme,
 				},
 				"/test",
+				tt.fields.headers,
 			)
 
 			// set a token url pointing back to our test server
@@ -125,11 +127,12 @@ func Test_retryRequest(t *testing.T) {
 	var ts *httptest.Server
 
 	type args struct {
-		res    func(w http.ResponseWriter, r *http.Request)
-		method string
-		path   string
-		body   io.Reader
-		opts   []*Options
+		res     func(w http.ResponseWriter, r *http.Request)
+		headers *http.Header
+		method  string
+		path    string
+		body    io.Reader
+		opts    []*Options
 	}
 	tests := []struct {
 		name    string
@@ -149,6 +152,7 @@ func Test_retryRequest(t *testing.T) {
 					data["req.URL"] = r.URL.String()
 					_ = json.NewEncoder(w).Encode(data)
 				},
+				nil,
 				"GET",
 				"/test",
 				nil,
@@ -182,6 +186,7 @@ func Test_retryRequest(t *testing.T) {
 					data["req.URL"] = r.URL.String()
 					_ = json.NewEncoder(w).Encode(data)
 				},
+				nil,
 				"GET",
 				"/test",
 				nil,
@@ -209,6 +214,7 @@ func Test_retryRequest(t *testing.T) {
 					data["req.URL"] = r.URL.String()
 					_ = json.NewEncoder(w).Encode(data)
 				},
+				nil,
 				"GET",
 				"/test",
 				nil,
@@ -224,6 +230,7 @@ func Test_retryRequest(t *testing.T) {
 					w.WriteHeader(http.StatusBadRequest)
 					w.Header().Set("Content-Type", "application/json")
 				},
+				nil,
 				"GET",
 				"/test",
 				nil,
@@ -240,6 +247,7 @@ func Test_retryRequest(t *testing.T) {
 					w.Header().Set("Content-Type", "application/text")
 					w.Write([]byte("a random string"))
 				},
+				nil,
 				"GET",
 				"/test",
 				bytes.NewReader([]byte("a random string")),
@@ -257,6 +265,34 @@ func Test_retryRequest(t *testing.T) {
 
 					bdy, _ := io.ReadAll(r.Body)
 					w.Write([]byte(bdy))
+				},
+				nil,
+				"POST",
+				"/test",
+				bytes.NewBuffer(testData),
+				[]*Options{},
+			},
+			testData,
+			false,
+		},
+		{
+			"should properly issue request with headers",
+			args{
+				func(w http.ResponseWriter, r *http.Request) {
+					hdr := r.Header.Get("X-Test-Header")
+					if hdr != "test" {
+						w.WriteHeader(http.StatusBadRequest)
+						return
+					}
+
+					w.WriteHeader(http.StatusOK)
+					w.Header().Set("Content-Type", "application/json")
+
+					bdy, _ := io.ReadAll(r.Body)
+					w.Write([]byte(bdy))
+				},
+				&http.Header{
+					"X-Test-Header": []string{"test"},
 				},
 				"POST",
 				"/test",
@@ -283,6 +319,7 @@ func Test_retryRequest(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				"/test",
+				tt.args.headers,
 			)
 
 			// set a testing oauth token
@@ -290,7 +327,7 @@ func Test_retryRequest(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := retryRequest(context.Background(), e.a, tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
+			got, err := retryRequest(context.Background(), e.hdr, e.a, tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.request() error = %v, wantErr %v", err, tt.wantErr)
 				return

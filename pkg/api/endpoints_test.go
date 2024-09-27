@@ -34,7 +34,8 @@ func TestEndpoint_Create(t *testing.T) {
 	var ts *httptest.Server
 
 	type fields struct {
-		path string
+		path    string
+		headers *http.Header
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -51,6 +52,7 @@ func TestEndpoint_Create(t *testing.T) {
 			"should properly create a model",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -83,6 +85,7 @@ func TestEndpoint_Create(t *testing.T) {
 			"should properly handle an error response",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -118,6 +121,7 @@ func TestEndpoint_Create(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -146,7 +150,8 @@ func TestEndpoint_Delete(t *testing.T) {
 	var ts *httptest.Server
 
 	type fields struct {
-		path string
+		path    string
+		headers *http.Header
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -162,6 +167,7 @@ func TestEndpoint_Delete(t *testing.T) {
 			"should properly delete a model",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -175,6 +181,7 @@ func TestEndpoint_Delete(t *testing.T) {
 			"should properly handle an error response",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -207,6 +214,7 @@ func TestEndpoint_Delete(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -230,7 +238,8 @@ func TestEndpoint_Get(t *testing.T) {
 	var ts *httptest.Server
 
 	type fields struct {
-		path string
+		path    string
+		headers *http.Header
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -247,6 +256,7 @@ func TestEndpoint_Get(t *testing.T) {
 			"should properly get a model",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -270,6 +280,7 @@ func TestEndpoint_Get(t *testing.T) {
 			"should properly handle an error response",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -303,6 +314,7 @@ func TestEndpoint_Get(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -332,7 +344,8 @@ func TestEndpoint_Patch(t *testing.T) {
 	var ts *httptest.Server
 
 	type fields struct {
-		path string
+		path    string
+		headers *http.Header
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -350,6 +363,7 @@ func TestEndpoint_Patch(t *testing.T) {
 			"should properly patch a model",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -376,6 +390,7 @@ func TestEndpoint_Patch(t *testing.T) {
 			"should properly handle an error response",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -413,6 +428,7 @@ func TestEndpoint_Patch(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -441,7 +457,8 @@ func TestEndpoint_Search(t *testing.T) {
 	var ts *httptest.Server
 
 	type fields struct {
-		path string
+		path    string
+		headers *http.Header
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -457,6 +474,7 @@ func TestEndpoint_Search(t *testing.T) {
 			"should properly get all models",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -488,6 +506,7 @@ func TestEndpoint_Search(t *testing.T) {
 			"should properly handle an error response",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -520,6 +539,7 @@ func TestEndpoint_Search(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -549,7 +569,8 @@ func TestEndpoint_Update(t *testing.T) {
 	var ts *httptest.Server
 
 	type fields struct {
-		path string
+		path    string
+		headers *http.Header
 	}
 	type args struct {
 		res func(w http.ResponseWriter, r *http.Request)
@@ -567,6 +588,7 @@ func TestEndpoint_Update(t *testing.T) {
 			"should properly post a model",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -593,6 +615,7 @@ func TestEndpoint_Update(t *testing.T) {
 			"should properly handle an error response",
 			fields{
 				"/models",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -630,6 +653,7 @@ func TestEndpoint_Update(t *testing.T) {
 					Proto: u.Scheme,
 				},
 				tt.fields.path,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token

@@ -24,6 +24,7 @@ func TestChildEndpoint_Create(t *testing.T) {
 	type fields struct {
 		parentPath string
 		childPath  string
+		headers    *http.Header
 	}
 	type args struct {
 		res      func(w http.ResponseWriter, r *http.Request)
@@ -42,6 +43,7 @@ func TestChildEndpoint_Create(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -76,6 +78,7 @@ func TestChildEndpoint_Create(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -113,6 +116,7 @@ func TestChildEndpoint_Create(t *testing.T) {
 				},
 				tt.fields.parentPath,
 				tt.fields.childPath,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -143,6 +147,7 @@ func TestChildEndpoint_Delete(t *testing.T) {
 	type fields struct {
 		parentPath string
 		childPath  string
+		headers    *http.Header
 	}
 	type args struct {
 		res      func(w http.ResponseWriter, r *http.Request)
@@ -160,6 +165,7 @@ func TestChildEndpoint_Delete(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -175,6 +181,7 @@ func TestChildEndpoint_Delete(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -209,6 +216,7 @@ func TestChildEndpoint_Delete(t *testing.T) {
 				},
 				tt.fields.parentPath,
 				tt.fields.childPath,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -234,6 +242,7 @@ func TestChildEndpoint_Get(t *testing.T) {
 	type fields struct {
 		parentPath string
 		childPath  string
+		headers    *http.Header
 	}
 	type args struct {
 		res      func(w http.ResponseWriter, r *http.Request)
@@ -252,6 +261,7 @@ func TestChildEndpoint_Get(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -277,6 +287,7 @@ func TestChildEndpoint_Get(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +323,7 @@ func TestChildEndpoint_Get(t *testing.T) {
 				},
 				tt.fields.parentPath,
 				tt.fields.childPath,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -343,6 +355,7 @@ func TestChildEndpoint_Patch(t *testing.T) {
 	type fields struct {
 		parentPath string
 		childPath  string
+		headers    *http.Header
 	}
 	type args struct {
 		res      func(w http.ResponseWriter, r *http.Request)
@@ -362,6 +375,7 @@ func TestChildEndpoint_Patch(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -390,6 +404,7 @@ func TestChildEndpoint_Patch(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -429,6 +444,7 @@ func TestChildEndpoint_Patch(t *testing.T) {
 				},
 				tt.fields.parentPath,
 				tt.fields.childPath,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -459,6 +475,7 @@ func TestChildEndpoint_Search(t *testing.T) {
 	type fields struct {
 		parentPath string
 		childPath  string
+		headers    *http.Header
 	}
 	type args struct {
 		res      func(w http.ResponseWriter, r *http.Request)
@@ -476,6 +493,7 @@ func TestChildEndpoint_Search(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -509,6 +527,7 @@ func TestChildEndpoint_Search(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -543,6 +562,7 @@ func TestChildEndpoint_Search(t *testing.T) {
 				},
 				tt.fields.parentPath,
 				tt.fields.childPath,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token
@@ -574,6 +594,7 @@ func TestChildEndpoint_Update(t *testing.T) {
 	type fields struct {
 		parentPath string
 		childPath  string
+		headers    *http.Header
 	}
 	type args struct {
 		res      func(w http.ResponseWriter, r *http.Request)
@@ -593,6 +614,7 @@ func TestChildEndpoint_Update(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -621,6 +643,7 @@ func TestChildEndpoint_Update(t *testing.T) {
 			fields{
 				"/models",
 				"/children",
+				nil,
 			},
 			args{
 				func(w http.ResponseWriter, r *http.Request) {
@@ -660,6 +683,7 @@ func TestChildEndpoint_Update(t *testing.T) {
 				},
 				tt.fields.parentPath,
 				tt.fields.childPath,
+				tt.fields.headers,
 			)
 
 			// set a testing oauth token

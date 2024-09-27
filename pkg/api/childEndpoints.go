@@ -13,10 +13,11 @@ import (
 
 type ChildEndpoint[T any] struct {
 	a    *api
+	hdr  *http.Header
 	Path string
 }
 
-func NewChildEndpoint[T any](svc *Service, parentPath, childPath string) *ChildEndpoint[T] {
+func NewChildEndpoint[T any](svc *Service, parentPath, childPath string, hdr *http.Header) *ChildEndpoint[T] {
 	a := api{
 		Clnt: &http.Client{},
 		Svc:  svc,
@@ -24,6 +25,7 @@ func NewChildEndpoint[T any](svc *Service, parentPath, childPath string) *ChildE
 
 	return &ChildEndpoint[T]{
 		a:    &a,
+		hdr:  hdr,
 		Path: strings.Join([]string{parentPath, "/%s", childPath}, ""),
 	}
 }
@@ -31,6 +33,7 @@ func NewChildEndpoint[T any](svc *Service, parentPath, childPath string) *ChildE
 func (ce *ChildEndpoint[T]) request(ctx context.Context, method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
 	r, err := retryRequest(
 		ctx,
+		ce.hdr,
 		ce.a,
 		method,
 		path,

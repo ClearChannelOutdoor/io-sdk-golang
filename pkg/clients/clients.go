@@ -3,6 +3,7 @@ package clients
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
@@ -11,6 +12,7 @@ import (
 
 type Client[T any] struct {
 	ctx      context.Context
+	Headers  *http.Header
 	rep      api.ReadResource[T]
 	wep      api.WriteResource[T]
 	writable bool
@@ -77,14 +79,18 @@ func NewClient[T any](ctx context.Context, svr string, resource string, oauth2 *
 		return nil, errors.New("the API server URL is invalid")
 	}
 
+	// create a header collection for the client
+	hdr := make(http.Header)
+
 	// create new endpoint
-	ep := api.NewEndpoint[T](svc, resource)
+	ep := api.NewEndpoint[T](svc, resource, &hdr)
 
 	// determine if oauth supports write operations
 	for _, scope := range writeScopes {
 		if internal.ContainsValue(oauth2.Scopes, scope) {
 			return &Client[T]{
 				ctx:      ctx,
+				Headers:  &hdr,
 				rep:      ep,
 				wep:      ep,
 				writable: true,

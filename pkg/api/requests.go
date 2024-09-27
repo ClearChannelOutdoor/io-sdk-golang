@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/avast/retry-go"
@@ -42,7 +43,7 @@ func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 	return a.OAuthToken.AccessToken, nil
 }
 
-func retryRequest(ctx context.Context, a *api, method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, error) {
+func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, error) {
 	// determine the URL
 	url := fmt.Sprintf("%s://%s%s", a.Svc.Proto, a.Svc.Host, reqPath)
 
@@ -58,6 +59,13 @@ func retryRequest(ctx context.Context, a *api, method string, reqPath string, bo
 		return nil, err
 	}
 	req.Header.Set(authorizationHeader, fmt.Sprintf(bearerFmt, tkn))
+
+	// set the headers (if applicable)
+	if hdr != nil {
+		for k, v := range *hdr {
+			req.Header.Set(k, strings.Join(v, ","))
+		}
+	}
 
 	// set the query params as appropriate
 	if len(opts) > 0 {
