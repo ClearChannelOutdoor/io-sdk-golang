@@ -25,10 +25,11 @@ var retryAfterRE *regexp.Regexp = regexp.MustCompile(`retry after (\d+)s\: `)
 
 type Endpoint[T any] struct {
 	a    *api
+	hdr  *http.Header
 	Path string
 }
 
-func NewEndpoint[T any](svc *Service, path string) *Endpoint[T] {
+func NewEndpoint[T any](svc *Service, path string, hdr *http.Header) *Endpoint[T] {
 	a := api{
 		Clnt: &http.Client{},
 		Svc:  svc,
@@ -36,6 +37,7 @@ func NewEndpoint[T any](svc *Service, path string) *Endpoint[T] {
 
 	return &Endpoint[T]{
 		a:    &a,
+		hdr:  hdr,
 		Path: path,
 	}
 }
@@ -43,6 +45,7 @@ func NewEndpoint[T any](svc *Service, path string) *Endpoint[T] {
 func (e *Endpoint[T]) request(ctx context.Context, method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
 	r, err := retryRequest(
 		ctx,
+		e.hdr,
 		e.a,
 		method,
 		path,

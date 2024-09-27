@@ -3,6 +3,7 @@ package clients
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/clearchanneloutdoor/io-sdk-golang/internal"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
@@ -11,6 +12,7 @@ import (
 
 type ChildClient[T any] struct {
 	ctx      context.Context
+	Headers  *http.Header
 	rep      api.ReadChildResource[T]
 	wep      api.WriteChildResouce[T]
 	writable bool
@@ -77,13 +79,17 @@ func NewChildClient[T any](ctx context.Context, svr string, parentResource, chil
 		return nil, errors.New("the API server URL is invalid")
 	}
 
-	ep := api.NewChildEndpoint[T](svc, parentResource, childResouce)
+	// create a header collection for the client
+	hdr := make(http.Header)
+
+	ep := api.NewChildEndpoint[T](svc, parentResource, childResouce, &hdr)
 
 	// determine if oauth supports write operations
 	for _, scope := range writeScopes {
 		if internal.ContainsValue(oauth2.Scopes, scope) {
 			return &ChildClient[T]{
 				ctx:      ctx,
+				Headers:  &hdr,
 				rep:      ep,
 				wep:      ep,
 				writable: true,
