@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	serverUrl string = "https://direct.cco.io"
+	bookingsModify        = "bookings-modify"
+	serverUrl      string = "https://direct.cco.io"
 )
 
 func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Booking], error) {
@@ -17,5 +18,5 @@ func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSv
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[Booking](ctx, svr, "/v1/bookings", oauth2)
+	return clients.NewClient[Booking](ctx, svr, "/v1/bookings", oauth2, bookingsModify)
 }
