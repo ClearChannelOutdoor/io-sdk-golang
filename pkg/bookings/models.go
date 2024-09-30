@@ -1,7 +1,11 @@
 package bookings
 
 import (
+	"fmt"
+	"strings"
 	"time"
+
+	"github.com/rs/zerolog"
 )
 
 type BookingStatus string
@@ -90,4 +94,80 @@ type DigitalDaysToPlay struct {
 	Thursday  bool `json:"thursday" bson:"thursday"`
 	Friday    bool `json:"friday" bson:"friday"`
 	Saturday  bool `json:"saturday" bson:"saturday"`
+}
+
+func (b Booking) MarshalZerologObject(e *zerolog.Event) {
+	canceled := ""
+	if b.Canceled != nil {
+		canceled = fmt.Sprintf("%v", *b.Canceled)
+	}
+	var start, end string
+	if b.StartDate != nil {
+		start = (*b.StartDate).Format(time.DateOnly)
+	}
+	if b.EndDate != nil {
+		end = (*b.EndDate).Format(time.DateOnly)
+	}
+	waitlisted := ""
+	if b.Waitlisted != nil {
+		waitlisted = fmt.Sprintf("%v", *b.Waitlisted)
+	}
+
+	e.
+		Str("model", "Booking").
+		Str("bookingID", b.ID).
+		Str("orderID", b.OrderID).
+		Str("startDate", start).
+		Str("endDate", end).
+		Str("canceled", canceled).
+		Bool("filler", b.Filler).
+		Str("externalIDs", strings.Join(b.ExternalIDs, ", ")).
+		Str("waitlisted", waitlisted)
+
+	if b.Print != nil {
+		e.Object("print", b.Print)
+	}
+
+	if b.Digital != nil {
+		e.Object("digital", b.Digital)
+	}
+}
+
+func (dd *DigitalDetails) MarshalZerologObject(e *zerolog.Event) {
+	if dd == nil {
+		return
+	}
+
+	e.
+		Str("networkID", dd.NetworkID).
+		Str("dailyStartTime", dd.DailyStartTime).
+		Str("dailyEndTime", dd.DailyEndTime).
+		Object("daysToPlay", dd.DaysToPlay).
+		Int("numberOfSlots", dd.NumberOfSlots).
+		Float32("slotSeconds", dd.SlotSeconds).
+		Int("slotSlices", dd.SlotSlices).
+		Str("specificStartTime", dd.SpecificStartTime)
+}
+
+func (pd *PrintDetails) MarshalZerologObject(e *zerolog.Event) {
+	if pd == nil {
+		return
+	}
+
+	e.Str("displayID", pd.DisplayID)
+}
+
+func (dtp *DigitalDaysToPlay) MarshalZerologObject(e *zerolog.Event) {
+	if dtp == nil {
+		return
+	}
+
+	e.
+		Bool("sunday", dtp.Sunday).
+		Bool("monday", dtp.Monday).
+		Bool("tuesday", dtp.Tuesday).
+		Bool("wednesday", dtp.Wednesday).
+		Bool("thursday", dtp.Thursday).
+		Bool("friday", dtp.Friday).
+		Bool("saturday", dtp.Saturday)
 }

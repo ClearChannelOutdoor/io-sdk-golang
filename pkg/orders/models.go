@@ -1,6 +1,10 @@
 package orders
 
-import "time"
+import (
+	"time"
+
+	"github.com/rs/zerolog"
+)
 
 /* Orders */
 type Order struct {
@@ -58,4 +62,7 @@ type CustomerEntity struct {
 	Name        string   `json:"name,omitempty" bson:"name,omitempty"`
 	Number      string   `json:"number,omitempty" bson:"number,omitempty"`
 	Type        string   `json:"type,omitempty" bson:"type,omitempty"`
+}
+
+func (o Order) MarshalZerologObject(e *zerolog.Event) {
 }
