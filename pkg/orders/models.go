@@ -1,6 +1,7 @@
 package orders
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/rs/zerolog"
@@ -11,17 +12,17 @@ type Order struct {
 	Account                 *OrderAccount `json:"account,omitempty" bson:"account,omitempty"`
 	AdvertisedProductCode   string        `json:"advertisedProductCode,omitempty" bson:"advertisedProductCode,omitempty"`
 	BookingNotes            string        `json:"bookingNotes,omitempty" bson:"bookingNotes,omitempty"`
-	Canceled                bool          `json:"canceled" bson:"canceled"`
+	Canceled                *bool         `json:"canceled" bson:"canceled"`
 	CancellationTerms       string        `json:"cancellationTerms,omitempty" bson:"cancellationTerms,omitempty"`
 	CancellationReason      string        `json:"cancellationReason,omitempty" bson:"cancellationReason,omitempty" `
 	CreatedAt               time.Time     `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	CreativeChangeAgreement bool          `json:"creativeChangeAgreement,omitempty" bson:"creativeChangeAgreement,omitempty"`
+	CreativeChangeAgreement *bool         `json:"creativeChangeAgreement,omitempty" bson:"creativeChangeAgreement,omitempty"`
 	EndDate                 *time.Time    `json:"endDate,omitempty" bson:"endDate,omitempty"`
 	ID                      string        `json:"id,omitempty" bson:"id,omitempty"`
 	Markets                 []OrderMarket `json:"markets,omitempty" bson:"markets,omitempty" `
 	Number                  string        `json:"number,omitempty" bson:"number,omitempty"`
 	Name                    string        `json:"name,omitempty" bson:"name,omitempty"`
-	Psa                     bool          `json:"psa,omitempty" bson:"psa,omitempty"`
+	Psa                     *bool         `json:"psa,omitempty" bson:"psa,omitempty"`
 	Seller                  *OrderSeller  `json:"seller,omitempty" bson:"seller,omitempty"`
 	Source                  OrderSource   `json:"source,omitempty" bson:"source,omitempty"`
 	StartDate               *time.Time    `json:"startDate,omitempty" bson:"startDate,omitempty"`
@@ -29,7 +30,6 @@ type Order struct {
 
 	ExternalIDs []string `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 }
-
 type OrderMarket struct {
 	MarketID           string             `json:"marketID,omitempty" bson:"marketID,omitempty"`
 	MarketCode         string             `json:"marketCode,omitempty" bson:"marketCode,omitempty"`
@@ -65,4 +65,36 @@ type CustomerEntity struct {
 }
 
 func (o Order) MarshalZerologObject(e *zerolog.Event) {
+	var start, end time.Time
+	var canceled, creativeChange, psa string
+	if o.StartDate != nil {
+		start = *o.StartDate
+	}
+	if o.EndDate != nil {
+		end = *o.EndDate
+	}
+	if o.Canceled != nil {
+		canceled = fmt.Sprintf("%v", *o.Canceled)
+	}
+	if o.CreativeChangeAgreement != nil {
+		creativeChange = fmt.Sprintf("%v", *o.CreativeChangeAgreement)
+	}
+	if o.Psa != nil {
+		psa = fmt.Sprintf("%v", *o.Psa)
+	}
+
+	e.
+		Str("model", "Order").
+		Str("orderID", o.ID).
+		Str("advertisedProductCode", o.AdvertisedProductCode).
+		Str("canceled", canceled).
+		Str("cancellationReason", o.CancellationReason).
+		Str("cancellationTerms", o.CancellationTerms).
+		Str("creativeChangeAgreement", creativeChange).
+		Time("endDate", end).
+		Time("startDate", start).
+		Str("name", o.Name).
+		Str("number", o.Number).
+		Str("psa", psa).
+		Str("source", string(o.Source))
 }
