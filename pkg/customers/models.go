@@ -29,17 +29,18 @@ type Credit struct {
 }
 
 type Customer struct {
-	ID           string            `json:"customerID,omitempty"`
-	CreatedAt    *time.Time        `json:"createdAt,omitempty"`
-	Credit       *Credit           `json:"credit,omitempty"`
-	ExternalIDs  []string          `json:"externalIDs,omitempty"`
-	IsAdvertiser bool              `json:"isAdvertiser,omitempty"`
-	Markets      []Market          `json:"markets,omitempty"`
-	NAICS        *NAICS            `json:"naics,omitempty"`
-	Name         string            `json:"name,omitempty"`
-	Number       string            `json:"number,omitempty"`
-	Taxonomy     *CustomerTaxonomy `json:"taxonomy,omitempty"`
-	UpdatedAt    *time.Time        `json:"updatedAt,omitempty"`
+	ID                  string            `json:"customerID,omitempty"`
+	CreatedAt           *time.Time        `json:"createdAt,omitempty"`
+	Credit              *Credit           `json:"credit,omitempty"`
+	ExternalIDs         []string          `json:"externalIDs,omitempty"`
+	IsAdvertiser        bool              `json:"isAdvertiser,omitempty"`
+	MarketingRestricted bool              `json:"marketingRestricted,omitempty"`
+	Markets             []Market          `json:"markets,omitempty"`
+	NAICS               *NAICS            `json:"naics,omitempty"`
+	Name                string            `json:"name,omitempty"`
+	Number              string            `json:"number,omitempty"`
+	Taxonomy            *CustomerTaxonomy `json:"taxonomy,omitempty"`
+	UpdatedAt           *time.Time        `json:"updatedAt,omitempty"`
 }
 
 type CustomerTaxonomy struct {

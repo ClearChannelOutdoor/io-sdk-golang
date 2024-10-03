@@ -5,9 +5,13 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.4.1] - 2024-10-11
+## [0.4.2] - 2024-10-03
 
-- Update booking mdoel to reflect booking-api
+- Added customer marketingRestricted boolean field
+
+## [0.4.1] - 2024-09-30
+
+- Added modify scopes to bookings and orders
 
 ## [0.4.0] - 2024-09-27
 
