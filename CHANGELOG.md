@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [0.4.3] - 2024-10-11
+
+- Update booking model to reflect booking-api
+
 ## [0.4.2] - 2024-10-03
 
 - Added customer marketingRestricted boolean field
