@@ -12,30 +12,31 @@ const (
 	Reserved BookingStatus = "Reserved"
 	Booked   BookingStatus = "Booked"
 	Canceled BookingStatus = "Canceled"
-
-	CreateAsReserved LifecycleEvent = "CreateAsReserved"
-	UpdateToBooked   LifecycleEvent = "UpdateToBooked"
 )
 
 type Booking struct {
-	ID          string           `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
-	Canceled    *bool            `json:"canceled,omitempty" bson:"canceled,omitempty"`
-	CreatedAt   time.Time        `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	DeletedAt   *time.Time       `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
-	Digital     *DigitalDetails  `json:"digital,omitempty" bson:"digital,omitempty"`
-	EndDate     *time.Time       `json:"endDate,omitempty" bson:"endDate,omitempty"`
-	ExternalIDs []string         `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
-	Filler      bool             `json:"filler,omitempty" bson:"filler,omitempty"`
-	Lifecycle   BookingLifecycle `json:"lifecycle,omitempty" bson:"lifecycle,omitempty"`
-	MarketID    string           `json:"marketID,omitempty" bson:"marketID,omitempty"`
-	OrderID     string           `json:"orderID,omitempty" bson:"orderID,omitempty"`
-	Print       *PrintDetails    `json:"print,omitempty" bson:"print,omitempty"`
-	Product     ProductDetails   `json:"product,omitempty" bson:"product,omitempty"`
-	Segment     SegmentDetails   `json:"segment,omitempty" bson:"segment,omitempty"`
-	StartDate   *time.Time       `json:"startDate,omitempty" bson:"startDate,omitempty"`
-	Status      BookingStatus    `json:"status,omitempty" bson:"status,omitempty"`
-	UpdatedAt   time.Time        `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
-	Waitlisted  *bool            `json:"waitlisted,omitempty" bson:"waitlisted,omitempty"`
+	ID           string           `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
+	BuyTypeID    string           `json:"buyTypeID,omitempty" bson:"buyTypeID,omitempty"`
+	CreatedAt    time.Time        `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	DeletedAt    *time.Time       `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
+	Digital      *DigitalDetails  `json:"digital,omitempty" bson:"digital,omitempty"`
+	EndDate      *time.Time       `json:"endDate,omitempty" bson:"endDate,omitempty"`
+	ExternalIDs  []string         `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	Filler       bool             `json:"filler,omitempty" bson:"filler,omitempty"`
+	Lifecycle    BookingLifecycle `json:"lifecycle,omitempty" bson:"lifecycle,omitempty"`
+	MarketID     string           `json:"marketID,omitempty" bson:"marketID,omitempty"`
+	MediaProduct MediaProduct     `json:"mediaProduct,omitempty" bson:"mediaProduct,omitempty"`
+	OrderID      string           `json:"orderID,omitempty" bson:"orderID,omitempty"`
+	Print        *PrintDetails    `json:"print,omitempty" bson:"print,omitempty"`
+	StartDate    *time.Time       `json:"startDate,omitempty" bson:"startDate,omitempty"`
+	Status       BookingStatus    `json:"status,omitempty" bson:"status,omitempty"`
+	UpdatedAt    time.Time        `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	Waitlisted   *bool            `json:"waitlisted,omitempty" bson:"waitlisted,omitempty"`
+}
+
+type MediaProduct struct {
+	ProductCode string `json:"productCode,omitempty" bson:"productCode,omitempty"`
+	TypeCode    string `json:"typeCode,omitempty" bson:"typeCode,omitempty"`
 }
 
 type BookingLifecycle struct {
@@ -49,14 +50,6 @@ type BookingLifecycle struct {
 type LifecycleTimestamp struct {
 	Sent     time.Time `json:"sent,omitempty" bson:"sent,omitempty"`
 	Received time.Time `json:"received,omitempty" bson:"received,omitempty"`
-}
-
-type ProductDetails struct {
-	ProductID    string `json:"productID,omitempty" bson:"productID,omitempty"`
-	MediaProduct struct {
-		ProductCode string `json:"productCode,omitempty" bson:"productCode,omitempty"`
-		TypeCode    string `json:"typeCode,omitempty" bson:"typeCode,omitempty"`
-	} `json:"media,omitempty" bson:"media,omitempty"`
 }
 
 type SegmentDetails struct {
