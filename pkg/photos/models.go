@@ -12,6 +12,7 @@ type Photo struct {
 	ExternalIDs []string       `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 	ID          string         `json:"photoID" bson:"photoID"`
 	Status      *PhotoStatus   `json:"status,omitempty" bson:"status,omitempty"`
+	SubmittedBy string         `json:"submittedBy,omitempty" bson:"submittedBy,omitempty"`
 	Type        string         `json:"type" bson:"type"`
 	UpdatedAt   *time.Time     `json:"updatedAt" bson:"updatedAt"`
 	Urls        map[string]any `json:"urls" bson:"urls"`
