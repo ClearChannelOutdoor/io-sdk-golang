@@ -20,7 +20,7 @@ type Booking struct {
 	CreatedAt    time.Time        `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	DeletedAt    *time.Time       `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
 	Digital      *DigitalDetails  `json:"digital,omitempty" bson:"digital,omitempty"`
-	EndDate      *time.Time       `json:"endDate,omitempty" bson:"endDate,omitempty"`
+	EndDate      time.Time        `json:"endDate,omitempty" bson:"endDate,omitempty"`
 	ExternalIDs  []string         `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 	Filler       bool             `json:"filler,omitempty" bson:"filler,omitempty"`
 	Lifecycle    BookingLifecycle `json:"lifecycle,omitempty" bson:"lifecycle,omitempty"`
@@ -28,7 +28,7 @@ type Booking struct {
 	MediaProduct MediaProduct     `json:"mediaProduct,omitempty" bson:"mediaProduct,omitempty"`
 	OrderID      string           `json:"orderID,omitempty" bson:"orderID,omitempty"`
 	Print        *PrintDetails    `json:"print,omitempty" bson:"print,omitempty"`
-	StartDate    *time.Time       `json:"startDate,omitempty" bson:"startDate,omitempty"`
+	StartDate    time.Time        `json:"startDate,omitempty" bson:"startDate,omitempty"`
 	Status       BookingStatus    `json:"status,omitempty" bson:"status,omitempty"`
 	UpdatedAt    time.Time        `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 	Waitlisted   *bool            `json:"waitlisted,omitempty" bson:"waitlisted,omitempty"`
