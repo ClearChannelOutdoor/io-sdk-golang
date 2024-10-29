@@ -5,6 +5,13 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.6] - 2024-10-28
+Updates to the Order model: 
+- Start and End dates are no longer pointers
+- promote Advertiser and Buyer to root level 
+- remove Employee FullName and add Number
+- add Canceled field to Market related data
+
 ## [0.4.5] - 2024-10-18
 
 - Start and End dates in the booking model are no longer pointers

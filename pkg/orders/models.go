@@ -38,14 +38,6 @@ type Employee struct {
 	ExternalIDs []string `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 }
 
-type OrderAccount struct {
-	AccountID             string         `json:"accountID" bson:"accountID"`
-	Advertiser            CustomerEntity `json:"advertiser,omitempty" bson:"advertiser,omitempty"`
-	Buyer                 CustomerEntity `json:"buyer,omitempty" bson:"buyer,omitempty"`
-	DefaultBillToCustomer CustomerEntity `json:"defaultBillToCustomer,omitempty" bson:"defaultBillToCustomer,omitempty"`
-	ExternalIDs           []string       `json:"externalIDs"`
-}
-
 type OrderSeller struct {
 	LeadAccountExec         Employee `json:"leadAccountExec,omitempty" bson:"leadAccountExec,omitempty"`
 	SellingBusinessUnitCode string   `json:"sellingBusinessUnitCode,omitempty" bson:"sellingBusinessUnitCode,omitempty"`
