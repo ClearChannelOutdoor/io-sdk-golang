@@ -360,7 +360,7 @@ func main() {
 		}, cmd)
 	case "orders":
 		runClientCommand(func() (*clients.Client[orders.Order], error) {
-			return orders.NewOrdersClient(ctx, cc, cmd.server)
+			return orders.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "photos":
 		runClientCommand(func() (*clients.Client[photos.Photo], error) {

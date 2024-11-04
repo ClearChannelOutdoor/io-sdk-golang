@@ -17,6 +17,7 @@ const (
 type Booking struct {
 	ID           string           `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
 	BuyTypeID    string           `json:"buyTypeID,omitempty" bson:"buyTypeID,omitempty"`
+	Cost         *float32         `json:"cost,omitempty"`
 	CreatedAt    time.Time        `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	DeletedAt    *time.Time       `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
 	Digital      *DigitalDetails  `json:"digital,omitempty" bson:"digital,omitempty"`

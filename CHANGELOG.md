@@ -5,6 +5,9 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.7] - 2024-11-04
+- Add Cost field to booking model
+
 ## [0.4.6] - 2024-10-28
 Updates to the Order model: 
 - Start and End dates are no longer pointers
