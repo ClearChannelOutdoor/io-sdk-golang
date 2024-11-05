@@ -1,4 +1,4 @@
-package segmentDetails
+package buyTypes
 
 import (
 	"context"
@@ -11,7 +11,7 @@ const (
 	serverUrl string = "https://direct.cco.io"
 )
 
-func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Details], error) {
+func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[BuyType], error) {
 	svr := serverUrl
 	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
 		svr = overrideSvr[0]
