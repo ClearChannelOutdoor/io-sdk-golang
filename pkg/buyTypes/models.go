@@ -1,4 +1,4 @@
-package segmentDetails
+package buyTypes
 
 import (
 	"time"

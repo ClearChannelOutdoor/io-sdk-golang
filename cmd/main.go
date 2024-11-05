@@ -12,6 +12,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/accounts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/bookings"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/buyTypes"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/contracts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/creatives"
@@ -24,7 +25,6 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/photos"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/renewals"
-	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/segmentDetails"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/urls"
 	"golang.org/x/oauth2/clientcredentials"
@@ -278,6 +278,10 @@ func main() {
 		runClientCommand(func() (*clients.Client[bookings.Booking], error) {
 			return bookings.NewClient(ctx, cc, cmd.server)
 		}, cmd)
+	case "buyTypes":
+		runClientCommand(func() (*clients.Client[buyTypes.BuyType], error) {
+			return buyTypes.NewClient(ctx, cc, cmd.server)
+		}, cmd)
 	case "contracts":
 		runClientCommand(func() (*clients.Client[contracts.Contract], error) {
 			return contracts.NewClient(ctx, cc, cmd.server)
@@ -373,10 +377,6 @@ func main() {
 	case "renewals":
 		runClientCommand(func() (*clients.Client[renewals.Relationship], error) {
 			return renewals.NewClient(ctx, cc, cmd.server)
-		}, cmd)
-	case "segmentDetails":
-		runClientCommand(func() (*clients.Client[segmentDetails.Details], error) {
-			return segmentDetails.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "taxa-cco":
 		runClientCommand(func() (*clients.Client[taxa.CCOCode], error) {
