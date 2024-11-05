@@ -17,5 +17,5 @@ func NewClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSv
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[Details](ctx, svr, "/v1/details", oauth2)
+	return clients.NewClient[Details](ctx, svr, "/v1/buytypes", oauth2)
 }
