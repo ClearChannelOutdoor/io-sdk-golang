@@ -25,6 +25,8 @@ func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 
 	// if the token is blank or expired, get a new one
 	// removing check for OAuthToken.Expiry.Zero - this would indicate token does not expire
+	a.Mu.Lock()
+	defer a.Mu.Unlock()
 	if a.OAuthToken == nil || a.OAuthToken.Expiry.Before(time.Now()) {
 		// set the auth style to header
 		a.Svc.oauth2.AuthStyle = oauth2.AuthStyleInHeader
