@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"path"
 	"strings"
+	"sync"
 )
 
 type ChildEndpoint[T any] struct {
@@ -21,6 +22,7 @@ func NewChildEndpoint[T any](svc *Service, parentPath, childPath string, hdr *ht
 	a := api{
 		Clnt: &http.Client{},
 		Svc:  svc,
+		Mu:   &sync.Mutex{},
 	}
 
 	return &ChildEndpoint[T]{

@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"sync"
 )
 
 const (
@@ -33,6 +34,7 @@ func NewEndpoint[T any](svc *Service, path string, hdr *http.Header) *Endpoint[T
 	a := api{
 		Clnt: &http.Client{},
 		Svc:  svc,
+		Mu:   &sync.Mutex{},
 	}
 
 	return &Endpoint[T]{
