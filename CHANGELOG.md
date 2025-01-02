@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.2] - 2025-01-02
 
-- Update iab taxonomy model to match industry standard veribage
+- Update iab taxonomy model to match industry standard verbiage
 - Added /v3/taxa endpoint to iab client
 
 ## [0.5.1] - 2024-11-26
