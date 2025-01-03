@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.2] - 2025-01-02
+
+- Update iab taxonomy model to match industry standard verbiage
+- Added /v3/taxa endpoint to iab client
+
 ## [0.5.1] - 2024-11-26
 
 - Added a mutex to the underlying client surrounding retrieval of the OAuth v2.0 token

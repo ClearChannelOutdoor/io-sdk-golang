@@ -383,12 +383,16 @@ func main() {
 			return taxa.NewCCOCodeClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "taxa-iab-v1":
-		runClientCommand(func() (*clients.Client[taxa.IABV1Taxonomy], error) {
+		runClientCommand(func() (*clients.Client[taxa.V1Taxonomy], error) {
 			return taxa.NewIABV1Client(ctx, cc, cmd.server)
 		}, cmd)
 	case "taxa-iab-v2":
-		runClientCommand(func() (*clients.Client[taxa.IABV2Taxonomy], error) {
+		runClientCommand(func() (*clients.Client[taxa.IABTaxonomy], error) {
 			return taxa.NewIABV2Client(ctx, cc, cmd.server)
+		}, cmd)
+	case "taxa-iab-v3":
+		runClientCommand(func() (*clients.Client[taxa.IABTaxonomy], error) {
+			return taxa.NewIABV3Client(ctx, cc, cmd.server)
 		}, cmd)
 	case "url-locations":
 		runClientCommand(func() (*clients.Client[urls.Location], error) {

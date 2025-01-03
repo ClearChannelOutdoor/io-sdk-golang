@@ -20,20 +20,29 @@ func NewCCOCodeClient(ctx context.Context, oauth2 *clientcredentials.Config, ove
 	return clients.NewClient[CCOCode](ctx, svr, "/v1/codes", oauth2)
 }
 
-func NewIABV1Client(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[IABV1Taxonomy], error) {
+func NewIABV1Client(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[V1Taxonomy], error) {
 	svr := serverUrl
 	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[IABV1Taxonomy](ctx, svr, "/v1/taxa", oauth2)
+	return clients.NewClient[V1Taxonomy](ctx, svr, "/v1/taxa", oauth2)
 }
 
-func NewIABV2Client(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[IABV2Taxonomy], error) {
+func NewIABV2Client(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[IABTaxonomy], error) {
 	svr := serverUrl
 	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
 		svr = overrideSvr[0]
 	}
 
-	return clients.NewClient[IABV2Taxonomy](ctx, svr, "/v2/taxa", oauth2)
+	return clients.NewClient[IABTaxonomy](ctx, svr, "/v2/taxa", oauth2)
+}
+
+func NewIABV3Client(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[IABTaxonomy], error) {
+	svr := serverUrl
+	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
+		svr = overrideSvr[0]
+	}
+
+	return clients.NewClient[IABTaxonomy](ctx, svr, "/v3/taxa", oauth2)
 }

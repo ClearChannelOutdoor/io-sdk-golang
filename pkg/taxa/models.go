@@ -1,21 +1,23 @@
 package taxa
 
 type CCOCode struct {
-	Code     string         `json:"code"`
-	FullCode string         `json:"fullCode"`
-	Name     string         `json:"name"`
-	Unmapped bool           `json:"unmapped"`
-	V1       *IABV1Taxonomy `json:"v1,omitempty"`
+	Code     string       `json:"code"`
+	FullCode string       `json:"fullCode"`
+	Name     string       `json:"name"`
+	Unmapped bool         `json:"unmapped"`
+	V1       *V1Taxonomy  `json:"v1,omitempty"`
+	V2       *IABTaxonomy `json:"v2,omitempty"`
+	V3       *IABTaxonomy `json:"v3,omitempty"`
 }
 
-type IABV1Taxonomy struct {
-	RTBID      string         `json:"rtbID"`
-	Subject    string         `json:"subject"`
-	Deprecated bool           `json:"deprecated"`
-	V2         *IABV2Taxonomy `json:"v2,omitempty"`
+type V1Taxonomy struct {
+	IABCode    string `json:"iabCode"`
+	Category   string `json:"category"`
+	Tier1      string `json:"tier1,omitempty"`
+	Deprecated bool   `json:"deprecated"`
 }
 
-type IABV2Taxonomy struct {
+type IABTaxonomy struct {
 	UniqueID  string `json:"uniqueID"`
 	Parent    string `json:"parent,omitempty"`
 	Name      string `json:"name"`
