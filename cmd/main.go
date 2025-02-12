@@ -23,6 +23,7 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/networks"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/orders"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/photos"
+	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/pricing"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/products"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/renewals"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/taxa"
@@ -369,6 +370,10 @@ func main() {
 	case "photos":
 		runClientCommand(func() (*clients.Client[photos.Photo], error) {
 			return photos.NewClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "pricing":
+		runClientCommand(func() (*clients.Client[pricing.Quote], error) {
+			return pricing.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "products":
 		runClientCommand(func() (*clients.Client[products.Product], error) {
