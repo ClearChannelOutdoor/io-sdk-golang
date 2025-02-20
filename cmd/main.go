@@ -371,9 +371,13 @@ func main() {
 		runClientCommand(func() (*clients.Client[photos.Photo], error) {
 			return photos.NewClient(ctx, cc, cmd.server)
 		}, cmd)
-	case "pricing":
+	case "quotes":
 		runClientCommand(func() (*clients.Client[pricing.Quote], error) {
-			return pricing.NewClient(ctx, cc, cmd.server)
+			return pricing.NewQuotesClient(ctx, cc, cmd.server)
+		}, cmd)
+	case "quotesCurrent":
+		runClientCommand(func() (*clients.Client[pricing.Quote], error) {
+			return pricing.NewQuotesCurrentClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "products":
 		runClientCommand(func() (*clients.Client[products.Product], error) {
