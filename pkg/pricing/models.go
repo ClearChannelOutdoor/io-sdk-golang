@@ -36,15 +36,15 @@ type SaleableItem struct {
 	ExternalIDs                 []string `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 	// includes
 	// salesforce:panelLineItem:a3JVT000001Kh532AC
-	ID                  string                            `json:"saleableItemID,omitempty" bson:"saleableItemID,omitempty"`
-	IsTaxExempt         *bool                             `json:"isTaxExempt,omitempty" bson:"isTaxExempt,omitempty"`
-	MarketCode          string                            `json:"marketCode,omitempty" bson:"marketCode,omitempty"`
-	MarketDurationTotal *int                              `json:"marketDurationTotal,omitempty" bson:"marketDurationTotal,omitempty"`
-	MediaGrouping       string                            `json:"mediaGrouping,omitempty" bson:"mediaGrouping,omitempty"`
-	PricedItems         []*PricedItem                     `json:"pricedItems,omitempty" bson:"pricedItems,omitempty"`
-	PricingGuidance     map[GuidanceType]*PricingGuidance `json:"pricingGuidance,omitempty" bson:"pricingGuidance,omitempty"`
-	Quantity            int                               `json:"quantity,omitempty" bson:"quantity,omitempty"`
-	Schedule            Schedule                          `json:"schedule,omitempty" bson:"schedule,omitempty"`
+	ID                  string           `json:"saleableItemID,omitempty" bson:"saleableItemID,omitempty"`
+	IsTaxExempt         *bool            `json:"isTaxExempt,omitempty" bson:"isTaxExempt,omitempty"`
+	MarketCode          string           `json:"marketCode,omitempty" bson:"marketCode,omitempty"`
+	MarketDurationTotal *int             `json:"marketDurationTotal,omitempty" bson:"marketDurationTotal,omitempty"`
+	MediaGrouping       string           `json:"mediaGrouping,omitempty" bson:"mediaGrouping,omitempty"`
+	PricedItems         []*PricedItem    `json:"pricedItems,omitempty" bson:"pricedItems,omitempty"`
+	PricingGuidance     *PricingGuidance `json:"pricingGuidance,omitempty" bson:"pricingGuidance,omitempty"`
+	Quantity            int              `json:"quantity,omitempty" bson:"quantity,omitempty"`
+	Schedule            Schedule         `json:"schedule,omitempty" bson:"schedule,omitempty"`
 }
 
 type Debug struct {
@@ -239,11 +239,4 @@ const (
 	ProductionCostMod ModifierType = "productionCost"
 	RateMod           ModifierType = "rate"
 	TraditionalMod    ModifierType = "traditional"
-)
-
-type GuidanceType string
-
-const (
-	Calculated GuidanceType = "calculated"
-	Current    GuidanceType = "current"
 )
