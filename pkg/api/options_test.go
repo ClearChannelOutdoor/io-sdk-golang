@@ -236,6 +236,36 @@ func Test_options_AddFilter(t *testing.T) {
 				},
 			},
 		},
+		{
+			"should add multiple filter values when provided variadically",
+			fields{
+				filter: map[string][]string{},
+			},
+			args{
+				"field",
+				[]any{"value-1", "value-2", "value-3"},
+			},
+			&Options{
+				filter: map[string][]string{
+					"field": {"value-1", "value-2", "value-3"},
+				},
+			},
+		},
+		{
+			"should add multiple filter values when provided variadically (even with duplicate)",
+			fields{
+				filter: map[string][]string{},
+			},
+			args{
+				"field",
+				[]any{"value-1", "value-2", "value-2", "value-3"},
+			},
+			&Options{
+				filter: map[string][]string{
+					"field": {"value-1", "value-2", "value-3"},
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
