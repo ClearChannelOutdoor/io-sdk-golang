@@ -232,11 +232,13 @@ const (
 type ModifierType string
 
 const (
-	DynamicMod        ModifierType = "dynamic"
-	EventMod          ModifierType = "event"
-	FlexibleMod       ModifierType = "flexible"
-	PoliticalRateMod  ModifierType = "political"
-	ProductionCostMod ModifierType = "productionCost"
-	RateMod           ModifierType = "rate"
-	TraditionalMod    ModifierType = "traditional"
+	DynamicMod             ModifierType = "dynamic"
+	EventMod               ModifierType = "event"
+	FlexibleMod            ModifierType = "flexible"
+	FullMarketMod          ModifierType = "fullMarket"
+	FullMarketPoliticalMod ModifierType = "fullMarketPolitical"
+	PoliticalRateMod       ModifierType = "political"
+	ProductionCostMod      ModifierType = "productionCost"
+	RateMod                ModifierType = "rate"
+	TraditionalMod         ModifierType = "traditional"
 )
