@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.5] - 2025-05-20
+
+- fixed minor bug in `AddFilter` where only two filters would be created when using the variadic form of the function (as opposed to all provided parameters)
+
 ## [0.5.4] - 2025-02-24
 
 - update Pricing-API's SaleableItem struct with a single PricingGuidance

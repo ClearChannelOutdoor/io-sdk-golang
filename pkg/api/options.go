@@ -70,12 +70,12 @@ func (o *Options) AddFilter(field string, value ...any) *Options {
 		if f, ok := o.filter[field]; ok {
 			// check to see if the value already exists within the filter
 			if internal.ContainsValue(f, v) {
-				return o
+				continue
 			}
 
 			// append the filter and return
 			o.filter[field] = append(f, v)
-			return o
+			continue
 		}
 
 		// add the filter and return
