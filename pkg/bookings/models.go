@@ -4,8 +4,10 @@ import (
 	"time"
 )
 
-type BookingStatus string
-type LifecycleEvent string
+type (
+	BookingStatus  string
+	LifecycleEvent string
+)
 
 const (
 	Draft    BookingStatus = "Draft"
@@ -15,7 +17,9 @@ const (
 )
 
 type Booking struct {
-	ID           string           `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
+	ID      string   `json:"bookingID,omitempty" bson:"bookingID,omitempty"`
+	BuyType *BuyType `json:"buyType,omitempty" bson:"buyType,omitempty"`
+	// todo: remove buyTypeID once dependency on buy-type-api is removed from all services
 	BuyTypeID    string           `json:"buyTypeID,omitempty" bson:"buyTypeID,omitempty"`
 	Cost         *float32         `json:"cost,omitempty"`
 	CreatedAt    time.Time        `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
@@ -33,6 +37,12 @@ type Booking struct {
 	Status       BookingStatus    `json:"status,omitempty" bson:"status,omitempty"`
 	UpdatedAt    time.Time        `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 	Waitlisted   *bool            `json:"waitlisted,omitempty" bson:"waitlisted,omitempty"`
+}
+
+type BuyType struct {
+	Deliverable      string `json:"deliverable,omitempty" bson:"deliverable,omitempty"`
+	Flexibility      string `json:"flexibility,omitempty" bson:"flexibility,omitempty"`
+	RevenueSpecifier string `json:"revenueSpecifier,omitempty" bson:"revenueSpecifier,omitempty"`
 }
 
 type MediaProduct struct {

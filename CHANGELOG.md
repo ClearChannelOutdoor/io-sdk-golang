@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.7] - 2025-05-23
+
+- add BuyType struct to the bookings model
+
 ## [0.5.6] - 2025-05-20
 
 - add fullMarket & fullMarketPolitical mod types to pricing models
