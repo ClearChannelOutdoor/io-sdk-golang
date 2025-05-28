@@ -58,14 +58,15 @@ const (
 type RevenueSpecifier string
 
 const (
-	Trade    RevenueSpecifier = "Trade"
 	Bonus    RevenueSpecifier = "Bonus"
-	Lessor   RevenueSpecifier = "Lessor"
-	PSA      RevenueSpecifier = "PSA" // lives on order, not booking, may still come through on an orderline message and will need to be parsed correctly
-	MakeGood RevenueSpecifier = "Make Good"
-	RFR      RevenueSpecifier = "Right of First Refusal"
+	Empty    RevenueSpecifier = ""
 	FBI      RevenueSpecifier = "FBI"
+	Lessor   RevenueSpecifier = "Lessor"
+	MakeGood RevenueSpecifier = "Make Good"
 	Override RevenueSpecifier = "Override"
+	PSA      RevenueSpecifier = "PSA" // lives on order, not booking, may still come through on an orderline message and will need to be parsed correctly
+	RFR      RevenueSpecifier = "Right of First Refusal"
+	Trade    RevenueSpecifier = "Trade"
 )
 
 type MediaProduct struct {
