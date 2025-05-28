@@ -40,10 +40,33 @@ type Booking struct {
 }
 
 type BuyType struct {
-	Deliverable      string `json:"deliverable,omitempty" bson:"deliverable,omitempty"`
-	Flexibility      string `json:"flexibility,omitempty" bson:"flexibility,omitempty"`
-	RevenueSpecifier string `json:"revenueSpecifier,omitempty" bson:"revenueSpecifier,omitempty"`
+	Deliverable      string           `json:"deliverable,omitempty" bson:"deliverable,omitempty"`
+	Flexibility      Flexibility      `json:"flexibility,omitempty" bson:"flexibility,omitempty"`
+	RevenueSpecifier RevenueSpecifier `json:"revenueSpecifier,omitempty" bson:"revenueSpecifier,omitempty"`
 }
+
+// flexibility enums for Fixed, Flexible, FullMarketFixed, FullMarketFlexible
+type Flexibility string
+
+const (
+	Fixed    Flexibility = "Fixed"
+	Flexible Flexibility = "Flexible"
+	NA       Flexibility = "N/A" // for override bonus only
+)
+
+// enums for Trade, Bonus, Lessor, PSA, Make Good, RFR, FBI, "", Override
+type RevenueSpecifier string
+
+const (
+	Trade    RevenueSpecifier = "Trade"
+	Bonus    RevenueSpecifier = "Bonus"
+	Lessor   RevenueSpecifier = "Lessor"
+	PSA      RevenueSpecifier = "PSA" // lives on order, not booking, may still come through on an orderline message and will need to be parsed correctly
+	MakeGood RevenueSpecifier = "Make Good"
+	RFR      RevenueSpecifier = "Right of First Refusal"
+	FBI      RevenueSpecifier = "FBI"
+	Override RevenueSpecifier = "Override"
+)
 
 type MediaProduct struct {
 	ProductCode string `json:"productCode,omitempty" bson:"productCode,omitempty"`
