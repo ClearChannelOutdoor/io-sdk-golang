@@ -60,22 +60,22 @@ const (
 type Flexibility string
 
 const (
-	Fixed    Flexibility = "Fixed"
-	Flexible Flexibility = "Flexible"
-	None     Flexibility = ExplicitEmpty // for bonus override only
+	Fixed            Flexibility = "Fixed"
+	Flexible         Flexibility = "Flexible"
+	EmptyFlexibility Flexibility = ExplicitEmpty // for bonus override only
 )
 
 type RevenueSpecifier string
 
 const (
-	Bonus    RevenueSpecifier = "Bonus"
-	Empty    RevenueSpecifier = ExplicitEmpty
-	FBI      RevenueSpecifier = "FBI"
-	Lessor   RevenueSpecifier = "Lessor"
-	MakeGood RevenueSpecifier = "Make Good"
-	PSA      RevenueSpecifier = "PSA" // lives on order, not booking, may still come through on an orderline message and will need to be parsed correctly
-	RFR      RevenueSpecifier = "Right of First Refusal"
-	Trade    RevenueSpecifier = "Trade"
+	Bonus                 RevenueSpecifier = "Bonus"
+	EmptyRevenueSpecifier RevenueSpecifier = ExplicitEmpty
+	FBI                   RevenueSpecifier = "FBI"
+	Lessor                RevenueSpecifier = "Lessor"
+	MakeGood              RevenueSpecifier = "Make Good"
+	PSA                   RevenueSpecifier = "PSA" // lives on order, not booking, may still come through on an orderline message and will need to be parsed correctly
+	RFR                   RevenueSpecifier = "Right of First Refusal"
+	Trade                 RevenueSpecifier = "Trade"
 )
 
 type MediaProduct struct {
