@@ -45,12 +45,15 @@ type BuyType struct {
 	RevenueSpecifier RevenueSpecifier `json:"revenueSpecifier,omitempty" bson:"revenueSpecifier,omitempty"`
 }
 
+const ExplicitEmpty = ""
+
 type Deliverable string
 
 const (
 	// unique values
 	Display     Deliverable = "Display"
 	Impressions Deliverable = "Impressions"
+	Override    Deliverable = "Override"
 	Quantity    Deliverable = "Quantity"
 )
 
@@ -59,13 +62,14 @@ type Flexibility string
 const (
 	Fixed    Flexibility = "Fixed"
 	Flexible Flexibility = "Flexible"
+	None     Flexibility = ExplicitEmpty // for bonus override only
 )
 
 type RevenueSpecifier string
 
 const (
 	Bonus    RevenueSpecifier = "Bonus"
-	Empty    RevenueSpecifier = ""
+	Empty    RevenueSpecifier = ExplicitEmpty
 	FBI      RevenueSpecifier = "FBI"
 	Lessor   RevenueSpecifier = "Lessor"
 	MakeGood RevenueSpecifier = "Make Good"
