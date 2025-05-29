@@ -45,8 +45,6 @@ type BuyType struct {
 	RevenueSpecifier RevenueSpecifier `json:"revenueSpecifier,omitempty" bson:"revenueSpecifier,omitempty"`
 }
 
-const ExplicitEmpty = ""
-
 type Deliverable string
 
 const (
@@ -67,7 +65,7 @@ type RevenueSpecifier string
 
 const (
 	Bonus    RevenueSpecifier = "Bonus"
-	Empty    RevenueSpecifier = ExplicitEmpty
+	Empty    RevenueSpecifier = ""
 	FBI      RevenueSpecifier = "FBI"
 	Lessor   RevenueSpecifier = "Lessor"
 	MakeGood RevenueSpecifier = "Make Good"
