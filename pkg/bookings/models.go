@@ -53,7 +53,6 @@ const (
 	// unique values
 	Display     Deliverable = "Display"
 	Impressions Deliverable = "Impressions"
-	Override    Deliverable = "Override"
 	Quantity    Deliverable = "Quantity"
 )
 
