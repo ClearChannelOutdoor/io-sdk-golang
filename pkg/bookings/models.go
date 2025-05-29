@@ -61,7 +61,6 @@ type Flexibility string
 const (
 	Fixed    Flexibility = "Fixed"
 	Flexible Flexibility = "Flexible"
-	None     Flexibility = ExplicitEmpty // for bonus override only
 )
 
 type RevenueSpecifier string
