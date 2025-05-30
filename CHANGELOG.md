@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.9] - 2025-05-28
+
+- modified deliverable to enum, removed extra comments, added explicitEmpty constants to flexibility and revenueSpecifier enums
+
 ## [0.5.8] - 2025-05-28
 
 - changed flexibility and revenueSpecifier in buyType model to enums
