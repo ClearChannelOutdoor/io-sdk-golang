@@ -2,6 +2,7 @@ package campaigns
 
 import "time"
 
+/* Campaign */
 type audience struct {
 	Demographics []struct {
 		Age           string `json:"age,omitempty"`
@@ -38,11 +39,12 @@ type Campaign struct {
 }
 
 type CampaignAccount struct {
-	Advertiser customerEntity           `json:"advertiser,omitempty"`
-	Contacts   []CampaignAccountContact `json:"contacts,omitempty"`
-	BillTo     customerEntity           `json:"billTo,omitempty"`
-	Buyer      customerEntity           `json:"buyer,omitempty"`
-	ThirdParty customerEntity           `json:"thirdParty,omitempty"`
+	AccountExecutive customerEntity           `json:"accountExecutive,omitempty"`
+	Advertiser       customerEntity           `json:"advertiser,omitempty"`
+	Contacts         []CampaignAccountContact `json:"contacts,omitempty"`
+	BillTo           customerEntity           `json:"billTo,omitempty"`
+	Buyer            customerEntity           `json:"buyer,omitempty"`
+	ThirdParty       customerEntity           `json:"thirdParty,omitempty"`
 }
 
 type CampaignAccountContact struct {
@@ -73,16 +75,19 @@ type CampaignFlight struct {
 }
 
 type CampaignStatus struct {
-	CancelledAt     *time.Time `json:"cancelledAt,omitempty" bson:"cancelledAt,omitempty"`
-	ContractCloseAt *time.Time `json:"contractCloseAt,omitempty" bson:"contractCloseAt,omitempty"`
-	HardTakedownAt  *time.Time `json:"hardTakedownAt,omitempty" bson:"hardTakedownAt,omitempty"`
-	ResponseBy      *time.Time `json:"responseBy,omitempty" bson:"responseBy,omitempty"`
+	CancelledAt        *time.Time `json:"cancelledAt,omitempty" bson:"cancelledAt,omitempty"`
+	CancellationReason string     `json:"cancellationReason,omitempty" bson:"cancellationReason,omitempty"`
+	ContractCloseAt    *time.Time `json:"contractCloseAt,omitempty" bson:"contractCloseAt,omitempty"`
+	HardTakedownAt     *time.Time `json:"hardTakedownAt,omitempty" bson:"hardTakedownAt,omitempty"`
+	ResponseBy         *time.Time `json:"responseBy,omitempty" bson:"responseBy,omitempty"`
 }
 
 type customerEntity struct {
-	CustomerID  string   `json:"customerID,omitempty"`
-	ExternalIDs []string `json:"externalIDs,omitempty"`
-	Name        string   `json:"name,omitempty"`
+	CustomerID     string   `json:"customerID,omitempty"`
+	CustomerNumber string   `json:"customerNumber,omitempty"`
+	ExternalIDs    []string `json:"externalIDs,omitempty"`
+	Name           string   `json:"name,omitempty"`
+	Type           string   `json:"type,omitempty"`
 }
 
 type location struct {
@@ -97,16 +102,60 @@ type location struct {
 	ZipCodes []string `json:"zipCodes,omitempty"`
 }
 
+/* Plan */
+
 type Plan struct {
-	CampaignID string          `json:"campaignID"`
-	CreatedAt  time.Time       `json:"createdAt,omitempty"`
-	ID         string          `json:"planID"`
-	Inventory  []PlanInventory `json:"inventory"`
-	UpdatedAt  time.Time       `json:"updatedAt,omitempty"`
+	CampaignID  string    `json:"campaignID" bson:"campaignID"`
+	CreatedAt   time.Time `json:"createdAt" bson:"createdAt"`
+	EndDate     time.Time `json:"endDate,omitempty" bson:"endDate,omitempty"`
+	ExternalIDs []string  `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	ID          string    `json:"planID" bson:"planID"`
+	Markets     []Market  `json:"markets,omitempty" bson:"markets,omitempty"`
+	Name        string    `json:"name" bson:"name"`
+	StartDate   time.Time `json:"startDate,omitempty" bson:"startDate,omitempty"`
+	Status      Status    `json:"status,omitempty" bson:"status,omitempty"`
+	Type        string    `json:"type,omitempty" bson:"type,omitempty"`
+	UpdatedAt   time.Time `json:"updatedAt" bson:"updatedAt"`
 }
 
-type PlanInventory struct {
-	DisplayID string         `json:"displayID"`
-	Flight    CampaignFlight `json:"flight,omitempty"`
-	ProductID string         `json:"productID"`
+type Market struct {
+	Code        string   `json:"code,omitempty" bson:"code,omitempty"`
+	ExternalIDs []string `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	Name        string   `json:"name,omitempty" bson:"name,omitempty"`
+}
+
+type Status struct {
+	Canceled *bool `json:"canceled,omitempty" bson:"canceled,omitempty"`
+}
+
+/* PlanItem */
+
+type PlanItem struct {
+	BuyType        *BuyType        `json:"buyType,omitempty" bson:"buyType,omitempty"`
+	CreatedAt      time.Time       `json:"createdAt" bson:"createdAt"`
+	DigitalDetails *DigitalDetails `json:"digitalDetails,omitempty" bson:"digitalDetails,omitempty"`
+	EndDate        time.Time       `json:"endDate,omitempty" bson:"endDate,omitempty"`
+	ExternalIDs    []string        `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	ID             string          `json:"planItemID" bson:"planItemID"`
+	IsDigital      bool            `json:"isDigital,omitempty" bson:"isDigital,omitempty"`
+	PlanID         string          `json:"planID" bson:"planID"`
+	PrintDetails   *PrintDetails   `json:"printDetails,omitempty" bson:"printDetails,omitempty"`
+	StartDate      time.Time       `json:"startDate,omitempty" bson:"startDate,omitempty"`
+	UpdatedAt      time.Time       `json:"updatedAt" bson:"updatedAt"`
+}
+
+type BuyType struct {
+	Deliverable Deliverable `json:"deliverable,omitempty" bson:"deliverable,omitempty"`
+	Flexibility Flexibility `json:"flexibility,omitempty" bson:"flexibility,omitempty"`
+}
+
+type DigitalDetails struct {
+	ExternalIDs          []string `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
+	NumberOfSpotsPerLoop int      `json:"numberOfSpotsPerLoop,omitempty" bson:"numberOfSpotsPerLoop,omitempty"`
+	Quantity             int      `json:"quantity,omitempty" bson:"quantity,omitempty"`
+	SpotLength           int      `json:"spotLength,omitempty" bson:"spotLength,omitempty"`
+}
+type PrintDetails struct {
+	DisplayID   string   `json:"displayID,omitempty" bson:"displayID,omitempty"`
+	ExternalIDs []string `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
 }

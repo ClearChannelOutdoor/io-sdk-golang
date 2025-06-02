@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.0] - 2025-06-02
+
+- [IOC-1112](https://clearchanneloutdoor.atlassian.net/browse/IOC-1112) updated campaign, plan, planItem model to sync with the latest changes in the campaign-api
+
 ## [0.5.10] - 2025-06-02
 
 - adjusted token expiration detection to overlap by 5 minutes
