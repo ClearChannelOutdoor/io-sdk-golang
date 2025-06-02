@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - [IOC-1112](https://clearchanneloutdoor.atlassian.net/browse/IOC-1112) updated campaign, plan, planItem model to sync with the latest changes in the campaign-api
 
+## [0.5.10] - 2025-06-02
+
+- adjusted token expiration detection to overlap by 5 minutes
+
 ## [0.5.9] - 2025-05-28
 
 - modified deliverable to enum, removed extra comments, added explicitEmpty constants to flexibility and revenueSpecifier enums
