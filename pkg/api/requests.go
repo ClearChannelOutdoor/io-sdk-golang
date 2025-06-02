@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	defaultMaxAttempts uint = 5
+	defaultMaxAttempts            uint          = 5
+	defaultTokenExpirationOverlap time.Duration = 5 * time.Minute
 )
 
 func ensureBearerToken(ctx context.Context, a *api) (string, error) {
@@ -23,11 +24,13 @@ func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 		return "", nil
 	}
 
+	n := time.Now()
+
 	// if the token is blank or expired, get a new one
 	// removing check for OAuthToken.Expiry.Zero - this would indicate token does not expire
 	a.Mu.Lock()
 	defer a.Mu.Unlock()
-	if a.OAuthToken == nil || a.OAuthToken.Expiry.Before(time.Now()) {
+	if a.OAuthToken == nil || a.OAuthToken.Expiry.Before(n.Add(-defaultTokenExpirationOverlap)) {
 		// set the auth style to header
 		a.Svc.oauth2.AuthStyle = oauth2.AuthStyleInHeader
 

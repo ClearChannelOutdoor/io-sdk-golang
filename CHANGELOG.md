@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.10] - 2025-06-02
+
+- adjusted token expiration detection to overlap by 5 minutes
+
 ## [0.5.9] - 2025-05-28
 
 - modified deliverable to enum, removed extra comments, added explicitEmpty constants to flexibility and revenueSpecifier enums
