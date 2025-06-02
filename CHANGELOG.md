@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.6.0] - 2025-06-02
 
-- [IOC-1112](https://clearchanneloutdoor.atlassian.net/browse/IOC-1112) updated campaign, plan, planItem model to minic the latest changes in the campaign-api
+- [IOC-1112](https://clearchanneloutdoor.atlassian.net/browse/IOC-1112) updated campaign, plan, planItem model to sync with the latest changes in the campaign-api
 
 ## [0.5.9] - 2025-05-28
 
