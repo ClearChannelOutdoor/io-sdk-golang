@@ -75,13 +75,13 @@ type ContractSignedEvent struct {
 }
 
 type Contract struct {
-	AcceptedOnDate    time.Time `json:"acceptedOnDate,omitempty" bson:"acceptedOnDate,omitempty"`
-	CancellationTerms string    `json:"cancellationTerms,omitempty" bson:"cancellationTerms,omitempty"`
-	ContractValue     float64   `json:"contractValue,omitempty" bson:"contractValue,omitempty"`
-	CreatedAt         time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	ExternalIDs       []string  `json:"externalIDs,omitempty" bson:"externalIDs,omitempty"`
-	ID                string    `json:"contractID,omitempty" bson:"contractID,omitempty"`
-	OrderID           string    `json:"orderID,omitempty" bson:"orderID,omitempty"`
-	OrderLineIDs      []string  `json:"orderLineIDs,omitempty" bson:"orderLineIDs,omitempty"`
-	UpdatedAt         time.Time `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	AcceptedOnDate    time.Time `json:"acceptedOnDate,omitempty"`
+	CancellationTerms string    `json:"cancellationTerms,omitempty"`
+	ContractValue     float64   `json:"contractValue,omitempty"`
+	CreatedAt         time.Time `json:"createdAt,omitempty"`
+	ExternalIDs       []string  `json:"externalIDs,omitempty"`
+	ID                string    `json:"contractID,omitempty"`
+	OrderID           string    `json:"orderID,omitempty"`
+	OrderLineIDs      []string  `json:"orderLineIDs,omitempty"`
+	UpdatedAt         time.Time `json:"updatedAt,omitempty"`
 }

@@ -4,12 +4,12 @@ import "time"
 
 type Account struct {
 	ID          string           `json:"accountID"`
-	Advertiser  *AccountCustomer `json:"advertiser,omitempty" bson:"-"`
-	BillTo      *AccountCustomer `json:"billTo,omitempty" bson:"-"`
-	Buyer       *AccountCustomer `json:"buyer,omitempty" bson:"-"`
+	Advertiser  *AccountCustomer `json:"advertiser,omitempty"`
+	BillTo      *AccountCustomer `json:"billTo,omitempty"`
+	Buyer       *AccountCustomer `json:"buyer,omitempty"`
 	CreatedAt   time.Time        `json:"createdAt"`
 	ExternalIDs []string         `json:"externalIDs,omitempty"`
-	ThirdParty  *AccountCustomer `json:"thirdParty,omitempty" bson:"-"`
+	ThirdParty  *AccountCustomer `json:"thirdParty,omitempty"`
 	UpdatedAt   time.Time        `json:"updatedAt"`
 }
 
