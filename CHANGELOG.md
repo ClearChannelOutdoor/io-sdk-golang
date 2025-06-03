@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.1] - 2025-06-03
+
+- [IOC-1190](https://clearchanneloutdoor.atlassian.net/browse/IOC-1190) updated network models to match the latest changes in the network-api
+- removed all bson references per group discussion
+
 ## [0.6.0] - 2025-06-02
 
 - [IOC-1112](https://clearchanneloutdoor.atlassian.net/browse/IOC-1112) updated campaign, plan, planItem model to sync with the latest changes in the campaign-api
