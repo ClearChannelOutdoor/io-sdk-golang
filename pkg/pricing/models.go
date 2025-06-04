@@ -5,11 +5,8 @@ import (
 )
 
 type Quote struct {
-	CreatedAt   *time.Time `json:"createdAt"`
-	ExternalIDs []string   `json:"externalIDs,omitempty"`
-	// includes
-	// salesforce:opportunity:a3HVT000001HYBB2A4
-	// salesforce:plan:a3JVT000001Kh532AC
+	CreatedAt      *time.Time      `json:"createdAt"`
+	ExternalIDs    []string        `json:"externalIDs,omitempty"`
 	ID             string          `json:"quoteID"`
 	SaleableItems  []*SaleableItem `json:"saleableItems,omitempty"`
 	SpecialPricing *SpecialPricing `json:"specialPricing,omitempty"`
@@ -31,20 +28,18 @@ type SpecialPricing struct {
 }
 
 type SaleableItem struct {
-	BuyType                     BuyType  `json:"buyType,omitempty"`
-	EffectiveQuantityGroupTotal float64  `json:"effectiveQuantityGroupTotal,omitempty"`
-	ExternalIDs                 []string `json:"externalIDs,omitempty"`
-	// includes
-	// salesforce:panelLineItem:a3JVT000001Kh532AC
-	ID                  string           `json:"saleableItemID,omitempty"`
-	IsTaxExempt         *bool            `json:"isTaxExempt,omitempty"`
-	MarketCode          string           `json:"marketCode,omitempty"`
-	MarketDurationTotal *int             `json:"marketDurationTotal,omitempty"`
-	MediaGrouping       string           `json:"mediaGrouping,omitempty"`
-	PricedItems         []*PricedItem    `json:"pricedItems,omitempty"`
-	PricingGuidance     *PricingGuidance `json:"pricingGuidance,omitempty"`
-	Quantity            int              `json:"quantity,omitempty"`
-	Schedule            Schedule         `json:"schedule,omitempty"`
+	BuyType                     BuyType          `json:"buyType,omitempty"`
+	EffectiveQuantityGroupTotal float64          `json:"effectiveQuantityGroupTotal,omitempty"`
+	ExternalIDs                 []string         `json:"externalIDs,omitempty"`
+	ID                          string           `json:"saleableItemID,omitempty"`
+	IsTaxExempt                 *bool            `json:"isTaxExempt,omitempty"`
+	MarketCode                  string           `json:"marketCode,omitempty"`
+	MarketDurationTotal         *int             `json:"marketDurationTotal,omitempty"`
+	MediaGrouping               string           `json:"mediaGrouping,omitempty"`
+	PricedItems                 []*PricedItem    `json:"pricedItems,omitempty"`
+	PricingGuidance             *PricingGuidance `json:"pricingGuidance,omitempty"`
+	Quantity                    int              `json:"quantity,omitempty"`
+	Schedule                    Schedule         `json:"schedule,omitempty"`
 }
 
 type Debug struct {
@@ -73,10 +68,8 @@ type Price struct {
 }
 
 type PricedItem struct {
-	DisplayID   string   `json:"displayID,omitempty"`
-	ExternalIDs []string `json:"externalIDs,omitempty"`
-	// includes
-	// salesforce:display:a3IVF000000YNLZ2A4
+	DisplayID         string           `json:"displayID,omitempty"`
+	ExternalIDs       []string         `json:"externalIDs,omitempty"`
 	InstallTaxRate    float64          `json:"installTaxRate"`
 	PricingGuidance   *PricingGuidance `json:"pricingGuidance,omitempty"`
 	ProductionTaxRate float64          `json:"productionTaxRate"`
