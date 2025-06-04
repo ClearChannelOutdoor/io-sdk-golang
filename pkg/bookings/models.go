@@ -10,19 +10,19 @@ type Booking struct {
 	// todo: remove buyTypeID once dependency on buy-type-api is removed from all services
 	BuyTypeID    string          `json:"buyTypeID,omitempty"`
 	Cost         *float32        `json:"cost,omitempty"`
-	CreatedAt    time.Time       `json:"createdAt,omitempty"`
+	CreatedAt    *time.Time      `json:"createdAt,omitempty"`
 	DeletedAt    *time.Time      `json:"deletedAt,omitempty"`
 	Digital      *DigitalDetails `json:"digital,omitempty"`
-	EndDate      time.Time       `json:"endDate,omitempty"`
+	EndDate      *time.Time      `json:"endDate,omitempty"`
 	ExternalIDs  []string        `json:"externalIDs,omitempty"`
 	Filler       bool            `json:"filler,omitempty"`
 	MarketID     string          `json:"marketID,omitempty"`
-	MediaProduct MediaProduct    `json:"mediaProduct,omitempty"`
+	MediaProduct *MediaProduct   `json:"mediaProduct,omitempty"`
 	OrderID      string          `json:"orderID,omitempty"`
 	Print        *PrintDetails   `json:"print,omitempty"`
-	StartDate    time.Time       `json:"startDate,omitempty"`
-	Status       BookingStatus   `json:"status,omitempty"`
-	UpdatedAt    time.Time       `json:"updatedAt,omitempty"`
+	StartDate    *time.Time      `json:"startDate,omitempty"`
+	Status       *BookingStatus  `json:"status,omitempty"`
+	UpdatedAt    *time.Time      `json:"updatedAt,omitempty"`
 	Waitlisted   *bool           `json:"waitlisted,omitempty"`
 }
 type BookingStatus struct {
