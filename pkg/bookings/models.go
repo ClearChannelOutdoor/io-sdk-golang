@@ -5,10 +5,8 @@ import (
 )
 
 type Booking struct {
-	ID      string   `json:"bookingID,omitempty"`
-	BuyType *BuyType `json:"buyType,omitempty"`
-	// todo: remove buyTypeID once dependency on buy-type-api is removed from all services
-	BuyTypeID    string          `json:"buyTypeID,omitempty"`
+	ID           string          `json:"bookingID,omitempty"`
+	BuyType      *BuyType        `json:"buyType,omitempty"`
 	Cost         *float32        `json:"cost,omitempty"`
 	CreatedAt    *time.Time      `json:"createdAt,omitempty"`
 	DeletedAt    *time.Time      `json:"deletedAt,omitempty"`
@@ -26,8 +24,8 @@ type Booking struct {
 	Waitlisted   *bool           `json:"waitlisted,omitempty"`
 }
 type BookingStatus struct {
-	Status BookingStatusValue               `json:"status,omitempty"`
-	Sync   map[BookingStatusValue]time.Time `json:"sync,omitempty"`
+	Status BookingStatusValue   `json:"status,omitempty"`
+	Sync   map[string]time.Time `json:"sync,omitempty"`
 }
 
 type BuyType struct {
@@ -108,10 +106,3 @@ const (
 	RFR                   RevenueSpecifier = "Right of First Refusal"
 	Trade                 RevenueSpecifier = "Trade"
 )
-
-// todo: pretty sure this is only used in order-bff or maybe order-api but doesn't need to be here in bookings section
-type SegmentDetails struct {
-	DetailCode  string `json:"detailCode,omitempty"`
-	SegmentCode string `json:"segmentCode,omitempty"`
-	TRP         *int   `json:"trp,omitempty"`
-}
