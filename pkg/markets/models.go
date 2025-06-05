@@ -10,10 +10,10 @@ type Location struct {
 
 type Market struct {
 	ID                        string                           `json:"marketID"`
-	CoreBasedStatisticalAreas []MarketCoreBasedStatisticalArea `json:"coreBasedStatisticalAreas,omitempty" bson:"coreBasedStatisticalAreas,omitempty"`
+	CoreBasedStatisticalAreas []MarketCoreBasedStatisticalArea `json:"coreBasedStatisticalAreas,omitempty"`
 	Code                      string                           `json:"code"`
 	CreatedAt                 time.Time                        `json:"createdAt"`
-	DesignatedMarketAreas     []MarketDesignatedMarketArea     `json:"designatedMarketAreas,omitempty" bson:"designatedMarketAreas,omitempty"`
+	DesignatedMarketAreas     []MarketDesignatedMarketArea     `json:"designatedMarketAreas,omitempty"`
 	ExternalIDs               []string                         `json:"externalIDs,omitempty"`
 	Location                  Location                         `json:"location,omitempty"`
 	Name                      string                           `json:"name"`
@@ -22,11 +22,11 @@ type Market struct {
 }
 
 type MarketCoreBasedStatisticalArea struct {
-	Code string `json:"code,omitempty" bson:"code,omitempty"`
-	Name string `json:"name,omitempty" bson:"name,omitempty"`
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 type MarketDesignatedMarketArea struct {
-	Code string `json:"code,omitempty" bson:"code,omitempty"`
-	Name string `json:"name,omitempty" bson:"name,omitempty"`
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
 }

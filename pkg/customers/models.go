@@ -63,7 +63,7 @@ type Market struct {
 	ID             string         `json:"marketID,omitempty"`
 	Category       Category       `json:"category,omitempty"`
 	Classification Classification `json:"classification,omitempty"`
-	Code           string         `json:"code,omitempty" bson:"code,omitempty"`
+	Code           string         `json:"code,omitempty"`
 	CreatedAt      time.Time      `json:"createdAt"`
 	Credit         *Credit        `json:"credit,omitempty"`
 	ExternalIDs    []string       `json:"externalIDs,omitempty"`
