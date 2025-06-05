@@ -32,8 +32,8 @@ func NewChildEndpoint[T any](svc *Service, parentPath, childPath string, hdr *ht
 	}
 }
 
-func (ce *ChildEndpoint[T]) request(ctx context.Context, method string, path string, body io.Reader, opts ...*Options) ([]byte, error) {
-	r, err := retryRequest(
+func (ce *ChildEndpoint[T]) request(ctx context.Context, method string, path string, body io.Reader, opts ...*Options) ([]byte, int, error) {
+	r, sts, err := retryRequest(
 		ctx,
 		ce.hdr,
 		ce.a,
@@ -42,126 +42,126 @@ func (ce *ChildEndpoint[T]) request(ctx context.Context, method string, path str
 		body,
 		opts...)
 	if err != nil {
-		return nil, err
+		return nil, sts, err
 	}
 
-	return r, nil
+	return r, sts, nil
 }
 
-func (ce *ChildEndpoint[T]) Create(ctx context.Context, parentID string, mdl *T) error {
+func (ce *ChildEndpoint[T]) Create(ctx context.Context, parentID string, mdl *T) (int, error) {
 	var created T
 
 	jd, err := json.Marshal(mdl)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	data, err := ce.request(ctx, postMethod, fmt.Sprintf(ce.Path, parentID), bytes.NewBuffer(jd))
+	data, sts, err := ce.request(ctx, postMethod, fmt.Sprintf(ce.Path, parentID), bytes.NewBuffer(jd))
 	if err != nil {
-		return err
+		return sts, err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &created); err != nil {
-		return err
+		return sts, err
 	}
 
 	// assign the created model
 	*mdl = created
 
-	return nil
+	return sts, nil
 }
 
-func (ce *ChildEndpoint[T]) Delete(ctx context.Context, parentID string, id string) error {
+func (ce *ChildEndpoint[T]) Delete(ctx context.Context, parentID string, id string) (int, error) {
 	// make the request to the API
-	_, err := ce.request(ctx, deleteMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
+	_, sts, err := ce.request(ctx, deleteMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
 	if err != nil {
-		return err
+		return sts, err
 	}
 
-	return nil
+	return sts, nil
 }
 
-func (ce *ChildEndpoint[T]) Get(ctx context.Context, parentID string, id string) (*T, error) {
+func (ce *ChildEndpoint[T]) Get(ctx context.Context, parentID string, id string) (*T, int, error) {
 	var mdl T
 
 	// make the request to the API
-	data, err := ce.request(ctx, getMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
+	data, sts, err := ce.request(ctx, getMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), nil)
 	if err != nil {
-		return nil, err
+		return nil, sts, err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &mdl); err != nil {
-		return nil, err
+		return nil, sts, err
 	}
 
-	return &mdl, nil
+	return &mdl, sts, nil
 }
 
-func (ce *ChildEndpoint[T]) Patch(ctx context.Context, parentID string, id string, mdl *T) error {
+func (ce *ChildEndpoint[T]) Patch(ctx context.Context, parentID string, id string, mdl *T) (int, error) {
 	var patched T
 
 	jd, err := json.Marshal(mdl)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	// make the request to the API
-	data, err := ce.request(ctx, patchMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
+	data, sts, err := ce.request(ctx, patchMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
 	if err != nil {
-		return err
+		return sts, err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &patched); err != nil {
-		return err
+		return sts, err
 	}
 
 	// assign the created model
 	*mdl = patched
 
-	return nil
+	return sts, nil
 }
 
-func (ce *ChildEndpoint[T]) Search(ctx context.Context, parentID string, opts ...*Options) (SearchResult[T], error) {
+func (ce *ChildEndpoint[T]) Search(ctx context.Context, parentID string, opts ...*Options) (SearchResult[T], int, error) {
 	var sr SearchResult[T]
 
 	// make the request to the API
-	data, err := ce.request(ctx, getMethod, fmt.Sprintf(ce.Path, parentID), nil, opts...)
+	data, sts, err := ce.request(ctx, getMethod, fmt.Sprintf(ce.Path, parentID), nil, opts...)
 	if err != nil {
-		return sr, err
+		return sr, sts, err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &sr); err != nil {
-		return sr, err
+		return sr, sts, err
 	}
 
-	return sr, nil
+	return sr, sts, nil
 }
 
-func (ce *ChildEndpoint[T]) Update(ctx context.Context, parentID string, id string, mdl *T) error {
+func (ce *ChildEndpoint[T]) Update(ctx context.Context, parentID string, id string, mdl *T) (int, error) {
 	var updated T
 
 	jd, err := json.Marshal(mdl)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	// make the request to the API
-	data, err := ce.request(ctx, putMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
+	data, sts, err := ce.request(ctx, putMethod, path.Join(fmt.Sprintf(ce.Path, parentID), id), bytes.NewBuffer(jd))
 	if err != nil {
-		return err
+		return sts, err
 	}
 
 	// unmarshal the data into the struct
 	if err := json.Unmarshal(data, &updated); err != nil {
-		return err
+		return sts, err
 	}
 
 	// assign the updated model
 	*mdl = updated
 
-	return nil
+	return sts, nil
 }

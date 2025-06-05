@@ -1,5 +1,5 @@
 
-SEMANTIC_VER=0.6.1+
+SEMANTIC_VER=0.7.0+
 BUILD_VER=$(shell git describe --always --long)
 PRE_RELEASE_VER=alpha
 
@@ -21,5 +21,10 @@ build: download
 
 download:
 	${GO_CMD} mod download
+
+test:
+	# coverpkg means what test dependencies to include in coverage
+	${GO_CMD} test -short -v -coverpkg=./... -coverprofile=profile.cov ./pkg/... \
+		&& ${GO_CMD} tool cover -func=profile.cov
 
 .PHONY: build

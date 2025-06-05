@@ -14,6 +14,7 @@ type Client[T any] struct {
 	ctx      context.Context
 	Headers  *http.Header
 	rep      api.ReadResource[T]
+	scb      func(int)
 	wep      api.WriteResource[T]
 	writable bool
 }
@@ -26,12 +27,22 @@ func (c *Client[T]) checkWrite() error {
 	return nil
 }
 
+func (c *Client[T]) ClearStatusCallback() {
+	c.scb = nil
+}
+
 func (c *Client[T]) Create(d *T) error {
 	if err := c.checkWrite(); err != nil {
 		return err
 	}
 
-	return c.wep.Create(c.ctx, d)
+	sts, err := c.wep.Create(c.ctx, d)
+
+	if c.scb != nil {
+		c.scb(sts)
+	}
+
+	return err
 }
 
 func (c *Client[T]) Delete(id string) error {
@@ -39,11 +50,23 @@ func (c *Client[T]) Delete(id string) error {
 		return err
 	}
 
-	return c.wep.Delete(c.ctx, id)
+	sts, err := c.wep.Delete(c.ctx, id)
+
+	if c.scb != nil {
+		c.scb(sts)
+	}
+
+	return err
 }
 
 func (c *Client[T]) Get(id string) (*T, error) {
-	return c.rep.Get(c.ctx, id)
+	v, sts, err := c.rep.Get(c.ctx, id)
+
+	if c.scb != nil {
+		c.scb(sts)
+	}
+
+	return v, err
 }
 
 func (c *Client[T]) Patch(id string, d *T) error {
@@ -51,11 +74,27 @@ func (c *Client[T]) Patch(id string, d *T) error {
 		return err
 	}
 
-	return c.wep.Patch(c.ctx, id, d)
+	sts, err := c.wep.Patch(c.ctx, id, d)
+
+	if c.scb != nil {
+		c.scb(sts)
+	}
+
+	return err
 }
 
 func (c *Client[T]) Search(opts ...*api.Options) (api.SearchResult[T], error) {
-	return c.rep.Search(c.ctx, opts...)
+	sr, sts, err := c.rep.Search(c.ctx, opts...)
+
+	if c.scb != nil {
+		c.scb(sts)
+	}
+
+	return sr, err
+}
+
+func (c *Client[T]) SetStatusCallback(cb func(int)) {
+	c.scb = cb
 }
 
 func (c *Client[T]) Update(id string, d *T) error {
@@ -63,7 +102,13 @@ func (c *Client[T]) Update(id string, d *T) error {
 		return err
 	}
 
-	return c.wep.Update(c.ctx, id, d)
+	sts, err := c.wep.Update(c.ctx, id, d)
+
+	if c.scb != nil {
+		c.scb(sts)
+	}
+
+	return err
 }
 
 func NewClient[T any](ctx context.Context, svr string, resource string, oauth2 *clientcredentials.Config, writeScopes ...string) (*Client[T], error) {

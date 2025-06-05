@@ -1,22 +1,18 @@
 package urls
 
-import (
-	"context"
+import "time"
 
-	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
-	"golang.org/x/oauth2/clientcredentials"
-)
+type Location struct {
+	CreatedAt *time.Time      `json:"createdAt,omitempty"`
+	Slugs     []*LocationSlug `json:"slugs,omitempty"`
+	UpdatedAt *time.Time      `json:"updatedAt,omitempty"`
+	URL       *string         `json:"url,omitempty"`
+}
 
-const (
-	scopeLocationsModify string = "locations-modify"
-	serverUrl            string = "https://direct.cco.io"
-)
-
-func NewLocationClient(ctx context.Context, oauth2 *clientcredentials.Config, overrideSvr ...string) (*clients.Client[Location], error) {
-	svr := serverUrl
-	if len(overrideSvr) > 0 && overrideSvr[0] != "" {
-		svr = overrideSvr[0]
-	}
-
-	return clients.NewClient[Location](ctx, svr, "/v1/locations", oauth2, scopeLocationsModify)
+type LocationSlug struct {
+	CreatedAt       *time.Time `json:"createdAt,omitempty"`
+	LastRequestedAt *time.Time `json:"lastRequestedAt,omitempty"`
+	ShortURL        string     `json:"shortURL,omitempty"`
+	Slug            *string    `json:"slug,omitempty"`
+	Visits          *uint      `json:"visits,omitempty"`
 }

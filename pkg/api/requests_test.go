@@ -135,10 +135,11 @@ func Test_retryRequest(t *testing.T) {
 		opts    []*Options
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    []byte
-		wantErr bool
+		name       string
+		args       args
+		wantData   []byte
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly succeed in issuing a request",
@@ -159,6 +160,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			testData,
+			http.StatusOK,
 			false,
 		},
 		{
@@ -193,6 +195,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			testData,
+			http.StatusOK,
 			false,
 		},
 		{
@@ -221,6 +224,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			testData,
+			http.StatusOK,
 			false,
 		},
 		{
@@ -237,6 +241,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			nil,
+			http.StatusBadRequest,
 			true,
 		},
 		{
@@ -254,6 +259,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			[]byte("a random string"),
+			http.StatusOK,
 			false,
 		},
 		{
@@ -273,6 +279,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			testData,
+			http.StatusOK,
 			false,
 		},
 		{
@@ -300,6 +307,7 @@ func Test_retryRequest(t *testing.T) {
 				[]*Options{},
 			},
 			testData,
+			http.StatusOK,
 			false,
 		},
 	}
@@ -327,17 +335,21 @@ func Test_retryRequest(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := retryRequest(context.Background(), e.hdr, e.a, tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
+			got, sts, err := retryRequest(context.Background(), e.hdr, e.a, tt.args.method, tt.args.path, tt.args.body, tt.args.opts...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.request() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			g := strings.TrimSpace(string(got))
-			w := strings.TrimSpace(string(tt.want))
+			w := strings.TrimSpace(string(tt.wantData))
 
 			if g != w {
-				t.Errorf("Endpoint.request() = \n\t%s\n want \n\t%s", got, tt.want)
+				t.Errorf("Endpoint.request() = \n\t%s\n want \n\t%s", got, tt.wantData)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.request() status code = %d, want %d", sts, tt.wantStatus)
 			}
 		})
 	}
