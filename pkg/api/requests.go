@@ -48,20 +48,20 @@ func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 	return a.OAuthToken.AccessToken, nil
 }
 
-func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, error) {
+func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, reqPath string, body io.Reader, opts ...*Options) ([]byte, int, error) {
 	// determine the URL
 	url := fmt.Sprintf("%s://%s%s", a.Svc.Proto, a.Svc.Host, reqPath)
 
 	// build the request
 	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	// set the bearer token authorization header
 	tkn, err := ensureBearerToken(ctx, a)
 	if err != nil {
-		return nil, err
+		return nil, http.StatusUnauthorized, err
 	}
 	req.Header.Set(authorizationHeader, fmt.Sprintf(bearerFmt, tkn))
 
@@ -78,6 +78,7 @@ func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, 
 	}
 
 	// track what is actually provided back from the API
+	code := http.StatusProcessing
 	data := []byte{}
 
 	// create retry operation
@@ -93,6 +94,9 @@ func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, 
 		// process the response
 		defer res.Body.Close()
 
+		// assign the response status code
+		code = res.StatusCode
+
 		// read the body
 		bdy, err := io.ReadAll(res.Body)
 		if err != nil {
@@ -100,20 +104,20 @@ func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, 
 		}
 
 		// check to see if the response contains an error status
-		if res.StatusCode > 399 {
+		if code > 399 {
 			// attempt to unmarshal the body into an apiError
 			var apiErr APIError
 			if err := json.Unmarshal(bdy, &apiErr); err != nil {
 				// the error is not an apiError, it is a string value
 				apiErr = APIError{
 					Message: string(bdy),
-					Status:  res.StatusCode,
+					Status:  code,
 					Title:   res.Status,
 				}
 			}
 
 			// check for throttling...
-			if apiErr.Status == http.StatusTooManyRequests {
+			if code == http.StatusTooManyRequests {
 				// set RetryAfter to delay the next request for throttling
 				return &retryError{
 					Err:        apiErr,
@@ -122,7 +126,7 @@ func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, 
 			}
 
 			// when the error is a client created error, do not retry
-			if res.StatusCode < http.StatusInternalServerError {
+			if code < http.StatusInternalServerError {
 				return apiErr
 			}
 
@@ -174,8 +178,8 @@ func retryRequest(ctx context.Context, hdr *http.Header, a *api, method string, 
 			}
 		}
 
-		return nil, err
+		return nil, code, err
 	}
 
-	return data, nil
+	return data, code, nil
 }

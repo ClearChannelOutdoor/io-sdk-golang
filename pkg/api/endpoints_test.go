@@ -42,11 +42,12 @@ func TestEndpoint_Create(t *testing.T) {
 		mdl *TestModel
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    *TestModel
-		wantErr bool
+		name       string
+		fields     fields
+		args       args
+		want       *TestModel
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly create a model",
@@ -69,7 +70,7 @@ func TestEndpoint_Create(t *testing.T) {
 					jsn, _ := json.Marshal(tm)
 
 					// write
-					io.WriteString(w, string(jsn))
+					w.Write(jsn)
 				},
 				&TestModel{
 					ID: "test-model-id",
@@ -79,6 +80,7 @@ func TestEndpoint_Create(t *testing.T) {
 				ID:   "test-model-id",
 				Path: "/models",
 			},
+			http.StatusOK,
 			false,
 		},
 		{
@@ -105,7 +107,42 @@ func TestEndpoint_Create(t *testing.T) {
 				},
 			},
 			&TestModel{},
+			http.StatusBadRequest,
 			true,
+		},
+		{
+			"should properly return status to provided channel",
+			fields{
+				"/models",
+				nil,
+			},
+			args{
+				func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusOK)
+					w.Header().Set("Content-Type", "application/json")
+
+					// read the inbound data
+					var tm TestModel
+					bdy, _ := io.ReadAll(r.Body)
+					json.Unmarshal(bdy, &tm)
+
+					// augment with the path
+					tm.Path = r.URL.String()
+					jsn, _ := json.Marshal(tm)
+
+					// write
+					w.Write(jsn)
+				},
+				&TestModel{
+					ID: "test-model-id",
+				},
+			},
+			&TestModel{
+				ID:   "test-model-id",
+				Path: "/models",
+			},
+			http.StatusOK,
+			false,
 		},
 	}
 	for _, tt := range tests {
@@ -129,13 +166,18 @@ func TestEndpoint_Create(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Create(context.Background(), tt.args.mdl); (err != nil) != tt.wantErr {
+			sts, err := e.Create(context.Background(), tt.args.mdl)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			if !tt.wantErr && !reflect.DeepEqual(tt.args.mdl, tt.want) {
 				t.Errorf("Endpoint.Create() = \n\t%+v\n want \n\t%+v", tt.args.mdl, tt.want)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.Create() status = \n\t%+v\n want \n\t%+v", sts, tt.wantStatus)
 			}
 		})
 	}
@@ -158,10 +200,11 @@ func TestEndpoint_Delete(t *testing.T) {
 		id  string
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
+		name       string
+		fields     fields
+		args       args
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly delete a model",
@@ -175,6 +218,7 @@ func TestEndpoint_Delete(t *testing.T) {
 				},
 				"test-model-id",
 			},
+			http.StatusNoContent,
 			false,
 		},
 		{
@@ -198,6 +242,7 @@ func TestEndpoint_Delete(t *testing.T) {
 				},
 				"test-model-id",
 			},
+			http.StatusBadRequest,
 			true,
 		},
 	}
@@ -222,8 +267,13 @@ func TestEndpoint_Delete(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Delete(context.Background(), tt.args.id); (err != nil) != tt.wantErr {
+			sts, err := e.Delete(context.Background(), tt.args.id)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.Delete() status = %v, wantStatus %v", sts, tt.wantStatus)
 			}
 		})
 	}
@@ -246,11 +296,12 @@ func TestEndpoint_Get(t *testing.T) {
 		id  string
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    *TestModel
-		wantErr bool
+		name       string
+		fields     fields
+		args       args
+		want       *TestModel
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly get a model",
@@ -274,6 +325,7 @@ func TestEndpoint_Get(t *testing.T) {
 				ID:   "test-model-id",
 				Path: "/models/test-model-id",
 			},
+			http.StatusOK,
 			false,
 		},
 		{
@@ -298,6 +350,7 @@ func TestEndpoint_Get(t *testing.T) {
 				"test-model-id",
 			},
 			&TestModel{},
+			http.StatusBadRequest,
 			true,
 		},
 	}
@@ -322,7 +375,7 @@ func TestEndpoint_Get(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := e.Get(context.Background(), tt.args.id)
+			got, sts, err := e.Get(context.Background(), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -330,6 +383,10 @@ func TestEndpoint_Get(t *testing.T) {
 
 			if !tt.wantErr && !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Endpoint.Get() = \n\t%+v\n want \n\t%+v", got, tt.want)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.Get() status code = %v, want %v", sts, tt.wantStatus)
 			}
 		})
 	}
@@ -353,11 +410,12 @@ func TestEndpoint_Patch(t *testing.T) {
 		m   *TestModel
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    *TestModel
-		wantErr bool
+		name       string
+		fields     fields
+		args       args
+		want       *TestModel
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly patch a model",
@@ -384,6 +442,7 @@ func TestEndpoint_Patch(t *testing.T) {
 				ID:   "test-model-id",
 				Path: "/models/test-model-id",
 			},
+			http.StatusOK,
 			false,
 		},
 		{
@@ -412,6 +471,7 @@ func TestEndpoint_Patch(t *testing.T) {
 				},
 			},
 			&TestModel{},
+			http.StatusBadRequest,
 			true,
 		},
 	}
@@ -436,13 +496,18 @@ func TestEndpoint_Patch(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Patch(context.Background(), tt.args.id, tt.args.m); (err != nil) != tt.wantErr {
+			sts, err := e.Patch(context.Background(), tt.args.id, tt.args.m)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Patch() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			if !tt.wantErr && !reflect.DeepEqual(tt.args.m, tt.want) {
 				t.Errorf("Endpoint.Patch() = \n\t%+v\n want \n\t%+v", tt.args.m, tt.want)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.Patch() status = %v, want %v", sts, tt.wantStatus)
 			}
 		})
 	}
@@ -464,11 +529,12 @@ func TestEndpoint_Search(t *testing.T) {
 		res func(w http.ResponseWriter, r *http.Request)
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    SearchResult[TestModel]
-		wantErr bool
+		name       string
+		fields     fields
+		args       args
+		want       SearchResult[TestModel]
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly get all models",
@@ -500,6 +566,7 @@ func TestEndpoint_Search(t *testing.T) {
 					},
 				},
 			},
+			http.StatusOK,
 			false,
 		},
 		{
@@ -523,6 +590,7 @@ func TestEndpoint_Search(t *testing.T) {
 				},
 			},
 			SearchResult[TestModel]{},
+			http.StatusBadRequest,
 			true,
 		},
 	}
@@ -547,7 +615,7 @@ func TestEndpoint_Search(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			got, err := e.Search(context.Background())
+			got, sts, err := e.Search(context.Background())
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Search() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -555,6 +623,10 @@ func TestEndpoint_Search(t *testing.T) {
 
 			if !tt.wantErr && !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Endpoint.Search() = \n\t%+v\n want \n\t%+v", got, tt.want)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.Search() status = %v, want %v", sts, tt.wantStatus)
 			}
 		})
 	}
@@ -578,11 +650,12 @@ func TestEndpoint_Update(t *testing.T) {
 		m   *TestModel
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    *TestModel
-		wantErr bool
+		name       string
+		fields     fields
+		args       args
+		want       *TestModel
+		wantStatus int
+		wantErr    bool
 	}{
 		{
 			"should properly post a model",
@@ -609,6 +682,7 @@ func TestEndpoint_Update(t *testing.T) {
 				ID:   "test-model-id",
 				Path: "/models/test-model-id",
 			},
+			http.StatusCreated,
 			false,
 		},
 		{
@@ -637,6 +711,7 @@ func TestEndpoint_Update(t *testing.T) {
 				},
 			},
 			&TestModel{},
+			http.StatusBadRequest,
 			true,
 		},
 	}
@@ -661,13 +736,18 @@ func TestEndpoint_Update(t *testing.T) {
 				AccessToken: "test-access-token",
 			}
 
-			if err := e.Update(context.Background(), tt.args.id, tt.args.m); (err != nil) != tt.wantErr {
+			sts, err := e.Update(context.Background(), tt.args.id, tt.args.m)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Endpoint.Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
 			if !tt.wantErr && !reflect.DeepEqual(tt.args.m, tt.want) {
 				t.Errorf("Endpoint.Update() = \n\t%+v\n want \n\t%+v", tt.args.m, tt.want)
+			}
+
+			if sts != tt.wantStatus {
+				t.Errorf("Endpoint.Update() status = %d, want %d", sts, tt.wantStatus)
 			}
 		})
 	}

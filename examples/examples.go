@@ -70,3 +70,4 @@ func GetNetworkdisplays() {
 		fmt.Printf("network: %s, displays: %+v\n", d.NetworkID, d.ExternalIDs)
 	}
 }
+
