@@ -73,10 +73,9 @@ func main() {
   fmt.Printf("Received status code: %d\n", status)
  })
 
- res, err := client.Search("parentID", &api.Options{
-  Filter: []string{"mediaProducts.digitalInfo.width=1080"},
- })
-
+ res, err := client.Search(api.EmptyOptions().
+   AddFilter("mediaProducts.digital", true).
+   AddFilter("mediaProducts.digitalInfo.width", 1080))
  if err != nil {
   log.Fatal(err)
  }
