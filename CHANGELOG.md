@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.1] - 2025-06-06
+
+- updated booking model to contain quantity buy
+
 ## [0.7.0] - 2025-06-05
 
 - exposing status code responses on API calls
