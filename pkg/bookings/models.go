@@ -8,10 +8,10 @@ type Booking struct {
 	ID           string           `json:"bookingID"`
 	BuyType      *BuyType         `json:"buyType,omitempty"`
 	Cost         *float32         `json:"cost,omitempty"`
-	CreatedAt    *time.Time       `json:"createdAt"`
-	DeletedAt    *time.Time       `json:"deletedAt,omitempty"`
+	CreatedAt    time.Time        `json:"createdAt"`
+	DeletedAt    time.Time        `json:"deletedAt,omitempty"`
 	Display      *DisplayDetails  `json:"display,omitempty"`
-	EndDate      *time.Time       `json:"endDate,omitempty"`
+	EndDate      time.Time        `json:"endDate,omitempty"`
 	ExternalIDs  []string         `json:"externalIDs,omitempty"`
 	Filler       bool             `json:"filler,omitempty"`
 	Market       *Market          `json:"market,omitempty"`
@@ -19,9 +19,9 @@ type Booking struct {
 	Network      *NetworkDetails  `json:"network,omitempty"`
 	OrderID      string           `json:"orderID,omitempty"`
 	Quantity     *QuantityDetails `json:"quantity,omitempty"`
-	StartDate    *time.Time       `json:"startDate,omitempty"`
+	StartDate    time.Time        `json:"startDate,omitempty"`
 	Status       *BookingStatus   `json:"status,omitempty"`
-	UpdatedAt    *time.Time       `json:"updatedAt"`
+	UpdatedAt    time.Time        `json:"updatedAt"`
 	Waitlisted   *bool            `json:"waitlisted,omitempty"`
 }
 type BookingStatus struct {
@@ -86,7 +86,7 @@ type QuantityDetails struct {
 }
 
 type QuantityFullMarketDetails struct {
-	Weight int `json:"weight,omitempty"`
+	Weight float32 `json:"weight,omitempty"`
 }
 
 const ExplicitEmpty = ""
