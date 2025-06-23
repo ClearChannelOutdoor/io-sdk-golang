@@ -7,7 +7,7 @@ import (
 type Booking struct {
 	ID           string           `json:"bookingID"`
 	BuyType      *BuyType         `json:"buyType,omitempty"`
-	Cost         *float32         `json:"cost,omitempty"`
+	Cost         *float64         `json:"cost,omitempty"`
 	CreatedAt    time.Time        `json:"createdAt"`
 	DeletedAt    time.Time        `json:"deletedAt,omitempty"`
 	Display      *DisplayDetails  `json:"display,omitempty"`
