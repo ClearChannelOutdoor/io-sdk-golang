@@ -5,6 +5,11 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.4] - 2025-06-30
+
+- updated campaign models to match the latest changes in the campaign-api
+- added campaign API SDK client code
+
 ## [0.7.3] - 2025-06-23
 
 - updated booking cost type to float64
