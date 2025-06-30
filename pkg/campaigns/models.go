@@ -3,48 +3,40 @@ package campaigns
 import "time"
 
 /* Campaign */
-type audience struct {
-	Demographics []struct {
-		Age           string `json:"age,omitempty"`
-		Ethnicity     string `json:"ethnicity,omitempty"`
-		Gender        string `json:"gender,omitempty"`
-		Income        string `json:"income,omitempty"`
-		MaritalStatus string `json:"maritalStatus,omitempty"`
-	} `json:"demographics,omitempty"`
+type Audience struct {
+	Demographics []AudienceDemographics `json:"demographics,omitempty"`
+}
+
+type AudienceDemographics struct {
+	Age           string `json:"age,omitempty"`
+	Ethnicity     string `json:"ethnicity,omitempty"`
+	Gender        string `json:"gender,omitempty"`
+	Income        string `json:"income,omitempty"`
+	MaritalStatus string `json:"maritalStatus,omitempty"`
 }
 
 type Campaign struct {
-	Account     *CampaignAccount `json:"account"`
-	Budget      *CampaignBudget  `json:"budget"`
-	CreatedAt   *time.Time       `json:"createdAt,omitempty"`
-	Description string           `json:"description,omitempty"`
-	ExternalIDs []string         `json:"externalIDs,omitempty"`
-	Flights     []CampaignFlight `json:"flights"`
-	ID          string           `json:"campaignID"`
-	Name        string           `json:"name"`
-	Objectives  []string         `json:"objectives,omitempty"`
-	Status      *CampaignStatus  `json:"status,omitempty"`
-	Taxonomy    *struct {
-		CCO *struct {
-			Code     string `json:"code,omitempty"`
-			FullCode string `json:"fullCode,omitempty"`
-		} `json:"cco,omitempty"`
-		IAB *struct {
-			V1 string `json:"v1,omitempty"`
-			V2 string `json:"v2,omitempty"`
-			V3 string `json:"v3,omitempty"`
-		} `json:"iab,omitempty"`
-	} `json:"taxonomy,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	Account     *CampaignAccount  `json:"account"`
+	Budget      *CampaignBudget   `json:"budget"`
+	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
+	Description string            `json:"description,omitempty"`
+	ExternalIDs []string          `json:"externalIDs,omitempty"`
+	Flights     []CampaignFlight  `json:"flights"`
+	ID          string            `json:"campaignID"`
+	Name        string            `json:"name"`
+	Objectives  []string          `json:"objectives,omitempty"`
+	Status      *CampaignStatus   `json:"status,omitempty"`
+	Taxonomy    *CampaignTaxonomy `json:"taxonomy,omitempty"`
+	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
 }
 
 type CampaignAccount struct {
-	AccountExecutive customerEntity           `json:"accountExecutive,omitempty"`
-	Advertiser       customerEntity           `json:"advertiser,omitempty"`
+	AccountExecutive *CampaignEntity          `json:"accountExecutive,omitempty"`
+	Advertiser       *CampaignEntity          `json:"advertiser,omitempty"`
 	Contacts         []CampaignAccountContact `json:"contacts,omitempty"`
-	BillTo           customerEntity           `json:"billTo,omitempty"`
-	Buyer            customerEntity           `json:"buyer,omitempty"`
-	ThirdParty       customerEntity           `json:"thirdParty,omitempty"`
+	BillTo           *CampaignEntity          `json:"billTo,omitempty"`
+	Buyer            *CampaignEntity          `json:"buyer,omitempty"`
+	ThirdParty       *CampaignEntity          `json:"thirdParty,omitempty"`
 }
 
 type CampaignAccountContact struct {
@@ -61,6 +53,14 @@ type CampaignBudget struct {
 	Total    float32 `json:"total,omitempty"`
 }
 
+type CampaignEntity struct {
+	CustomerID     string   `json:"customerID,omitempty"`
+	CustomerNumber string   `json:"customerNumber,omitempty"`
+	ExternalIDs    []string `json:"externalIDs,omitempty"`
+	Name           string   `json:"name,omitempty"`
+	Type           string   `json:"type,omitempty"`
+}
+
 type CampaignFlight struct {
 	EndAt         *time.Time `json:"endAt,omitempty"`
 	MediaProducts []struct {
@@ -69,28 +69,37 @@ type CampaignFlight struct {
 	} `json:"mediaProducts"`
 	StartAt *time.Time `json:"startAt,omitempty"`
 	Target  struct {
-		Audience audience `json:"audience,omitempty"`
-		Location location `json:"location,omitempty"`
+		Audience Audience `json:"audience,omitempty"`
+		Location Location `json:"location,omitempty"`
 	} `json:"target,omitempty"`
 }
 
 type CampaignStatus struct {
-	CancelledAt        *time.Time `json:"cancelledAt,omitempty"`
-	CancellationReason string     `json:"cancellationReason,omitempty"`
-	ContractCloseAt    *time.Time `json:"contractCloseAt,omitempty"`
-	HardTakedownAt     *time.Time `json:"hardTakedownAt,omitempty"`
-	ResponseBy         *time.Time `json:"responseBy,omitempty"`
+	CancelledAt          *time.Time `json:"cancelledAt,omitempty"`
+	CancellationReason   string     `json:"cancellationReason,omitempty"`
+	ContractCloseAt      *time.Time `json:"contractCloseAt,omitempty"`
+	CreateEventEmittedAt *time.Time `json:"createEventEmittedAt,omitempty"`
+	HardTakedownAt       *time.Time `json:"hardTakedownAt,omitempty"`
+	ResponseDueBy        *time.Time `json:"responseDueBy,omitempty"`
 }
 
-type customerEntity struct {
-	CustomerID     string   `json:"customerID,omitempty"`
-	CustomerNumber string   `json:"customerNumber,omitempty"`
-	ExternalIDs    []string `json:"externalIDs,omitempty"`
-	Name           string   `json:"name,omitempty"`
-	Type           string   `json:"type,omitempty"`
+type CampaignTaxonomy struct {
+	CCO *CampaignTaxonomyCCO `json:"cco,omitempty"`
+	IAB *CampaignTaxonomyIAB `json:"iab,omitempty"`
 }
 
-type location struct {
+type CampaignTaxonomyCCO struct {
+	Code     string `json:"code,omitempty"`
+	FullCode string `json:"fullCode,omitempty"`
+}
+
+type CampaignTaxonomyIAB struct {
+	V1 string `json:"v1,omitempty"`
+	V2 string `json:"v2,omitempty"`
+	V3 string `json:"v3,omitempty"`
+}
+
+type Location struct {
 	Markets []struct {
 		ExternalIDs []string `json:"externalIDs,omitempty"`
 		ID          string   `json:"marketID,omitempty"`
@@ -155,6 +164,7 @@ type DigitalDetails struct {
 	Quantity             int      `json:"quantity,omitempty"`
 	SpotLength           int      `json:"spotLength,omitempty"`
 }
+
 type PrintDetails struct {
 	DisplayID   string   `json:"displayID,omitempty"`
 	ExternalIDs []string `json:"externalIDs,omitempty"`
