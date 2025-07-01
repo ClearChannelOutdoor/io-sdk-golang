@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.5] - 2025-07-01
+
+- changed type of `slotSeconds` in booking model to int
+
 ## [0.7.4] - 2025-06-30
 
 - updated campaign models to match the latest changes in the campaign-api
