@@ -69,7 +69,7 @@ type NetworkDetails struct {
 	Frequency         int                `json:"frequency,omitempty"`
 	NetworkID         string             `json:"networkID,omitempty"`
 	NumberOfSlots     int                `json:"numberOfSlots,omitempty"`
-	SlotSeconds       float32            `json:"slotSeconds,omitempty"`
+	SlotSeconds       int                `json:"slotSeconds,omitempty"`
 	SlotSlices        int                `json:"slotSlices,omitempty"`
 	SpecificStartTime string             `json:"specificStartTime,omitempty"`
 }
