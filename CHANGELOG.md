@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.7.7] - 2025-07-09
 
-- add Production buy type and rename RFR revenue spec
+- [IOC-1228] add Production buy type and rename RFR revenue spec
 
 ## [0.7.6] - 2025-07-01
 
