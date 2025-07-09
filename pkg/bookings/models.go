@@ -94,10 +94,10 @@ const ExplicitEmpty = ""
 type BookingStatusValue string
 
 const (
-	Draft    BookingStatusValue = "Draft"
-	Reserved BookingStatusValue = "Reserved"
 	Booked   BookingStatusValue = "Booked"
 	Canceled BookingStatusValue = "Canceled"
+	Draft    BookingStatusValue = "Draft"
+	Reserved BookingStatusValue = "Reserved"
 )
 
 type Deliverable string
@@ -107,6 +107,7 @@ const (
 	Display     Deliverable = "Display"
 	Impressions Deliverable = "Impressions"
 	Override    Deliverable = "Override"
+	Production  Deliverable = "Production"
 	Quantity    Deliverable = "Quantity"
 )
 
@@ -127,6 +128,6 @@ const (
 	Lessor                RevenueSpecifier = "Lessor"
 	MakeGood              RevenueSpecifier = "Make Good"
 	PSA                   RevenueSpecifier = "PSA"
-	RFR                   RevenueSpecifier = "Right of First Refusal"
+	RFR                   RevenueSpecifier = "RFR"
 	Trade                 RevenueSpecifier = "Trade"
 )
