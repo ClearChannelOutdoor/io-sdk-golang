@@ -7,6 +7,7 @@ type Order struct {
 	Advertiser              CustomerEntity `json:"advertiser,omitempty"`
 	Buyer                   CustomerEntity `json:"buyer,omitempty"`
 	Canceled                *bool          `json:"canceled,omitempty"`
+	CancellationTerms       string         `json:"cancellationTerms,omitempty"`
 	CreatedAt               time.Time      `json:"createdAt,omitempty"`
 	CreativeChangeAgreement *bool          `json:"creativeChangeAgreement,omitempty"`
 	EndDate                 time.Time      `json:"endDate,omitempty"`
@@ -36,7 +37,6 @@ type Employee struct {
 type OrderMarket struct {
 	Canceled           bool               `json:"canceled,omitempty"`
 	CancellationReason string             `json:"cancellationReason,omitempty"`
-	CancellationTerms  string             `json:"cancellationTerms,omitempty"`
 	ExternalIDs        []string           `json:"externalIDs,omitempty"`
 	MarketCode         string             `json:"marketCode,omitempty"`
 	MarketID           string             `json:"marketID,omitempty"`
