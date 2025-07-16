@@ -82,8 +82,8 @@ type QuantityCustomDetails struct {
 type QuantityDetails struct {
 	Custom            *QuantityCustomDetails     `json:"custom,omitempty"`
 	FullMarket        *QuantityFullMarketDetails `json:"fullMarket,omitempty"`
-	RequestedQuantity int                        `json:"requestedQuantity,omitempty"`
 	Fulfilled         []Fulfilled                `json:"fulfilled,omitempty"`
+	RequestedQuantity int                        `json:"requestedQuantity,omitempty"`
 }
 
 type Fulfilled struct {
