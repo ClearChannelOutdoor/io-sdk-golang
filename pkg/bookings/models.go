@@ -81,10 +81,18 @@ type QuantityCustomDetails struct {
 
 type QuantityDetails struct {
 	Custom            *QuantityCustomDetails     `json:"custom,omitempty"`
+	Fulfilled         []Fulfilled                `json:"fulfilled,omitempty"`
 	FullMarket        *QuantityFullMarketDetails `json:"fullMarket,omitempty"`
 	RequestedQuantity int                        `json:"requestedQuantity,omitempty"`
 }
 
+type Fulfilled struct {
+	Display     *DisplayDetails      `json:"display,omitempty"`
+	EndDate     time.Time            `json:"endDate,omitempty"`
+	ExternalIDs []string             `json:"externalIDs,omitempty"`
+	StartDate   time.Time            `json:"startDate,omitempty"`
+	Sync        map[string]time.Time `json:"sync,omitempty"`
+}
 type QuantityFullMarketDetails struct {
 	Weight float32 `json:"weight,omitempty"`
 }

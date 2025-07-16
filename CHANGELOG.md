@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.9] - 2025-07-16
+
+- [IOC-1239] update booking model with fulfilled data
+
 ## [0.7.8] - 2025-07-10
 
 - added cancellationTerms to the order level
