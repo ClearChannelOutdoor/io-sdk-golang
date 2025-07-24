@@ -16,7 +16,7 @@ import (
 
 const (
 	defaultMaxAttempts            uint          = 5
-	defaultTokenExpirationOverlap time.Duration = 5 * time.Minute
+	defaultTokenExpirationOverlap time.Duration = 15 * time.Minute
 )
 
 func ensureBearerToken(ctx context.Context, a *api) (string, error) {
