@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// todo verify system wide deprecation (with deprecation of buy-type-api) and remove this package
 type BuyType struct {
 	Attributes  *BuyTypeAttributes `json:"attributes,omitempty"`
 	Category    string             `json:"category,omitempty"`
