@@ -12,7 +12,6 @@ import (
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/accounts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/api"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/bookings"
-	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/buyTypes"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/clients"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/contracts"
 	"github.com/clearchanneloutdoor/io-sdk-golang/pkg/creatives"
@@ -255,7 +254,7 @@ func main() {
 		TokenURL:     as.TokenURL,
 	}
 
-	//opts := api.EmptyOptions()
+	// opts := api.EmptyOptions()
 	cmd := parseArgs()
 
 	if cmd.api == "" {
@@ -278,10 +277,6 @@ func main() {
 	case "bookings":
 		runClientCommand(func() (*clients.Client[bookings.Booking], error) {
 			return bookings.NewClient(ctx, cc, cmd.server)
-		}, cmd)
-	case "buyTypes":
-		runClientCommand(func() (*clients.Client[buyTypes.BuyType], error) {
-			return buyTypes.NewClient(ctx, cc, cmd.server)
 		}, cmd)
 	case "contracts":
 		runClientCommand(func() (*clients.Client[contracts.Contract], error) {
