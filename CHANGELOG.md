@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.12] - 2025-07-28
+
+- [IOC-1255] remove buytypes package with deprecation of buy-types-api
+
 ## [0.7.11] - 2025-07-28
 
 - [IOC-1253] updated booking model to match pointered fields and added externalIDs to networkDetails
