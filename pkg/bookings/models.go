@@ -5,7 +5,6 @@ import (
 )
 
 type Booking struct {
-	ID           string           `json:"bookingID"`
 	BuyType      *BuyType         `json:"buyType,omitempty"`
 	Cost         *float64         `json:"cost,omitempty"`
 	CreatedAt    time.Time        `json:"createdAt"`
@@ -13,7 +12,8 @@ type Booking struct {
 	Display      *DisplayDetails  `json:"display,omitempty"`
 	EndDate      time.Time        `json:"endDate,omitempty"`
 	ExternalIDs  []string         `json:"externalIDs,omitempty"`
-	Filler       bool             `json:"filler,omitempty"`
+	Filler       *bool            `json:"filler,omitempty"`
+	ID           string           `json:"bookingID"`
 	Market       *Market          `json:"market,omitempty"`
 	MediaProduct *MediaProduct    `json:"mediaProduct,omitempty"`
 	Network      *NetworkDetails  `json:"network,omitempty"`
@@ -36,13 +36,13 @@ type BuyType struct {
 }
 
 type DigitalDaysToPlay struct {
-	Sunday    bool `json:"sunday"`
-	Monday    bool `json:"monday"`
-	Tuesday   bool `json:"tuesday"`
-	Wednesday bool `json:"wednesday"`
-	Thursday  bool `json:"thursday"`
-	Friday    bool `json:"friday"`
-	Saturday  bool `json:"saturday"`
+	Sunday    *bool `json:"sunday"`
+	Monday    *bool `json:"monday"`
+	Tuesday   *bool `json:"tuesday"`
+	Wednesday *bool `json:"wednesday"`
+	Thursday  *bool `json:"thursday"`
+	Friday    *bool `json:"friday"`
+	Saturday  *bool `json:"saturday"`
 }
 
 type DisplayDetails struct {
@@ -66,6 +66,7 @@ type NetworkDetails struct {
 	DailyEndTime      string             `json:"dailyEndTime,omitempty"`
 	DailyStartTime    string             `json:"dailyStartTime,omitempty"`
 	DaysToPlay        *DigitalDaysToPlay `json:"daysToPlay,omitempty"`
+	ExternalIDs       []string           `json:"externalIDs,omitempty"`
 	Frequency         int                `json:"frequency,omitempty"`
 	NetworkID         string             `json:"networkID,omitempty"`
 	NumberOfSlots     int                `json:"numberOfSlots,omitempty"`
@@ -81,7 +82,7 @@ type QuantityCustomDetails struct {
 
 type QuantityDetails struct {
 	Custom            *QuantityCustomDetails     `json:"custom,omitempty"`
-	Fulfilled         []Fulfilled                `json:"fulfilled,omitempty"`
+	Fulfilled         []*Fulfilled               `json:"fulfilled,omitempty"`
 	FullMarket        *QuantityFullMarketDetails `json:"fullMarket,omitempty"`
 	RequestedQuantity int                        `json:"requestedQuantity,omitempty"`
 }
