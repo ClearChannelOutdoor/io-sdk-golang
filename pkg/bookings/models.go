@@ -78,6 +78,7 @@ type NetworkDetails struct {
 type QuantityCustomDetails struct {
 	ExternalIDs []string          `json:"externalIDs,omitempty"`
 	Displays    []*DisplayDetails `json:"displays,omitempty"`
+	Meta        map[string]string `json:"meta,omitempty"`
 }
 
 type QuantityDetails struct {

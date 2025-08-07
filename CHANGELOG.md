@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.14] - 2025-08-06
+
+- [IOC-1287] add meta to booking's quantity custom details
+
 ## [0.7.13] - 2025-07-29
 
 - added support for restriction-api

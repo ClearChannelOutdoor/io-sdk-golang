@@ -1,4 +1,4 @@
-SEMANTIC_VER=0.7.13+
+SEMANTIC_VER=0.7.14+
 BUILD_VER=$(shell git describe --always --long)
 PRE_RELEASE_VER=alpha
 
