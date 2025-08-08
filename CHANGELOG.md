@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.15] - 2025-08-08
+
+- [IOC-1277] add addtionalCosts to order model and enums
+
 ## [0.7.14] - 2025-08-06
 
 - [IOC-1287] add meta to booking's quantity custom details

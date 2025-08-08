@@ -2,7 +2,14 @@ package orders
 
 import "time"
 
+type AdditionalCost struct {
+	ContractValue *float64           `json:"contractValue,omitempty" bson:"contractValue,omitempty"`
+	Name          AdditionalCostName `json:"name,omitempty" bson:"name,omitempty"`
+}
+
 type Order struct {
+	AdditionalCosts []*AdditionalCost `json:"additionalCosts,omitempty" bson:"additionalCosts,omitempty"`
+
 	AdvertisedProductCode   string         `json:"advertisedProductCode,omitempty"`
 	Advertiser              CustomerEntity `json:"advertiser,omitempty"`
 	Buyer                   CustomerEntity `json:"buyer,omitempty"`
