@@ -1,5 +1,16 @@
 package orders
 
+type AdditionalCostName string
+
+const (
+	ProductionDelivery AdditionalCostName = "Production Delivery"
+	Installation       AdditionalCostName = "Installation"
+	Embellishment      AdditionalCostName = "Embellishment"
+	Illumniation       AdditionalCostName = "Illumination"
+	CreativeDesign     AdditionalCostName = "Creative Design"
+	ReturnShipping     AdditionalCostName = "Return Shipping"
+)
+
 type OrderSource string
 
 const (
