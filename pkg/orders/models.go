@@ -3,31 +3,30 @@ package orders
 import "time"
 
 type AdditionalCost struct {
-	ContractValue *float64           `json:"contractValue,omitempty" bson:"contractValue,omitempty"`
-	Name          AdditionalCostName `json:"name,omitempty" bson:"name,omitempty"`
+	ContractValue *float64           `json:"contractValue,omitempty"`
+	Name          AdditionalCostName `json:"name,omitempty"`
 }
 
 type Order struct {
-	AdditionalCosts []*AdditionalCost `json:"additionalCosts,omitempty" bson:"additionalCosts,omitempty"`
-
-	AdvertisedProductCode   string         `json:"advertisedProductCode,omitempty"`
-	Advertiser              CustomerEntity `json:"advertiser,omitempty"`
-	Buyer                   CustomerEntity `json:"buyer,omitempty"`
-	Canceled                *bool          `json:"canceled,omitempty"`
-	CancellationTerms       string         `json:"cancellationTerms,omitempty"`
-	CreatedAt               time.Time      `json:"createdAt,omitempty"`
-	CreativeChangeAgreement *bool          `json:"creativeChangeAgreement,omitempty"`
-	EndDate                 time.Time      `json:"endDate,omitempty"`
-	ExternalIDs             []string       `json:"externalIDs,omitempty"`
-	ID                      string         `json:"orderID,omitempty"`
-	Markets                 []OrderMarket  `json:"markets,omitempty"`
-	Name                    string         `json:"name,omitempty"`
-	Number                  string         `json:"number,omitempty"`
-	Psa                     *bool          `json:"psa,omitempty"`
-	Seller                  *OrderSeller   `json:"seller,omitempty"`
-	Source                  OrderSource    `json:"source,omitempty"`
-	StartDate               time.Time      `json:"startDate,omitempty"`
-	UpdatedAt               time.Time      `json:"updatedAt,omitempty"`
+	AdditionalCosts         []*AdditionalCost `json:"additionalCosts,omitempty"`
+	AdvertisedProductCode   string            `json:"advertisedProductCode,omitempty"`
+	Advertiser              CustomerEntity    `json:"advertiser,omitempty"`
+	Buyer                   CustomerEntity    `json:"buyer,omitempty"`
+	Canceled                *bool             `json:"canceled,omitempty"`
+	CancellationTerms       string            `json:"cancellationTerms,omitempty"`
+	CreatedAt               time.Time         `json:"createdAt,omitempty"`
+	CreativeChangeAgreement *bool             `json:"creativeChangeAgreement,omitempty"`
+	EndDate                 time.Time         `json:"endDate,omitempty"`
+	ExternalIDs             []string          `json:"externalIDs,omitempty"`
+	ID                      string            `json:"orderID,omitempty"`
+	Markets                 []OrderMarket     `json:"markets,omitempty"`
+	Name                    string            `json:"name,omitempty"`
+	Number                  string            `json:"number,omitempty"`
+	Psa                     *bool             `json:"psa,omitempty"`
+	Seller                  *OrderSeller      `json:"seller,omitempty"`
+	Source                  OrderSource       `json:"source,omitempty"`
+	StartDate               time.Time         `json:"startDate,omitempty"`
+	UpdatedAt               time.Time         `json:"updatedAt,omitempty"`
 }
 
 type CustomerEntity struct {
