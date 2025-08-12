@@ -3,7 +3,11 @@
 All notable changes in io-sdk-golang will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+and this project adheres to [Semantic Versioning](http://semver.org/)
+
+## [0.7.16] - 2025-08-11
+
+- [IOC-1281] - updated order model to add employee and customer names
 
 ## [0.7.15] - 2025-08-08
 

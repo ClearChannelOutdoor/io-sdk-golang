@@ -10,8 +10,8 @@ type AdditionalCost struct {
 type Order struct {
 	AdditionalCosts         []*AdditionalCost `json:"additionalCosts,omitempty"`
 	AdvertisedProductCode   string            `json:"advertisedProductCode,omitempty"`
-	Advertiser              CustomerEntity    `json:"advertiser,omitempty"`
-	Buyer                   CustomerEntity    `json:"buyer,omitempty"`
+	Advertiser              *CustomerEntity   `json:"advertiser,omitempty"`
+	Buyer                   *CustomerEntity   `json:"buyer,omitempty"`
 	Canceled                *bool             `json:"canceled,omitempty"`
 	CancellationTerms       string            `json:"cancellationTerms,omitempty"`
 	CreatedAt               time.Time         `json:"createdAt,omitempty"`
@@ -32,11 +32,13 @@ type Order struct {
 type CustomerEntity struct {
 	ID           string `json:"customerID,omitempty"`
 	IsAdvertiser bool   `json:"isAdvertiser,omitempty"`
+	Name         string `json:"name,omitempty"`
 	Number       string `json:"number,omitempty"`
 }
 
 type Employee struct {
 	ExternalIDs []string `json:"externalIDs,omitempty"`
+	Name        string   `json:"name,omitempty"`
 	Number      string   `json:"number,omitempty"`
 }
 
@@ -50,7 +52,7 @@ type OrderMarket struct {
 }
 
 type OrderSeller struct {
-	LeadAccountExec         Employee `json:"leadAccountExec,omitempty"`
-	SellingBusinessUnitCode string   `json:"sellingBusinessUnitCode,omitempty"`
-	SupportingAccountExec   Employee `json:"supportingAccountExec,omitempty"`
+	LeadAccountExec         *Employee `json:"leadAccountExec,omitempty"`
+	SellingBusinessUnitCode string    `json:"sellingBusinessUnitCode,omitempty"`
+	SupportingAccountExec   *Employee `json:"supportingAccountExec,omitempty"`
 }
