@@ -30,7 +30,8 @@ func ensureBearerToken(ctx context.Context, a *api) (string, error) {
 	// removing check for OAuthToken.Expiry.Zero - this would indicate token does not expire
 	a.Mu.Lock()
 	defer a.Mu.Unlock()
-	if a.OAuthToken == nil || a.OAuthToken.Expiry.Before(n.Add(-defaultTokenExpirationOverlap)) {
+	// add check if expiration time is within 15 minutes, then refresh token
+	if a.OAuthToken == nil || a.OAuthToken.Expiry.Before(n.Add(defaultTokenExpirationOverlap)) {
 		// set the auth style to header
 		a.Svc.oauth2.AuthStyle = oauth2.AuthStyleInHeader
 
