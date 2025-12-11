@@ -5,6 +5,10 @@ All notable changes in io-sdk-golang will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/)
 
+## [0.7.18] - 2025-12-11
+
+- apply updates to booking model
+
 ## [0.7.17] - 2025-10-16
 
 - [IOC-1389] - updated default token expiration overlap setting to refresh the token if it is going to expire within 15 minutes
