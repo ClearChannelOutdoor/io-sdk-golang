@@ -5,28 +5,31 @@ import (
 )
 
 type Booking struct {
-	BuyType      *BuyType         `json:"buyType,omitempty"`
-	Cost         *float64         `json:"cost,omitempty"`
-	CreatedAt    time.Time        `json:"createdAt"`
-	DeletedAt    time.Time        `json:"deletedAt,omitempty"`
-	Display      *DisplayDetails  `json:"display,omitempty"`
-	EndDate      time.Time        `json:"endDate,omitempty"`
-	ExternalIDs  []string         `json:"externalIDs,omitempty"`
-	Filler       *bool            `json:"filler,omitempty"`
-	ID           string           `json:"bookingID"`
-	Market       *Market          `json:"market,omitempty"`
-	MediaProduct *MediaProduct    `json:"mediaProduct,omitempty"`
-	Network      *NetworkDetails  `json:"network,omitempty"`
-	OrderID      string           `json:"orderID,omitempty"`
-	Quantity     *QuantityDetails `json:"quantity,omitempty"`
-	StartDate    time.Time        `json:"startDate,omitempty"`
-	Status       *BookingStatus   `json:"status,omitempty"`
-	UpdatedAt    time.Time        `json:"updatedAt"`
-	Waitlisted   *bool            `json:"waitlisted,omitempty"`
+	BuyType       *BuyType         `json:"buyType,omitempty"`
+	ContractValue *float64         `json:"contractValue,omitempty"`
+	Cost          *float64         `json:"cost,omitempty"`
+	CreatedAt     time.Time        `json:"createdAt"`
+	DeletedAt     time.Time        `json:"deletedAt,omitempty"`
+	Display       *DisplayDetails  `json:"display,omitempty"`
+	EndDate       time.Time        `json:"endDate,omitempty"`
+	ExternalIDs   []string         `json:"externalIDs,omitempty"`
+	ID            string           `json:"bookingID"`
+	Market        *Market          `json:"market,omitempty"`
+	MediaProduct  *MediaProduct    `json:"mediaProduct,omitempty"`
+	Network       *NetworkDetails  `json:"network,omitempty"`
+	OrderID       string           `json:"orderID,omitempty"`
+	Quantity      *QuantityDetails `json:"quantity,omitempty"`
+	StartDate     time.Time        `json:"startDate,omitempty"`
+	Status        *BookingStatus   `json:"status,omitempty"`
+	UpdatedAt     time.Time        `json:"updatedAt"`
 }
+
 type BookingStatus struct {
-	Status BookingStatusValue   `json:"status,omitempty"`
-	Sync   map[string]time.Time `json:"sync,omitempty"`
+	DeletedAt    time.Time            `json:"deletedAt,omitempty"`
+	Filler       *bool                `json:"filler,omitempty"`
+	SellingState SellingStateValue    `json:"sellingState,omitempty"`
+	Sync         map[string]time.Time `json:"sync,omitempty"`
+	Waitlisted   *bool                `json:"waitlisted,omitempty"`
 }
 
 type BuyType struct {
@@ -83,31 +86,33 @@ type QuantityCustomDetails struct {
 
 type QuantityDetails struct {
 	Custom            *QuantityCustomDetails     `json:"custom,omitempty"`
-	Fulfilled         []*Fulfilled               `json:"fulfilled,omitempty"`
 	FullMarket        *QuantityFullMarketDetails `json:"fullMarket,omitempty"`
 	RequestedQuantity int                        `json:"requestedQuantity,omitempty"`
+	Scheduled         []*Scheduled               `json:"scheduled,omitempty"`
 }
 
-type Fulfilled struct {
+type Scheduled struct {
 	Display     *DisplayDetails      `json:"display,omitempty"`
 	EndDate     time.Time            `json:"endDate,omitempty"`
 	ExternalIDs []string             `json:"externalIDs,omitempty"`
+	Network     *NetworkDetails      `json:"network,omitempty"`
 	StartDate   time.Time            `json:"startDate,omitempty"`
 	Sync        map[string]time.Time `json:"sync,omitempty"`
 }
+
 type QuantityFullMarketDetails struct {
 	Weight float32 `json:"weight,omitempty"`
 }
 
 const ExplicitEmpty = ""
 
-type BookingStatusValue string
+type SellingStateValue string
 
 const (
-	Booked   BookingStatusValue = "Booked"
-	Canceled BookingStatusValue = "Canceled"
-	Draft    BookingStatusValue = "Draft"
-	Reserved BookingStatusValue = "Reserved"
+	Booked   SellingStateValue = "Booked"
+	Canceled SellingStateValue = "Canceled"
+	Draft    SellingStateValue = "Draft"
+	Reserved SellingStateValue = "Reserved"
 )
 
 type Deliverable string
